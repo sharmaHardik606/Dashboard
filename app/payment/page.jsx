@@ -1,5 +1,10 @@
-export default function Payment() {
-    return (
-        <h1>this is Payment</h1>
+import InvoiceTable from "@/components/ui/InvoiceTable";
+
+export default function PaymentPage() {
+return (
+    <div>
+        <h1>Payment</h1>
+        <InvoiceTable />
+    </div>
     );
 }
