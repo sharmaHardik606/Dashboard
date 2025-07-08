@@ -1,0 +1,51 @@
+export const invoices = [
+  {
+    id: "INV00134",
+    name: "John Doe",
+    amount: "$120.00",
+    date: "2025-08-01",
+    status: "paid",
+  },
+  {
+    id: "INV00243",
+    name: "Jane Smith",
+    amount: "$89.99",
+    date: "2025-08-15",
+    status: "pending",
+  },
+  {
+    id: "INV00343",
+    name: "Michael Johnson",
+    amount: "$150.50",
+    date: "2025-09-01",
+    status: "paid",
+  },
+  {
+    id: "INV00456",
+    name: "Emily Davis",
+    amount: "$59.00",
+    date: "2025-07-25",
+    status: "pending",
+  },
+  {
+    id: "INV00576",
+    name: "Daniel Lee",
+    amount: "$200.00",
+    date: "2025-07-30",
+    status: "pending",
+  },
+  {
+    id: "INV00612",
+    name: "Alicia Keys",
+    amount: "$310.00",
+    date: "2025-08-20",
+    status: "paid",
+  },
+  {
+    id: "INV00789",
+    name: "Robert Smith",
+    amount: "$78.00",
+    date: "2025-08-28",
+    status: "pending",
+  },
+];

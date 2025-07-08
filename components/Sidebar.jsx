@@ -30,7 +30,7 @@ export function Sidebar() {
   ];
 
   return (
-    <aside className="ml-6 h-[calc(100vh-2rem)] mt-4 mb-4 w-70 border-r bg-gray-200 rounded-3xl p-1">
+    <aside className="ml-6 h-[calc(100vh-2rem)] mt-4 mb-4 w-70 bg-neutral-200 rounded-3xl p-1">
       <nav className="flex flex-col p-4 space-y-1">
         {menuItems.map((item) => (
           <div key={item.name}>
@@ -39,14 +39,14 @@ export function Sidebar() {
                 <button
                   onClick={() => setIsManagementOpen(!isManagementOpen)}
                   className={cn(
-                    "flex items-center gap-2 w-full p-2 rounded-xl hover:bg-blue-100 transition-colors",
+                    "flex items-center gap-2 w-full p-3 rounded-xl hover:bg-blue-100 transition-colors",
                     (pathname.startsWith("/management") && item.name === "Management") 
                       ? "bg-blue-600 text-white" 
                       : "hover:bg-blue-100"
                   )}
                 >
                   {item.icon}
-                  <span className="flex-1 text-left">{item.name}</span>
+                  <span className="flex-1 text-sm text-left">{item.name}</span>
                   {isManagementOpen ? (
                     <ChevronUp className="h-4 w-4" />
                   ) : (
@@ -60,13 +60,13 @@ export function Sidebar() {
                         key={subItem.name}
                         href={subItem.href}
                         className={cn(
-                          "flex items-center gap-2 p-2 rounded-xl hover:bg-blue-100 transition-colors",
+                          "flex items-center  gap-2 p-2 rounded-xl hover:bg-blue-100 transition-colors",
                           pathname === subItem.href && "bg-blue-600 text-white"
                         )}
                       >
                         
                         {subItem.icon}
-                        {subItem.name}
+                       <span className="text-sm">{subItem.name}</span>
                       </Link>
                     ))}
                   </div>
@@ -81,7 +81,7 @@ export function Sidebar() {
                 )}
               >
                 {item.icon}
-                {item.name}
+                <span className="text-sm">{item.name}</span>
               </Link>
             )}
           </div>
