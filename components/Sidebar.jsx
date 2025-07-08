@@ -5,20 +5,21 @@ import { usePathname } from "next/navigation";
 import { ChevronDown, ChevronUp, House, UserRound, ChartColumnStacked, NotepadText, MessageSquareMore, Settings, NotepadTextDashed } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { PiArrowBendDownRight } from "react-icons/pi";
 
 export function Sidebar() {
   const pathname = usePathname();
   const [isManagementOpen, setIsManagementOpen] = useState(false);
 
   const menuItems = [
-    { name: "Dashboard", href: "/dashboard", icon: <House className="h-5 w-5" /> },
+    { name: "Dashboard", href: "/", icon: <House className="h-5 w-5" /> },
     {
       name: "Management", 
       icon: <UserRound className="h-5 w-5" />,
       subItems: [
-        { name: "Members", href: "/management/members" },
-        { name: "Staff", href: "/management/staff" },
-        { name: "Attendance", href: "/management/attendance" },
+        { name: "Members", href: "/management/members",icon:<PiArrowBendDownRight className="h-5 w-5" /> },
+        { name: "Staff", href: "/management/staff", icon:<PiArrowBendDownRight className="h-5 w-5" />},
+        { name: "Attendance", href: "/management/attendance", icon:<PiArrowBendDownRight className="h-5 w-5" />},
       ],
     },
     { name: "Payment", href: "/payment", icon: <ChartColumnStacked className="h-5 w-5" /> },
@@ -29,7 +30,7 @@ export function Sidebar() {
   ];
 
   return (
-    <aside className="ml-6 h-[calc(100vh-2rem)] mt-4 mb-4 w-64 border-r bg-gray-100 rounded-2xl">
+    <aside className="ml-6 h-[calc(100vh-2rem)] mt-4 mb-4 w-70 border-r bg-gray-200 rounded-3xl p-1">
       <nav className="flex flex-col p-4 space-y-1">
         {menuItems.map((item) => (
           <div key={item.name}>
@@ -53,7 +54,7 @@ export function Sidebar() {
                   )}
                 </button>
                 {isManagementOpen && (
-                  <div className="ml-8 mt-1 space-y-1">
+                  <div className="mt-1 space-y-1">
                     {item.subItems.map((subItem) => (
                       <Link
                         key={subItem.name}
@@ -63,7 +64,8 @@ export function Sidebar() {
                           pathname === subItem.href && "bg-blue-600 text-white"
                         )}
                       >
-                        <span className="w-5"></span> {/* Spacer to align with parent */}
+                        
+                        {subItem.icon}
                         {subItem.name}
                       </Link>
                     ))}
