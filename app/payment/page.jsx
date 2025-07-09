@@ -6,6 +6,7 @@ import { ContainerCard } from "@/components/ui/ContainerCard";
 import InvoiceTable from "@/components/payment/InvoiceTable";
 import PaymentOverview from "@/components/payment/PaymentOverview";
 import { overviewStats } from "@/constants/payments/overviewStats";
+import { Plus } from "lucide-react";
 
 export default function PaymentPage() {
   const [filter, setFilter] = useState("overview");
@@ -19,7 +20,15 @@ export default function PaymentPage() {
 
   return (
     <div className="p-3 space-y-6">
-      <h1 className="text-3xl font-semibold">Payment Overview</h1>
+      <div className="flex items-center justify-between">
+              <h1 className="text-3xl font-semibold ">Payment Overview</h1>
+              <div className="flex items-center">
+                <Button variant={"mainblue"} size={"xl"}>
+                  <Plus strokeWidth={3}/>
+                  Log Payment
+                </Button>
+              </div>
+            </div>
 
       <div className="flex gap-2">
         {filters.map((tab) => (
@@ -35,7 +44,7 @@ export default function PaymentPage() {
 
       {filter === "overview" ? (
         <>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
             {overviewStats.map((stat, i) => (
               <PaymentOverview key={i} {...stat} />
             ))}
