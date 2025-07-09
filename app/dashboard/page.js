@@ -1,5 +1,5 @@
 import ChartCard from "@/components/cards/ChartCard";
-import { ContainerCard } from "@/components/cards/ContainerCard";
+import { ContainerCard } from "@/components/ui/ContainerCard";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { statsData } from "@/app/data/dashboardState";

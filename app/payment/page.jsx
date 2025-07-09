@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { ContainerCard } from '@/components/cards/ContainerCard';
+import { ContainerCard } from '@/components/ui/ContainerCard';
 import InvoiceTable from '@/components/payment/InvoiceTable';
 
 export default function PaymentPage() {
