@@ -20,7 +20,7 @@ const buttonVariants = cva(
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
-        hollow:"px-6 flex items-center py-5 border border-black text-black bg-transparent rounded-md dark:border-white dark:text-white hover:cursor-pointer",
+        hollow:"px-6 flex items-center py-5 border-[1.4px] border-black text-black bg-transparent rounded-md dark:border-white dark:text-white hover:cursor-pointer",
         mainblue:"px-6 flex items-center  py-5 bg-blue-600 text-white rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 hover:cursor-pointer"
       },
       size: {

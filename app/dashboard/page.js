@@ -3,11 +3,12 @@ import { ContainerCard } from "@/components/ui/ContainerCard";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { statsData } from "@/app/data/dashboardState";
-import RecentActivity from "@/sections/RecentActivity";
+import RecentActivitySection from "@/sections/RecentActivitySection";
+import NotificationSection from "@/sections/NotificationSection";
 
 export default function DashboardPage() {
-    return (
-    <div className="p-3 space-y-6 ">
+return (
+<div className="p-3 space-y-6 ">
         <div className="flex items-center justify-between">
             <h1 className="text-3xl font-semibold ">Dashboard</h1>
             <div className="flex gap-2 items-center">
@@ -29,10 +30,15 @@ export default function DashboardPage() {
     </div>
     </ContainerCard>
 
+    <div className="flex items-start justify-between">
     <ContainerCard >
-        <RecentActivity />
+        <RecentActivitySection />
     </ContainerCard>
 
+    <ContainerCard>
+        <NotificationSection />
+    </ContainerCard>
     </div>
-    );
+</div>
+);
 }
