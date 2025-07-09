@@ -2,7 +2,18 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChevronDown, ChevronUp, House, UserRound, ChartColumnStacked, NotepadText, MessageSquareMore, Settings, NotepadTextDashed } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronUp,
+  House,
+  UserRound,
+  ChartColumnBig,
+  NotepadText,
+  MessageSquareMore,
+  Settings,
+  NotepadTextDashed,
+  ArrowLeft,
+} from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { PiArrowBendDownRight } from "react-icons/pi";
@@ -12,26 +23,62 @@ export function Sidebar() {
   const [isManagementOpen, setIsManagementOpen] = useState(false);
 
   const menuItems = [
-    { name: "Dashboard", href: "/", icon: <House className="h-5 w-5" /> },
     {
-      name: "Management", 
-      icon: <UserRound className="h-5 w-5" />,
+      name: "Dashboard",
+      href: "/",
+      icon: <House className="h-5 w-5" strokeWidth={3} />,
+    },
+    {
+      name: "Management",
+      icon: <UserRound className="h-5 w-5" strokeWidth={3} />,
       subItems: [
-        { name: "Members", href: "/management/members",icon:<PiArrowBendDownRight className="h-5 w-5" /> },
-        { name: "Staff", href: "/management/staff", icon:<PiArrowBendDownRight className="h-5 w-5" />},
-        { name: "Attendance", href: "/management/attendance", icon:<PiArrowBendDownRight className="h-5 w-5" />},
+        {
+          name: "Members",
+          href: "/management/members",
+          icon: <PiArrowBendDownRight strokeWidth={3} className="h-5 w-5" />,
+        },
+        {
+          name: "Staff",
+          href: "/management/staff",
+          icon: <PiArrowBendDownRight strokeWidth={3} className="h-5 w-5" />,
+        },
+        {
+          name: "Attendance",
+          href: "/management/attendance",
+          icon: <PiArrowBendDownRight strokeWidth={3} className="h-5 w-5" />,
+        },
       ],
     },
-    { name: "Payment", href: "/payment", icon: <ChartColumnStacked className="h-5 w-5" /> },
-    { name: "Plan Library", href: "/planlibrary", icon: <NotepadText className="h-5 w-5" /> },
-    { name: "Messages", href: "/messages", icon: <MessageSquareMore className="h-5 w-5" /> },
-    { name: "Reports", href: "/reports", icon: <NotepadTextDashed className="h-5 w-5" /> },
-    { name: "Settings", href: "/settings", icon: <Settings className="h-5 w-5" /> },
+    {
+      name: "Payment",
+      href: "/payment",
+      icon: <ChartColumnBig strokeWidth={3} className="h-5 w-5" />,
+    },
+    {
+      name: "Plan Library",
+      href: "/planlibrary",
+      icon: <NotepadText strokeWidth={3} className="h-5 w-5" />,
+    },
+    {
+      name: "Messages",
+      href: "/messages",
+      icon: <MessageSquareMore strokeWidth={3} className="h-5 w-5" />,
+    },
+    {
+      name: "Reports",
+      href: "/reports",
+      icon: <NotepadTextDashed strokeWidth={3} className="h-5 w-5" />,
+    },
+    {
+      name: "Settings",
+      href: "/settings",
+      icon: <Settings strokeWidth={3} className="h-5 w-5" />,
+    },
   ];
 
   return (
-    <aside className="ml-6 h-[calc(100vh-2rem)] mt-4 mb-4 w-70 bg-neutral-200 rounded-3xl p-2">
-      <nav className="flex flex-col p-4 space-y-1">
+    <aside className="ml-6  mt-4 mb-4 w-70 bg-neutral-200 rounded-3xl p-6 flex flex-col justify-between">
+      <nav className="flex flex-col  space-y-1">
         {menuItems.map((item) => (
           <div key={item.name}>
             {item.subItems ? (
@@ -39,54 +86,73 @@ export function Sidebar() {
                 <button
                   onClick={() => setIsManagementOpen(!isManagementOpen)}
                   className={cn(
-                    "flex items-center gap-2 w-full py-3 px-3 rounded-md hover:bg-blue-100",
-                    (pathname.startsWith("/management") && item.name === "Management") 
-                      ? "bg-blue-600 text-white" 
-                      : "hover:bg-blue-100 text-black"
+                    "flex items-center gap-2 py-3 px-2 w-full rounded-md",
+                    pathname.startsWith("/management") &&
+                      item.name === "Management"
+                      ? "bg-blue-600 text-white"
+                      : " text-black"
                   )}
                 >
                   {item.icon}
-                  <span className="flex-1 text-sm text-left">{item.name}</span>
+                  <span className="flex-1 text-sm text-left font-semibold text-neutral-600">
+                    {item.name}
+                  </span>
                   {isManagementOpen ? (
                     <ChevronUp className="h-4 w-4" />
                   ) : (
                     <ChevronDown className="h-4 w-4" />
                   )}
                 </button>
-                {isManagementOpen && (
-                  <div className="mt-1 space-y-1">
-                    {item.subItems.map((subItem) => (
-                      <Link
-                        key={subItem.name}
-                        href={subItem.href}
-                        className={cn(
-                          "flex items-center gap-2 py-3 px-2 rounded-md hover:bg-blue-100 ...",
-                          pathname === subItem.href && "bg-blue-600 text-white"
-                        )}
-                      >
-                        
-                        {subItem.icon}
-                       <span className="text-sm">{subItem.name}</span>
-                      </Link>
-                    ))}
-                  </div>
-                )}
+
+                <div
+                  className={cn(
+                    "mt-1 space-y-1 transition-all duration-200 ease-in-out overflow-hidden",
+                    isManagementOpen
+                      ? "opacity-100 max-h-96 translate-y-0"
+                      : "opacity-0 max-h-0 -translate-y-1 pointer-events-none"
+                  )}
+                >
+                  {item.subItems.map((subItem) => (
+                    <Link
+                      key={subItem.name}
+                      href={subItem.href}
+                      className={cn(
+                        "flex items-center gap-2 py-3 px-2 rounded-md ",
+                        pathname === subItem.href && "bg-blue-600 text-white"
+                      )}
+                    >
+                      {subItem.icon}
+                      <span className="text-sm font-semibold text-neutral-600">
+                        {subItem.name}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
               </>
             ) : (
               <Link
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-2 py-3 px-2 rounded-md hover:bg-blue-100 ",
+                  "flex items-center gap-2 py-3 px-2 rounded-md ",
                   pathname === item.href && "bg-blue-600 text-white"
                 )}
               >
                 {item.icon}
-                <span className="text-sm">{item.name}</span>
+                <span
+                  className={cn(
+                    "text-sm font-semibold",
+                    pathname === item.href ? "text-white" : "text-neutral-600"
+                  )}
+                >
+                  {item.name}
+                </span>
               </Link>
             )}
           </div>
         ))}
       </nav>
+
+      <ArrowLeft className="self-end " />
     </aside>
   );
 }

@@ -1,10 +1,15 @@
+import { invoices as allInvoices } from "@/constants/payments/invoices";
 
-import { invoices as allInvoices } from "@/data/invoices";
-
-export default function InvoiceTable({ filter }) {
-
+export default function InvoiceTable({ filter, limit }) {
   const filteredInvoices =
-    filter === 'all' ? allInvoices : allInvoices.filter((inv) => inv.status === filter);
+    filter === "all"
+      ? allInvoices
+      : allInvoices.filter((inv) => inv.status === filter);
+
+  // Apply limit if provided
+  const displayedInvoices = limit
+    ? filteredInvoices.slice(0, limit)
+    : filteredInvoices;
 
   return (
     <div className="overflow-hidden">
@@ -20,18 +25,18 @@ export default function InvoiceTable({ filter }) {
             </tr>
           </thead>
           <tbody>
-            {filteredInvoices.map((inv) => (
+            {displayedInvoices.map((inv) => (
               <tr key={inv.id} className="text-foreground">
-                <td className="p-4 ">{inv.id}</td>
+                <td className="p-4">{inv.id}</td>
                 <td className="p-4">{inv.name}</td>
                 <td className="p-4">{inv.amount}</td>
                 <td className="p-4">{inv.date}</td>
                 <td className="p-4 capitalize">
                   <span
                     className={`inline-block rounded-full px-2 py-1 text-xs font-semibold ${
-                      inv.status === 'paid'
-                        ? 'bg-green-100 text-green-700'
-                        : 'bg-yellow-100 text-yellow-800'
+                      inv.status === "paid"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-yellow-100 text-yellow-800"
                     }`}
                   >
                     {inv.status}

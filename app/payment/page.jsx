@@ -1,29 +1,31 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { ContainerCard } from '@/components/ui/ContainerCard';
-import InvoiceTable from '@/components/payment/InvoiceTable';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { ContainerCard } from "@/components/ui/ContainerCard";
+import InvoiceTable from "@/components/payment/InvoiceTable";
+import PaymentOverview from "@/components/payment/PaymentOverview";
+import { overviewStats } from "@/constants/payments/overviewStats";
 
 export default function PaymentPage() {
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState("overview");
 
   const filters = [
-    { key: 'all', label: 'Invoices' },
-    { key: 'paid', label: 'Paid Payments' },
-    { key: 'pending', label: 'Pending Payments' },
+    { key: "overview", label: "Overview" },
+    { key: "all", label: "Invoices" },
+    { key: "paid", label: "Paid Payments" },
+    { key: "pending", label: "Pending Payments" },
   ];
 
   return (
     <div className="p-3 space-y-6">
       <h1 className="text-3xl font-semibold">Payment Overview</h1>
 
-      {/* Filter Tabs */}
       <div className="flex gap-2">
         {filters.map((tab) => (
           <Button
             key={tab.key}
-            variant={filter === tab.key ? 'default' : 'outline'}
+            variant={filter === tab.key ? "default" : "outline"}
             onClick={() => setFilter(tab.key)}
           >
             {tab.label}
@@ -31,10 +33,23 @@ export default function PaymentPage() {
         ))}
       </div>
 
-      {/* Filtered Invoices Table */}
-      <ContainerCard>
-        <InvoiceTable filter={filter} />
-      </ContainerCard>
+      {filter === "overview" ? (
+        <>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
+            {overviewStats.map((stat, i) => (
+              <PaymentOverview key={i} {...stat} />
+            ))}
+          </div>
+
+          <ContainerCard>
+            <InvoiceTable filter="all" limit={5} />
+          </ContainerCard>
+        </>
+      ) : (
+        <ContainerCard>
+          <InvoiceTable filter={filter} />
+        </ContainerCard>
+      )}
     </div>
   );
 }

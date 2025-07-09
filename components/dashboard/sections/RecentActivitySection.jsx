@@ -1,7 +1,7 @@
 'use client';
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import activityData from "@/data/activityData";
+import activityData from "@/constants/dashboard/activityData";
 
 export default function RecentActivitySection() {
   return (
