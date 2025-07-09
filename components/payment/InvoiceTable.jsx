@@ -1,5 +1,5 @@
 
-import { invoices as allInvoices } from "@/app/data/invoices";
+import { invoices as allInvoices } from "@/data/invoices";
 
 export default function InvoiceTable({ filter }) {
 

@@ -1,10 +1,10 @@
-import ChartCard from "@/components/cards/ChartCard";
+import ChartCard from "@/components/dashboard/cards/ChartCard";
 import { ContainerCard } from "@/components/ui/ContainerCard";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { statsData } from "@/app/data/dashboardState";
-import RecentActivitySection from "@/sections/RecentActivitySection";
-import NotificationSection from "@/sections/NotificationSection";
+import { statsData } from "@/data/dashboardState";
+import RecentActivitySection from "@/components/dashboard/sections/RecentActivitySection";
+import NotificationSection from "@/components/dashboard/sections/NotificationSection";
 
 export default function DashboardPage() {
 return (

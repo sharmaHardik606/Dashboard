@@ -1,5 +1,5 @@
 import { ArrowUp, ArrowDown, Info } from "lucide-react";
-import SlopeChart from "@/components/charts/SlopeChart";
+import SlopeChart from "@/components/dashboard/charts/SlopeChart";
 
 export default function ChartCard({
   title,

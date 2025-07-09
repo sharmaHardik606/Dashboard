@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import NotificationData from '@/app/data/notificationData';
+import NotificationData from '@/data/notificationData';
 import { Button } from '@/components/ui/button';
 
 export default function NotificationsSection() {
