@@ -3,6 +3,7 @@ import { ContainerCard } from "@/components/cards/ContainerCard";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { statsData } from "@/app/data/dashboardState";
+import RecentActivity from "@/sections/RecentActivity";
 
 export default function DashboardPage() {
     return (
@@ -27,6 +28,11 @@ export default function DashboardPage() {
         ))}
     </div>
     </ContainerCard>
+
+    <ContainerCard >
+        <RecentActivity />
+    </ContainerCard>
+
     </div>
     );
 }

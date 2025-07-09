@@ -30,7 +30,7 @@ export function Sidebar() {
   ];
 
   return (
-    <aside className="ml-6 h-[calc(100vh-2rem)] mt-4 mb-4 w-70 bg-neutral-200 rounded-3xl p-1">
+    <aside className="ml-6 h-[calc(100vh-2rem)] mt-4 mb-4 w-70 bg-neutral-200 rounded-3xl p-2">
       <nav className="flex flex-col p-4 space-y-1">
         {menuItems.map((item) => (
           <div key={item.name}>
@@ -39,10 +39,10 @@ export function Sidebar() {
                 <button
                   onClick={() => setIsManagementOpen(!isManagementOpen)}
                   className={cn(
-                    "flex items-center gap-2 w-full p-3 rounded-xl hover:bg-blue-100 transition-colors",
+                    "flex items-center gap-2 w-full py-3 px-3 rounded-md hover:bg-blue-100",
                     (pathname.startsWith("/management") && item.name === "Management") 
                       ? "bg-blue-600 text-white" 
-                      : "hover:bg-blue-100"
+                      : "hover:bg-blue-100 text-black"
                   )}
                 >
                   {item.icon}
@@ -60,7 +60,7 @@ export function Sidebar() {
                         key={subItem.name}
                         href={subItem.href}
                         className={cn(
-                          "flex items-center  gap-2 p-2 rounded-xl hover:bg-blue-100 transition-colors",
+                          "flex items-center gap-2 py-3 px-2 rounded-md hover:bg-blue-100 ...",
                           pathname === subItem.href && "bg-blue-600 text-white"
                         )}
                       >
@@ -76,7 +76,7 @@ export function Sidebar() {
               <Link
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-2 p-2 rounded-xl hover:bg-blue-100 transition-colors",
+                  "flex items-center gap-2 py-3 px-2 rounded-md hover:bg-blue-100 ",
                   pathname === item.href && "bg-blue-600 text-white"
                 )}
               >
