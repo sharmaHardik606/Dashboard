@@ -95,7 +95,7 @@ export function Sidebar() {
                   onClick={() => setIsManagementOpen(!isManagementOpen)}
                   className={cn(
                     "flex items-center gap-2 py-3 px-2 w-full rounded-md",
-                    pathname.startsWith("/management") && "bg-blue-600 text-white"
+                    pathname.startsWith("/management")
                   )}
                 >
                   {item.icon}

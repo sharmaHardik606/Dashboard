@@ -20,14 +20,18 @@ const buttonVariants = cva(
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
-        hollow:"px-6 flex items-center py-5 border-[1.4px] border-black text-black bg-transparent rounded-md dark:border-white dark:text-white hover:cursor-pointer",
-        mainblue:"px-6 flex items-center  py-5 bg-blue-600 text-white rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 hover:cursor-pointer"
+        hollow:"flex items-center justify-center text-sm font-medium transition-colors border-[1.4px] border-black dark:border-white text-black dark:text-white bg-transparent rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-800 px-4 py-2 sm:px-6 sm:py-3 w-full max-w-xs"
+
+,
+        mainblue:"flex items-center justify-center text-sm font-medium transition-colors bg-blue-600 text-white rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 px-4 py-2 sm:px-6 sm:py-3 w-full max-w-xs"
+
+
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
         sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
         lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
-        xl: "h-11 rounded-md px-6 has-[>svg]:px-4 ",
+        xl: "px-4 py-2 text-sm sm:px-6 sm:py-5 sm:text-base",
         icon: "size-9",
       },
     },

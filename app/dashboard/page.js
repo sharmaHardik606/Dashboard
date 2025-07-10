@@ -9,15 +9,16 @@ import NotificationSection from "@/components/dashboard/sections/NotificationSec
 export default function DashboardPage() {
   return (
     <div className="p-3 space-y-6 ">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-semibold ">Dashboard</h1>
-        <div className="flex gap-2 items-center">
-          <Button variant={"hollow"} size={"xl"}>
-            <Plus strokeWidth={3}/>
+      <div className="flex items-center justify-between flex-wrap gap-2">
+        <h1 className="text-3xl font-semibold">Dashboard</h1>
+
+        <div className="flex items-center gap-2">
+          <Button variant="hollow" size="xl">
+            <Plus strokeWidth={3} />
             Log Payment
           </Button>
-          <Button variant={"mainblue"} size={"xl"}>
-            <Plus strokeWidth={3}/>
+          <Button variant="mainblue" size="xl">
+            <Plus strokeWidth={3} />
             Add New Member
           </Button>
         </div>
@@ -44,7 +45,6 @@ export default function DashboardPage() {
           </ContainerCard>
         </div>
       </div>
-
     </div>
   );
 }
