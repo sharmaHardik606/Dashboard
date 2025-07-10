@@ -17,10 +17,12 @@ import {
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { PiArrowBendDownRight } from "react-icons/pi";
+import { useSidebar } from "@/context/SidebarContext";
 
 export function Sidebar() {
   const pathname = usePathname();
   const [isManagementOpen, setIsManagementOpen] = useState(false);
+  const { isSidebarOpen, closeSidebar } = useSidebar();
 
   const menuItems = [
     {
@@ -77,8 +79,14 @@ export function Sidebar() {
   ];
 
   return (
-    <aside className="ml-6  mt-4 mb-4 w-70 bg-neutral-200 rounded-3xl p-6 flex flex-col justify-between">
-      <nav className="flex flex-col  space-y-1">
+    <aside
+      className={cn(
+        "ml-6 mt-4 mb-4 w-70 bg-neutral-200 rounded-3xl p-6 flex flex-col justify-between",
+        "transition-transform duration-300 ease-in-out z-40",
+        isSidebarOpen ? "block fixed top-16 left-0 w-72" : "hidden lg:flex"
+      )}
+    >
+      <nav className="flex flex-col space-y-1">
         {menuItems.map((item) => (
           <div key={item.name}>
             {item.subItems ? (
@@ -87,7 +95,7 @@ export function Sidebar() {
                   onClick={() => setIsManagementOpen(!isManagementOpen)}
                   className={cn(
                     "flex items-center gap-2 py-3 px-2 w-full rounded-md",
-                    pathname.startsWith("/management")
+                    pathname.startsWith("/management") && "bg-blue-600 text-white"
                   )}
                 >
                   {item.icon}
@@ -156,7 +164,10 @@ export function Sidebar() {
         ))}
       </nav>
 
-      <ArrowLeft className="self-end " />
+      <ArrowLeft
+        className="self-end mt-6 cursor-pointer block lg:hidden"
+        onClick={closeSidebar}
+      />
     </aside>
   );
 }
