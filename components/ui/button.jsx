@@ -20,10 +20,11 @@ const buttonVariants = cva(
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
-        hollow:"flex items-center justify-center text-sm font-medium transition-colors border-[1.4px] border-black dark:border-white text-black dark:text-white bg-transparent rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-800 px-4 py-2 sm:px-6 sm:py-3 w-full max-w-xs"
+        hollow:"bg-transparent border-[1.4px] border-black text-black dark:border-white dark:text-white hover:cursor-pointer"
 
 ,
-        mainblue:"flex items-center justify-center text-sm font-medium transition-colors bg-blue-600 text-white rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 px-4 py-2 sm:px-6 sm:py-3 w-full max-w-xs"
+        mainblue:"flex items-center justify-center font-medium transition-colors bg-blue-600 text-white rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 px-2 py-2 text-sm sm:px-5 sm:py-2 sm:text-base"
+
 
 
       },
@@ -31,7 +32,7 @@ const buttonVariants = cva(
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
         sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
         lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
-        xl: "px-4 py-2 text-sm sm:px-6 sm:py-5 sm:text-base",
+        xl: "px-2 py-2 text-sm sm:px-5 sm:py-2 sm:text-base",
         icon: "size-9",
       },
     },
