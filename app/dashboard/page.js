@@ -13,11 +13,11 @@ export default function DashboardPage() {
         <h1 className="text-3xl font-semibold ">Dashboard</h1>
         <div className="flex gap-2 items-center">
           <Button variant={"hollow"} size={"xl"}>
-            <Plus />
+            <Plus strokeWidth={3}/>
             Log Payment
           </Button>
           <Button variant={"mainblue"} size={"xl"}>
-            <Plus />
+            <Plus strokeWidth={3}/>
             Add New Member
           </Button>
         </div>
