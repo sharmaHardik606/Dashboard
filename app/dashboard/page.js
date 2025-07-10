@@ -12,12 +12,12 @@ export default function DashboardPage() {
       <div className="flex items-center justify-between flex-wrap gap-2">
         <h1 className="text-3xl font-semibold">Dashboard</h1>
 
-        <div className="flex items-center gap-2">
-          <Button variant="hollow" size="xl">
+        <div className="flex items-center gap-2 ">
+          <Button variant="hollow" size="xl" className="w-full sm:w-auto">
             <Plus strokeWidth={3} />
             Log Payment
           </Button>
-          <Button variant="mainblue" size="xl">
+          <Button variant="mainblue" size="xl" className="w-full sm:w-auto">
             <Plus strokeWidth={3} />
             Add New Member
           </Button>
