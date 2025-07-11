@@ -21,16 +21,19 @@ export default function PaymentPage() {
   return (
     <div className="p-3 space-y-6">
       <div className="flex items-center justify-between">
-              <h1 className="text-3xl font-semibold ">Payment Overview</h1>
-              <div className="flex items-center">
-                <Button variant={"mainblue"} size={"xl"}>
-                  <Plus strokeWidth={3}/>
-                  Log Payment
-                </Button>
-              </div>
-            </div>
+        <h1 className="text-2xl sm:text-3xl  font-semibold ">
+          Payment Overview
+        </h1>
+        <div className="flex items-center">
+          <Button variant={"mainblue"} size={"xl"}>
+            <Plus strokeWidth={3} />
+            Log Payment
+          </Button>
+        </div>
+      </div>
 
-      <div className="flex gap-2">
+      
+      <div className="hidden md:flex gap-2 flex-wrap">
         {filters.map((tab) => (
           <Button
             key={tab.key}
@@ -40,6 +43,30 @@ export default function PaymentPage() {
             {tab.label}
           </Button>
         ))}
+      </div>
+
+    
+      <div className="md:hidden flex gap-2">
+        
+        <Button
+          variant={filter === "overview" ? "default" : "outline"}
+          onClick={() => setFilter("overview")}
+        >
+          Overview
+        </Button>
+
+        {/* Filter drop */}
+        <div className="relative">
+          <select
+            className="border border-gray-300 rounded-md px-3 py-2 text-sm"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+          >
+            <option value="all">Invoices</option>
+            <option value="paid">Paid Payments</option>
+            <option value="pending">Pending Payments</option>
+          </select>
+        </div>
       </div>
 
       {filter === "overview" ? (
