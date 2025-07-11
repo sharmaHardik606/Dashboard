@@ -1,18 +1,28 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-// import { useSession } from "next-auth/react";
+import DashboardPage from "./dashboard/page";
+import { isLoggedIn } from "@/utils/auth";
 
 export default function Home() {
   const router = useRouter();
+  const [authenticated, setAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // fake auth check 
-    const isLoggedIn = false; // replace with real check
-    router.push(isLoggedIn ? "/dashboard" : "/login");
-  }, [router]);
+    const valid = isLoggedIn();
 
-  return null;
+    if (!valid) {
+      router.replace("/login"); // Redirect if not logged in
+    } else {
+      setAuthenticated(true);
+    }
+
+    setLoading(false);
+  }, []);
+
+  if (loading || !authenticated) return null;
+
+  return <DashboardPage />;
 }
-

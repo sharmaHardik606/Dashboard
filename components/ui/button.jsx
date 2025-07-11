@@ -20,9 +20,8 @@ const buttonVariants = cva(
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
-        hollow:"bg-transparent border-[1.4px] border-black text-black dark:border-white dark:text-white hover:cursor-pointer"
-
-,
+        hollow:"bg-transparent border-[1.4px] border-black text-black dark:border-white dark:text-white hover:cursor-pointer",
+        hollowblue:"bg-transparent border-[1.4px] border-blue-700 text-blue-700 dark:border-blue-500 dark:text-blue-500 hover:cursor-pointer",
         mainblue:"flex items-center justify-center font-medium transition-colors bg-blue-600 text-white rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 px-2 py-2 text-sm sm:px-5 sm:py-2 sm:text-base"
 
 

@@ -9,33 +9,10 @@ import { useEffect, useState } from "react";
 
 export default function ClientLayout({ children }) {
   const pathname = usePathname();
-  const router = useRouter();
-  const isAuthPage = pathname === "/login" || pathname === "/register";
+  const isAuthPage = pathname === "/login" || pathname === "/signup";
 
-  const [loading, setLoading] = useState(true);
-  const [authenticated, setAuthenticated] = useState(false);
+  // ✅ No redirect logic — just layout control
 
-  useEffect(() => {
-    const checkAuth = () => {
-      const valid = isLoggedIn();
-      setAuthenticated(valid);
-      setLoading(false);
-
-      if (!valid && !isAuthPage) {
-        router.replace("/login");
-      }
-    };
-
-    // Wait a tick to ensure localStorage is ready
-    setTimeout(checkAuth, 0);
-  }, [pathname]);
-
-  if (loading) return null;
-
-  // Not logged in & not on login page → block render
-  if (!authenticated && !isAuthPage) return null;
-
-  // Login/Register Page: no layout
   if (isAuthPage) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -44,7 +21,6 @@ export default function ClientLayout({ children }) {
     );
   }
 
-  // All other routes: show full layout
   return (
     <SidebarProvider>
       <div className="flex flex-col min-h-screen w-full">
