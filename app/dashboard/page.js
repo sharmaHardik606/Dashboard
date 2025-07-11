@@ -58,7 +58,7 @@ export default function DashboardPage() {
           </ContainerCard>
         </div>
 
-        <div className="w-full lg:w-[300px] shrink-0">
+        <div className="w-full lg:w-auto shrink-0">
           <ContainerCard>
             <NotificationSection />
           </ContainerCard>

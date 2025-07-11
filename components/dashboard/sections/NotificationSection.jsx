@@ -7,18 +7,20 @@ import { Button } from '@/components/ui/button';
 
 export default function NotificationsSection() {
   return (
-    <div className="flex flex-col gap-3 p-1">
+    <div className="flex flex-col gap-3 p-1 w-full">
         <h2 className="text-xl font-semibold">Alerts and Notifications</h2>
 
       {NotificationData.map((notification) => (
         <div key={notification.id} className="flex items-start gap-4 p-1">
-          <Image
-            src="https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg"
-            alt="User Avatar"
-            width={40}
-            height={40}
-            className="rounded-full w-12 h-12 object-cover"
-          />
+          <div className="relative h-10 w-10 rounded-full overflow-hidden border-2 border-gray-300 dark:border-gray-600">
+                      <Image
+                        src="https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg"
+                        alt="User avatar"
+                        fill
+                        className="object-cover"
+                        priority
+                      />
+                    </div>
 
         
           <div className="flex-1">
