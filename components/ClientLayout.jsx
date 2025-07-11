@@ -9,9 +9,28 @@ import { useEffect, useState } from "react";
 
 export default function ClientLayout({ children }) {
   const pathname = usePathname();
+  const router = useRouter();
   const isAuthPage = pathname === "/login" || pathname === "/signup";
 
-  // ✅ No redirect logic — just layout control
+  const [authenticated, setAuthenticated] = useState(null); // null = loading
+
+  useEffect(() => {
+    const checkAuth = () => {
+      const valid = isLoggedIn();
+      setAuthenticated(valid);
+
+      if (!valid && !isAuthPage) {
+        router.replace("/login");
+      }
+    };
+
+    // Delay by a tick to allow hydration
+    setTimeout(checkAuth, 0);
+  }, [pathname]);
+
+  if (authenticated === null) return null; // still loading
+
+  if (!authenticated && !isAuthPage) return null;
 
   if (isAuthPage) {
     return (

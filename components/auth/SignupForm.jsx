@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, ArrowLeft } from "lucide-react";
+import { Button } from "../ui/button";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -34,31 +35,31 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-centerpx-4 py-8">
-      <div className="relative w-full max-w-md space-y-6">
+    <div className="min-h-screen px-4 py-8 flex items-center justify-center w-full">
+      <div className="absolute top-10 right-10 text-sm">
+        <span className="text-gray-600">Already have an Account?{" "}</span>
         
-        <div className="absolute top-0 right-0">
-          <p className="text-sm text-right">
-            Already have an Account?{" "}
-            <a
-              href="/login"
-              className="text-blue-600 border border-blue-600 px-3 py-1 rounded-md ml-2 text-sm hover:bg-blue-50"
-            >
-              LOG IN
-            </a>
-          </p>
-        </div>
+        <a href="/login" className="text-blue-600 font-semibold text-sm">
+          <Button
+            variant={"hollowblue"}
+            className="text-blue-600 font-semibold"
+          >
+            {" "}
+            LOG IN
+          </Button>
+        </a>
+      </div>
 
-        
+      {/* Main Card */}
+      <div className="w-full max-w-md space-y-6">
         <button
           onClick={() => router.back()}
-          className="text-black mb-2 inline-flex items-center"
+          className="text-black inline-flex items-center"
         >
           <ArrowLeft className="w-5 h-5 mr-1" />
         </button>
 
-       
-        <div className="mt-8">
+        <div>
           <p className="text-blue-600 font-semibold text-sm uppercase mb-1">
             SIGN UP
           </p>
@@ -67,9 +68,7 @@ export default function SignupPage() {
           </h2>
         </div>
 
-        
         <form onSubmit={handleSubmit} className="space-y-4">
-          
           <div>
             <label className="block text-sm font-medium mb-1">
               Full name <span className="text-red-500">*</span>
@@ -84,7 +83,6 @@ export default function SignupPage() {
             />
           </div>
 
-          
           <div>
             <label className="block text-sm font-medium mb-1">
               Email <span className="text-red-500">*</span>
@@ -100,7 +98,6 @@ export default function SignupPage() {
             />
           </div>
 
-          
           <div>
             <label className="block text-sm font-medium mb-1">
               Contact Number <span className="text-red-500">*</span>
@@ -116,7 +113,6 @@ export default function SignupPage() {
             />
           </div>
 
-          
           <div>
             <label className="block text-sm font-medium mb-1">
               Password <span className="text-red-500">*</span>
@@ -145,7 +141,6 @@ export default function SignupPage() {
             </div>
           </div>
 
-          
           <div>
             <label className="block text-sm font-medium mb-1">
               Confirm Password <span className="text-red-500">*</span>
@@ -161,28 +156,23 @@ export default function SignupPage() {
             />
           </div>
 
-         
           <ul className="text-xs text-gray-500 space-y-1 list-disc pl-4">
             <li>Must be at least 8 characters or more.</li>
             <li>
-              Use a combination of uppercase and lowercase letters, numbers,
-              and symbols.
+              Use a combination of uppercase and lowercase letters, numbers, and
+              symbols.
             </li>
-            <li>
-              Don't start or end your password with a blank space.
-            </li>
+            <li>Don't start or end your password with a blank space.</li>
             <li>Must be different from your last 12 passwords.</li>
           </ul>
 
-         
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-md font-semibold hover:bg-blue-700 transition"
+            className="w-full bg-blue-700 text-white py-2 rounded-md font-semibold hover:bg-blue-800 hover:cursor-pointer transition"
           >
             Sign up
           </button>
 
-        
           <p className="text-xs text-center text-gray-500 mt-2">
             By continuing, you agree to Ayuprofit's{" "}
             <a href="#" className="underline text-blue-600">

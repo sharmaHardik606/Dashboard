@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { login } from "@/utils/auth";
 import { Eye, EyeOff, ArrowLeft } from "lucide-react";
+import { Button } from "../ui/button";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -15,12 +16,11 @@ export default function LoginPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Hardcoded credentials
     const validEmail = "admin123@gmail.com";
     const validPassword = "123456";
 
     if (email === validEmail && password === validPassword) {
-      login(); // stores isLoggedIn = true in localStorage
+      login(); // localStorage
       router.push("/dashboard");
     } else {
       alert("Invalid email or password");
@@ -28,7 +28,18 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center w-full px-4">
+    <div className="min-h-screen flex items-center justify-center w-full px-4 relative">
+      
+      <div className="absolute top-10 right-10 text-sm">
+        <span className="text-gray-600">Don’t have an account? </span>
+        <a
+          href="/signup"
+          className="text-blue-600 font-semibold text-sm"
+        >
+          <Button variant={'hollowblue'} className="text-blue-600 font-semibold"> SIGN UP</Button>
+        </a>
+      </div>
+
       <div className="w-full max-w-md space-y-6 p-4">
         <button onClick={() => router.back()} className="text-black">
           <ArrowLeft className="w-5 h-5" />
@@ -43,7 +54,7 @@ export default function LoginPage() {
           </h2>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 ">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="text-sm font-medium text-gray-900 block mb-1">
               Email <span className="text-red-500">*</span>
@@ -102,7 +113,7 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-md font-semibold hover:bg-blue-700 transition"
+            className="w-full bg-blue-700 text-white py-2 rounded-md font-semibold hover:bg-blue-800 hover:cursor-pointer transition"
           >
             Log In
           </button>
@@ -111,3 +122,4 @@ export default function LoginPage() {
     </div>
   );
 }
+

@@ -1,3 +1,6 @@
 export const login = () => {};
 export const logout = () => {};
-export const isLoggedIn = () => false;
+export const isLoggedIn = () => {
+  if (typeof window === "undefined") return false;
+  return localStorage.getItem("isLoggedIn") === "true";
+};
