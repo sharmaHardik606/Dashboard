@@ -26,14 +26,16 @@ export default function ClientLayout({ children }) {
       }
     };
 
-    
+    // Wait a tick to ensure localStorage is ready
     setTimeout(checkAuth, 0);
   }, [pathname]);
 
-  if (loading) return null; 
+  if (loading) return null;
 
+  // Not logged in & not on login page → block render
   if (!authenticated && !isAuthPage) return null;
 
+  // Login/Register Page: no layout
   if (isAuthPage) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -42,6 +44,7 @@ export default function ClientLayout({ children }) {
     );
   }
 
+  // All other routes: show full layout
   return (
     <SidebarProvider>
       <div className="flex flex-col min-h-screen w-full">
