@@ -27,7 +27,7 @@ export function Sidebar() {
   const menuItems = [
     {
       name: "Dashboard",
-      href: "/",
+      href: "/dashboard",
       icon: <House className="h-5 w-5" strokeWidth={3} />,
     },
     {
