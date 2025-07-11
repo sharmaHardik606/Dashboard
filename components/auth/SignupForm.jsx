@@ -36,7 +36,7 @@ export default function SignupPage() {
   return (
     <div className="min-h-screen flex items-center justify-centerpx-4 py-8">
       <div className="relative w-full max-w-md space-y-6">
-        {/* Top-right login link */}
+        
         <div className="absolute top-0 right-0">
           <p className="text-sm text-right">
             Already have an Account?{" "}
@@ -49,7 +49,7 @@ export default function SignupPage() {
           </p>
         </div>
 
-        {/* Back Button */}
+        
         <button
           onClick={() => router.back()}
           className="text-black mb-2 inline-flex items-center"
@@ -57,7 +57,7 @@ export default function SignupPage() {
           <ArrowLeft className="w-5 h-5 mr-1" />
         </button>
 
-        {/* Heading */}
+       
         <div className="mt-8">
           <p className="text-blue-600 font-semibold text-sm uppercase mb-1">
             SIGN UP
@@ -67,9 +67,9 @@ export default function SignupPage() {
           </h2>
         </div>
 
-        {/* Form */}
+        
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Full Name */}
+          
           <div>
             <label className="block text-sm font-medium mb-1">
               Full name <span className="text-red-500">*</span>
@@ -84,7 +84,7 @@ export default function SignupPage() {
             />
           </div>
 
-          {/* Email */}
+          
           <div>
             <label className="block text-sm font-medium mb-1">
               Email <span className="text-red-500">*</span>
@@ -100,7 +100,7 @@ export default function SignupPage() {
             />
           </div>
 
-          {/* Contact Number */}
+          
           <div>
             <label className="block text-sm font-medium mb-1">
               Contact Number <span className="text-red-500">*</span>
@@ -116,7 +116,7 @@ export default function SignupPage() {
             />
           </div>
 
-          {/* Password */}
+          
           <div>
             <label className="block text-sm font-medium mb-1">
               Password <span className="text-red-500">*</span>
@@ -145,7 +145,7 @@ export default function SignupPage() {
             </div>
           </div>
 
-          {/* Confirm Password */}
+          
           <div>
             <label className="block text-sm font-medium mb-1">
               Confirm Password <span className="text-red-500">*</span>
@@ -161,7 +161,7 @@ export default function SignupPage() {
             />
           </div>
 
-          {/* Password Rules */}
+         
           <ul className="text-xs text-gray-500 space-y-1 list-disc pl-4">
             <li>Must be at least 8 characters or more.</li>
             <li>
@@ -174,7 +174,7 @@ export default function SignupPage() {
             <li>Must be different from your last 12 passwords.</li>
           </ul>
 
-          {/* Submit */}
+         
           <button
             type="submit"
             className="w-full bg-blue-600 text-white py-2 rounded-md font-semibold hover:bg-blue-700 transition"
@@ -182,7 +182,7 @@ export default function SignupPage() {
             Sign up
           </button>
 
-          {/* Footer */}
+        
           <p className="text-xs text-center text-gray-500 mt-2">
             By continuing, you agree to Ayuprofit's{" "}
             <a href="#" className="underline text-blue-600">

@@ -30,22 +30,20 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center w-full px-4">
       <div className="w-full max-w-md space-y-6 p-4">
-
-        {/* Back button */}
         <button onClick={() => router.back()} className="text-black">
           <ArrowLeft className="w-5 h-5" />
         </button>
 
-        {/* Heading */}
         <div>
-          <p className="text-blue-600 font-semibold text-sm uppercase mb-1">Log in</p>
-          <h2 className="text-2xl font-bold text-gray-900">Welcome to AyuProFit</h2>
+          <p className="text-blue-600 font-semibold text-sm uppercase mb-1">
+            Log in
+          </p>
+          <h2 className="text-2xl font-bold text-gray-900">
+            Welcome to AyuProFit
+          </h2>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4 ">
-
-          {/* Email */}
           <div>
             <label className="text-sm font-medium text-gray-900 block mb-1">
               Email <span className="text-red-500">*</span>
@@ -60,7 +58,6 @@ export default function LoginPage() {
             />
           </div>
 
-          {/* Password */}
           <div>
             <label className="text-sm font-medium text-gray-900 block mb-1">
               Password <span className="text-red-500">*</span>
@@ -79,12 +76,15 @@ export default function LoginPage() {
                 onClick={() => setShowPass(!showPass)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
               >
-                {showPass ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                {showPass ? (
+                  <EyeOff className="w-5 h-5" />
+                ) : (
+                  <Eye className="w-5 h-5" />
+                )}
               </button>
             </div>
           </div>
 
-          {/* Remember me & forgot password */}
           <div className="flex items-center justify-between text-sm">
             <label className="flex items-center gap-2">
               <input
@@ -100,7 +100,6 @@ export default function LoginPage() {
             </a>
           </div>
 
-          {/* Submit */}
           <button
             type="submit"
             className="w-full bg-blue-600 text-white py-2 rounded-md font-semibold hover:bg-blue-700 transition"
