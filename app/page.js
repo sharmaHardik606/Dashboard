@@ -1,28 +1,15 @@
+// app/page.js
 "use client";
-
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import DashboardPage from "./dashboard/page";
-import { isLoggedIn } from "@/utils/auth";
 
-export default function Home() {
+export default function HomeRedirect() {
   const router = useRouter();
-  const [authenticated, setAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const valid = isLoggedIn();
-
-    if (!valid) {
-      router.replace("/login"); // Redirect if not logged in
-    } else {
-      setAuthenticated(true);
-    }
-
-    setLoading(false);
+    router.replace("/login");
   }, []);
 
-  if (loading || !authenticated) return null;
-
-  return <DashboardPage />;
+  return null;
 }
+
