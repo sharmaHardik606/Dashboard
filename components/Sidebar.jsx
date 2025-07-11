@@ -81,7 +81,7 @@ export function Sidebar() {
   return (
     <aside
       className={cn(
-        "ml-6 mt-4 mb-4 w-70 bg-neutral-200 rounded-3xl p-6 flex flex-col justify-between",
+        "ml-6 mt-4 mb-4 w-70 bg-[#eeeeee] rounded-4xl p-6 flex flex-col justify-between",
         "transition-transform duration-300 ease-in-out z-40",
         isSidebarOpen ? "block fixed top-16 left-0 w-72" : "hidden lg:flex"
       )}
@@ -122,7 +122,7 @@ export function Sidebar() {
                       key={subItem.name}
                       href={subItem.href}
                       className={cn(
-                        "flex items-center gap-2 py-3 px-2 rounded-md ",
+                        "flex items-center gap-2 py-3 px-2 rounded-lg ",
                         pathname === subItem.href && "bg-blue-600 text-white"
                       )}
                     >
@@ -145,7 +145,7 @@ export function Sidebar() {
               <Link
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-2 py-3 px-2 rounded-md ",
+                  "flex items-center gap-2 py-3 px-2 rounded-lg  ",
                   pathname === item.href && "bg-blue-600 text-white"
                 )}
               >
