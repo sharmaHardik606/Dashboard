@@ -1,3 +1,9 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { isLoggedIn } from "@/utils/auth";
+
 import ChartCard from "@/components/dashboard/cards/ChartCard";
 import { ContainerCard } from "@/components/ui/ContainerCard";
 import { Button } from "@/components/ui/button";
@@ -7,12 +13,25 @@ import RecentActivitySection from "@/components/dashboard/sections/RecentActivit
 import NotificationSection from "@/components/dashboard/sections/NotificationSection";
 
 export default function DashboardPage() {
+  const router = useRouter();
+  const [authChecked, setAuthChecked] = useState(false);
+
+  useEffect(() => {
+    if (!isLoggedIn()) {
+      router.replace("/login");
+    } else {
+      setAuthChecked(true);
+    }
+  }, [router]);
+
+  if (!authChecked) return null;
+
   return (
-    <div className="p-3 space-y-6 ">
-      <div className="flex flex-col  justify-between gap-4 sm:flex-row">
+    <div className="p-3 space-y-6">
+      <div className="flex flex-col justify-between gap-4 sm:flex-row">
         <h1 className="text-3xl font-semibold">Dashboard</h1>
 
-        <div className="flex gap-2 ">
+        <div className="flex gap-2">
           <Button variant="hollow" size="xl">
             <Plus strokeWidth={3} />
             Log Payment
