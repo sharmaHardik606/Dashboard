@@ -12,18 +12,17 @@ export function Navbar() {
     <header className="w-full sticky top-0 z-50 bg-gray-50 dark:bg-black border-b border-gray-200 dark:border-gray-800">
       <div className="w-full flex h-16 items-center justify-between px-4 sm:px-6">
         <div className="flex items-center gap-2">
-          {/* Toggle button on small screens */}
+          {/* Toggle button */}
           <button
             onClick={toggleSidebar}
-            className="lg:hidden p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
+            className="lg:hidden text-2xl p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
           >
             <Menu className="h-6 w-6" />
           </button>
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <Slack className="w-6 h-6" />
-            <span className="text-xl font-bold uppercase">Logo</span>
+          <Link href="/" className="flex items-center gap-2 ">
+            <span className="lg:text-3xl text-2xl font-bold uppercase">Logo</span>
           </Link>
         </div>
 

@@ -1,10 +1,18 @@
-import Image from "next/image";
-import DashboardPage from "./dashboard/page";
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+// import { useSession } from "next-auth/react";
 
 export default function Home() {
-  return (
-    <div>
-      <DashboardPage />
-    </div>
-  );
+  const router = useRouter();
+
+  useEffect(() => {
+    // fake auth check 
+    const isLoggedIn = false; // replace with real check
+    router.push(isLoggedIn ? "/dashboard" : "/login");
+  }, [router]);
+
+  return null;
 }
+
