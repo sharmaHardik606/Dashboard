@@ -30,8 +30,6 @@ export default function ManagementPage() {
 
   return (
     <div className="p-3 space-y-6">
-      
-
       {/* Filter Tabs */}
       <div className="flex gap-2">
         {["members", "staff", "attendance"].map((tab) => (
