@@ -64,7 +64,21 @@ export default function AttendancePage() {
       />
 
       <ContainerCard>
-        <Table data={filteredData} columns={attendanceColumns} />
+        <Table data={filteredData} columns={attendanceColumns} getActions={(item) => [
+            { label: "View/Edit", onClick: () => handleView(item.id) },
+            {
+              label: "Assign Workout",
+              onClick: () => handleWorkout(item.id),
+            },
+            {
+              label: "Assign Diet",
+              onClick: () => console.log("Assign Diet", item.id),
+            },
+            {
+              label: "Delete Member",
+              onClick: () => console.log("Delete", item.id),
+            },
+          ]}/>
       </ContainerCard>
     </div>
   );

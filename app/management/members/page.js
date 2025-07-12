@@ -40,7 +40,25 @@ export default function MembersPage() {
       />
 
       <ContainerCard>
-        <Table data={filteredData} columns={memberColumns} />
+        <Table
+          columns={memberColumns}
+          data={filteredData}
+          getActions={(item) => [
+            { label: "View/Edit", onClick: () => handleView(item.id) },
+            {
+              label: "Assign Workout",
+              onClick: () => handleWorkout(item.id),
+            },
+            {
+              label: "Assign Diet",
+              onClick: () => console.log("Assign Diet", item.id),
+            },
+            {
+              label: "Delete Member",
+              onClick: () => console.log("Delete", item.id),
+            },
+          ]}
+        />
       </ContainerCard>
     </div>
   );

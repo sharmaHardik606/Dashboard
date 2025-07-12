@@ -4,7 +4,7 @@ import { EllipsisVertical } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-export default function Table({ columns, data }) {
+export default function Table({ columns, data, getActions  }) {
   const [openDropdownId, setOpenDropdownId] = useState(null);
   const dropdownRefs = useRef({});
   const router = useRouter();
@@ -49,21 +49,7 @@ export default function Table({ columns, data }) {
 
           <tbody>
             {data.map((item, idx) => {
-              const actions = [
-                { label: "View/Edit", onClick: () => handleView(item.id) },
-                {
-                  label: "Assign Workout",
-                  onClick: () => handleWorkout(item.id),
-                },
-                {
-                  label: "Assign Diet",
-                  onClick: () => console.log("Assign Diet", item.id),
-                },
-                {
-                  label: "Delete Member",
-                  onClick: () => console.log("Delete", item.id),
-                },
-              ];
+              const actions = getActions ? getActions(item) : [];
 
               return (
                 <tr

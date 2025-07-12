@@ -36,7 +36,18 @@ export default function StaffPage() {
       />
 
       <ContainerCard>
-        <Table data={filteredData} columns={staffColumns} />
+        <Table data={filteredData} columns={staffColumns}
+        getActions={(item) => [
+            { label: "View/Edit", onClick: () => handleView(item.id) },
+            {
+              label: "Assign Member",
+              onClick: () => console.log("Assign Member", item.id),
+            },
+            {
+              label: "Delete Member",
+              onClick: () => console.log("Delete", item.id),
+            },
+          ]} />
       </ContainerCard>
     </div>
   );
