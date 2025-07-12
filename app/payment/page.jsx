@@ -14,6 +14,7 @@ import InvoiceTable from "@/components/payment/InvoiceTable";
 import PaymentOverview from "@/components/payment/PaymentOverview";
 import { overviewStats } from "@/constants/payments/overviewStats";
 import { Plus } from "lucide-react";
+import FilterBar from "@/components/sharedcomponents/FilterBar";
 
 export default function PaymentPage() {
   const [filter, setFilter] = useState("overview");
@@ -83,22 +84,33 @@ export default function PaymentPage() {
 
       {/* Main Section */}
       {filter === "overview" ? (
-        <>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
-            {overviewStats.map((stat, i) => (
-              <PaymentOverview key={i} {...stat} />
-            ))}
-          </div>
+  <>
+    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
+      {overviewStats.map((stat, i) => (
+        <PaymentOverview key={i} {...stat} />
+      ))}
+    </div>
 
-          <ContainerCard>
-            <InvoiceTable filter="all" limit={5} />
-          </ContainerCard>
-        </>
-      ) : (
-        <ContainerCard>
-          <InvoiceTable filter={filter} />
-        </ContainerCard>
-      )}
+    <ContainerCard>
+      <InvoiceTable filter="all" limit={5} />
+    </ContainerCard>
+  </>
+) : (
+  <>
+    
+    <FilterBar
+      primaryButton={{
+        label: "Filters",
+        onClick: () => console.log("Open filters modal or dropdown"),
+      }}
+      label="Search Invoices"
+    />
+
+    <ContainerCard>
+      <InvoiceTable filter={filter} />
+    </ContainerCard>
+  </>
+)}
     </div>
   );
 }
