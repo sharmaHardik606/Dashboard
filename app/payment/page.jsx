@@ -9,7 +9,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { ContainerCard } from "@/components/ui/ContainerCard";
+import { ContainerCard } from "@/components/sharedcomponents/ContainerCard";
 import InvoiceTable from "@/components/payment/InvoiceTable";
 import PaymentOverview from "@/components/payment/PaymentOverview";
 import { overviewStats } from "@/constants/payments/overviewStats";
@@ -63,7 +63,7 @@ export default function PaymentPage() {
         </Button>
 
         <Select
-          value={filter === "overview" ? "" : filter} 
+          value={filter === "overview" ? "" : filter}
           onValueChange={setFilter}
         >
           <SelectTrigger className="w-[150px]">

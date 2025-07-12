@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Data } from "@/constants/management/data";
-import { ContainerCard } from "@/components/ui/ContainerCard";
-import Table from "@/components/ui/Table";
+import { ContainerCard } from "@/components/sharedcomponents/ContainerCard";
+import Table from "@/components/sharedcomponents/Table";
 import {
   memberColumns,
   staffColumns,
@@ -50,6 +50,3 @@ export default function ManagementPage() {
     </div>
   );
 }
-
-
-

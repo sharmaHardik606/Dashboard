@@ -38,13 +38,13 @@ export default function Table({ columns, data }) {
                 <th
                   key={col.key}
                   className={`p-4 text-sm font-semibold ${
-                    i === 0 ? "rounded-l-xl" : ""
+                    i === 0 ? "rounded-l-md" : ""
                   }`}
                 >
                   {col.header}
                 </th>
               ))}
-              <th className="p-4 text-sm font-semibold rounded-r-xl">Action</th>
+              <th className="p-4 text-sm font-semibold rounded-r-md">Action</th>
             </tr>
           </thead>
 

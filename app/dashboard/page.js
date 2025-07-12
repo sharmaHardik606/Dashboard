@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { isLoggedIn } from "@/utils/auth";
 
 import ChartCard from "@/components/dashboard/cards/ChartCard";
-import { ContainerCard } from "@/components/ui/ContainerCard";
+import { ContainerCard } from "@/components/sharedcomponents/ContainerCard";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { statsData } from "@/constants/dashboard/dashboardState";

@@ -1,13 +1,16 @@
 "use client";
 
-import { ContainerCard } from "@/components/ui/ContainerCard";
-import Table from "@/components/ui/Table";
+import { ContainerCard } from "@/components/sharedcomponents/ContainerCard";
+import Table from "@/components/sharedcomponents/Table";
 import { Data } from "@/constants/management/data";
 import { attendanceColumns } from "@/constants/management/columns";
 import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import FilterBar from "@/components/sharedcomponents/FilterBar";
 
 export default function AttendancePage() {
   const filteredData = Data.filter((item) => item.checkInTime && item.method);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Format today's date
   const [today, setToday] = useState("");
@@ -29,7 +32,7 @@ export default function AttendancePage() {
         hour12: true,
       });
 
-      time = time.toUpperCase(); 
+      time = time.toUpperCase();
 
       return `${date} - ${time}`;
     };
@@ -45,6 +48,20 @@ export default function AttendancePage() {
           {today}
         </div>
       </div>
+
+      <FilterBar
+        searchValue={searchQuery}
+        onSearchChange={setSearchQuery}
+        primaryButton={{
+          label: "Filters",
+          onClick: () => console.log("Filters clicked"),
+        }}
+        secondaryButton={{
+          label: "Scan QR",
+          onClick: () => console.log("Import clicked"),
+        }}
+        label="Search Members/Staff or Scan ID/QR"
+      />
 
       <ContainerCard>
         <Table data={filteredData} columns={attendanceColumns} />

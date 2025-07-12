@@ -1,14 +1,17 @@
 "use client";
 
-import { ContainerCard } from "@/components/ui/ContainerCard";
-import Table from "@/components/ui/Table";
+import { ContainerCard } from "@/components/sharedcomponents/ContainerCard";
+import Table from "@/components/sharedcomponents/Table";
 import { Data } from "@/constants/management/data";
 import { memberColumns } from "@/constants/management/columns";
 import { Plus, HardDriveDownload } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import FilterBar from "@/components/sharedcomponents/FilterBar";
+import { useState } from "react";
 
 export default function MembersPage() {
   const filteredData = Data.filter((item) => item.type === "member");
+  const [searchQuery, setSearchQuery] = useState("");
 
   return (
     <div className="p-3 space-y-6">
@@ -25,6 +28,16 @@ export default function MembersPage() {
           </Button>
         </div>
       </div>
+
+      <FilterBar
+        searchValue={searchQuery}
+        onSearchChange={setSearchQuery}
+        primaryButton={{
+          label: "Filters",
+          onClick: () => console.log("Filters clicked"),
+        }}
+        label="Search Members"
+      />
 
       <ContainerCard>
         <Table data={filteredData} columns={memberColumns} />
