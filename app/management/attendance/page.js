@@ -1,7 +1,7 @@
 "use client";
 
 import { ContainerCard } from "@/components/sharedcomponents/ContainerCard";
-import Table from "@/components/sharedcomponents/Table";
+import Table from "@/components/management/Table";
 import { Data } from "@/constants/management/data";
 import { attendanceColumns } from "@/constants/management/columns";
 import { useState, useEffect } from "react";

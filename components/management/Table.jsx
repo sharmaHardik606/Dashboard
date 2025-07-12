@@ -26,7 +26,6 @@ export default function Table({ columns, data }) {
   const handleWorkout = (id) => router.push(`/members/${id}`);
   const handleDiet = (id) => router.push(`/members/${id}`);
   const handleDelete = (id) => router.push(`/members/${id}`);
-  
 
   return (
     <div className="overflow-hidden">
@@ -52,9 +51,18 @@ export default function Table({ columns, data }) {
             {data.map((item, idx) => {
               const actions = [
                 { label: "View/Edit", onClick: () => handleView(item.id) },
-                { label: "Assign Workout", onClick: () => handleWorkout(item.id) },
-                { label: "Assign Diet", onClick: () => console.log("Assign Diet", item.id) },
-                { label: "Delete Member", onClick: () => console.log("Delete", item.id) },
+                {
+                  label: "Assign Workout",
+                  onClick: () => handleWorkout(item.id),
+                },
+                {
+                  label: "Assign Diet",
+                  onClick: () => console.log("Assign Diet", item.id),
+                },
+                {
+                  label: "Delete Member",
+                  onClick: () => console.log("Delete", item.id),
+                },
               ];
 
               return (
@@ -69,7 +77,6 @@ export default function Table({ columns, data }) {
                         : item[col.key]}
                     </td>
                   ))}
-
 
                   <td className=" ">
                     <button
@@ -112,4 +119,3 @@ export default function Table({ columns, data }) {
     </div>
   );
 }
-

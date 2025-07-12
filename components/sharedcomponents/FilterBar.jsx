@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 
 export default function FilterBar({
   label = "Search",
+  placeHolder = "Search by name or ID",
   searchValue,
   onSearchChange,
   primaryButton,
@@ -19,7 +20,7 @@ export default function FilterBar({
         <Input
           id="search"
           type="text"
-          placeholder="Search by name or ID"
+          placeholder={placeHolder}
           value={searchValue}
           onChange={(e) => onSearchChange(e.target.value)}
           className="rounded-lg"

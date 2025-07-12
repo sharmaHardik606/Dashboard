@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Data } from "@/constants/management/data";
 import { ContainerCard } from "@/components/sharedcomponents/ContainerCard";
-import Table from "@/components/sharedcomponents/Table";
+import Table from "@/components/management/Table";
 import {
   memberColumns,
   staffColumns,

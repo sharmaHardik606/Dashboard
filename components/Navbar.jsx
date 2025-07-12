@@ -69,7 +69,7 @@ export function Navbar() {
             <div className="absolute right-0 top-14 w-40 bg-white dark:bg-gray-800 shadow-lg rounded-md p-2 z-50">
               <button
                 onClick={handleLogout}
-                className="w-full text-left font-bold text-red-600 text-sm px-3 py-2 bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+                className="w-full hover:cursor-pointer text-left font-bold text-red-600 text-sm px-3 py-2 bg-gray-100 dark:hover:bg-gray-700 rounded-md"
               >
                 Log out
               </button>
