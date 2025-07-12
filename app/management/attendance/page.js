@@ -1,3 +1,6 @@
+"use client";
+
+
 import { ContainerCard } from "@/components/ui/ContainerCard";
 import Table from "@/components/ui/Table";
 import { Data } from "@/constants/management/data";
