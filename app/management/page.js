@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Plus, HardDriveDownload } from "lucide-react";
 import { Data } from "@/constants/management/data";
 import { ContainerCard } from "@/components/ui/ContainerCard";
 import Table from "@/components/ui/Table";
