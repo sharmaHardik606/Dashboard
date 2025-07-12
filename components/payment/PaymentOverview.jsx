@@ -1,4 +1,4 @@
-import { ArrowUp, ArrowDown, Info } from "lucide-react";
+import { ArrowUp, ArrowDown, } from "lucide-react";
 
 export default function PaymentOverview({
   title,
