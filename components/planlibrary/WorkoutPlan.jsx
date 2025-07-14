@@ -2,11 +2,12 @@
 
 import FilterBar from "@/components/sharedcomponents/FilterBar";
 import { ContainerCard } from "../sharedcomponents/ContainerCard";
-import Table from "../management/Table";
+import Table from "../sharedcomponents/Table";
+import { WorkoutData, WorkoutColumns } from "@/constants/planlibrary/workoutData";
 
 export default function WorkoutPlan() {
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       <FilterBar
         primaryButton={{
           label: "Filters",
@@ -17,7 +18,22 @@ export default function WorkoutPlan() {
       />
 
       <ContainerCard>
-        
+        <Table data={WorkoutData} columns={WorkoutColumns}
+        getActions={(item) => [
+            { label: "View/Edit", onClick: () => handleView(item.id) },
+            {
+              label: "Assign ",
+              onClick: () => console.log("Assign", item.id),
+            },
+            {
+              label: "Dublicate",
+              onClick: () => console.log("Dublicate", item.id),
+            },
+            {
+              label: "Delete",
+              onClick: () => console.log("Delete", item.id),
+            },
+          ]}/>
       </ContainerCard>
     </div>
   );

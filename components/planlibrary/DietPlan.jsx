@@ -1,12 +1,13 @@
 "use client";
 
 import FilterBar from "@/components/sharedcomponents/FilterBar";
-import Table from "../management/Table";
+import Table from "../sharedcomponents/Table";
 import { ContainerCard } from "../sharedcomponents/ContainerCard";
+import { DietData, DietColumns } from "@/constants/planlibrary/dietData";
 
 export default function DietPlan() {
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       <FilterBar
         primaryButton={{
           label: "Filters",
@@ -17,7 +18,22 @@ export default function DietPlan() {
       />
 
       <ContainerCard>
-        
+        <Table data={DietData} columns={DietColumns}
+                getActions={(item) => [
+                    { label: "View/Edit", onClick: () => handleView(item.id) },
+                    {
+                      label: "Assign ",
+                      onClick: () => console.log("Assign", item.id),
+                    },
+                    {
+                      label: "Dublicate",
+                      onClick: () => console.log("Dublicate", item.id),
+                    },
+                    {
+                      label: "Delete",
+                      onClick: () => console.log("Delete", item.id),
+                    },
+                  ]}/>
       </ContainerCard>
     </div>
   );

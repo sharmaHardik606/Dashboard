@@ -1,7 +1,7 @@
 "use client";
 
 import { ContainerCard } from "@/components/sharedcomponents/ContainerCard";
-import Table from "@/components/management/Table";
+import Table from "@/components/sharedcomponents/Table";
 import { Data } from "@/constants/management/data";
 import { staffColumns } from "@/constants/management/columns";
 import { Plus } from "lucide-react";
@@ -36,8 +36,10 @@ export default function StaffPage() {
       />
 
       <ContainerCard>
-        <Table data={filteredData} columns={staffColumns}
-        getActions={(item) => [
+        <Table
+          data={filteredData}
+          columns={staffColumns}
+          getActions={(item) => [
             { label: "View/Edit", onClick: () => handleView(item.id) },
             {
               label: "Assign Member",
@@ -47,7 +49,8 @@ export default function StaffPage() {
               label: "Delete Member",
               onClick: () => console.log("Delete", item.id),
             },
-          ]} />
+          ]}
+        />
       </ContainerCard>
     </div>
   );
