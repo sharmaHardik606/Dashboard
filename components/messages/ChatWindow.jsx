@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import MessageInput from "./MessageInput";
+import { Ellipsis } from "lucide-react";
 
 export default function ChatWindow({ conversation }) {
   const [messages, setMessages] = useState(conversation.messages);
@@ -25,12 +26,15 @@ export default function ChatWindow({ conversation }) {
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
         <p className="font-semibold text-gray-800">{conversation.user.name}</p>
         <button className="text-sm px-3 py-1 bg-gray-100 rounded hover:bg-gray-200 transition">
-          Load conversation
+          <Ellipsis />
         </button>
       </div>
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-6">
+        <button className="text-sm px-3 py-1 bg-gray-100 rounded hover:bg-gray-200 transition">
+          Load conversation
+        </button>
         {messages.map((msg, idx) => (
           <div key={idx} className="space-y-1">
             <div className="text-xs text-gray-400">

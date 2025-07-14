@@ -27,7 +27,7 @@ export default function MessageInput({ onSend }) {
       {/* Text Input */}
       <input
         type="text"
-        placeholder="P/S: One more thing I need to tell you"
+        placeholder="Message"
         value={text}
         onChange={(e) => setText(e.target.value)}
         className="flex-1 text-sm outline-none px-2"
@@ -36,7 +36,7 @@ export default function MessageInput({ onSend }) {
       {/* Send Button */}
       <button
         type="submit"
-        className="bg-blue-600 text-white px-4 py-1.5 text-sm rounded hover:bg-blue-700 transition"
+        className="bg-blue-600 text-white px-4 py-1.5 text-sm rounded hover:bg-blue-700 transition cursor-pointer"
       >
         Send
       </button>
