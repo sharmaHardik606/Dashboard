@@ -4,9 +4,12 @@ import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { invoices as allInvoices } from "@/constants/payments/invoices";
 import { EllipsisVertical } from "lucide-react";
+import { createPortal } from "react-dom";
 
 export default function InvoiceTable({ filter, limit }) {
   const [openDropdownId, setOpenDropdownId] = useState(null);
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0, flipUp: false });
+  const buttonRefs = useRef({});
   const dropdownRefs = useRef({});
   const router = useRouter();
 
@@ -22,17 +25,42 @@ export default function InvoiceTable({ filter, limit }) {
   useEffect(() => {
     function handleClickOutside(e) {
       Object.entries(dropdownRefs.current).forEach(([id, ref]) => {
-        if (ref && !ref.contains(e.target)) {
+        const button = buttonRefs.current[id];
+        if (
+          ref &&
+          !ref.contains(e.target) &&
+          button &&
+          !button.contains(e.target)
+        ) {
           setOpenDropdownId(null);
         }
       });
     }
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleView = (id) => router.push(`/invoices/${id}`);
   const handleDownload = (id) => console.log("Download invoice", id);
+
+  const handleToggleDropdown = (id) => {
+    const button = buttonRefs.current[id];
+    if (!button) return;
+
+    const rect = button.getBoundingClientRect();
+    const dropdownHeight = 150;
+
+    const shouldFlipUp = rect.bottom + dropdownHeight > window.innerHeight;
+
+    setDropdownPosition({
+      top: rect.top + window.scrollY,
+      left: rect.left + window.scrollX,
+      flipUp: shouldFlipUp,
+    });
+
+    setOpenDropdownId((prev) => (prev === id ? null : id));
+  };
 
   return (
     <div className="overflow-hidden">
@@ -56,10 +84,7 @@ export default function InvoiceTable({ filter, limit }) {
               ];
 
               return (
-                <tr
-                  key={inv.id}
-                  className="text-sm text-muted-foreground relative"
-                >
+                <tr key={inv.id} className="text-sm text-muted-foreground relative">
                   <td className="p-4">{inv.id}</td>
                   <td className="p-4">{inv.name}</td>
                   <td className="p-4">{inv.amount}</td>
@@ -75,37 +100,14 @@ export default function InvoiceTable({ filter, limit }) {
                       {inv.status}
                     </span>
                   </td>
-                  <td className="p-1">
+                  <td className="p-1 relative">
                     <button
-                      onClick={() =>
-                        setOpenDropdownId((prev) =>
-                          prev === inv.id ? null : inv.id
-                        )
-                      }
+                      ref={(el) => (buttonRefs.current[inv.id] = el)}
+                      onClick={() => handleToggleDropdown(inv.id)}
                       className="p-2 rounded-full text-black hover:bg-gray-200 dark:hover:bg-gray-700"
                     >
                       <EllipsisVertical className="cursor-pointer" />
                     </button>
-
-                    {openDropdownId === inv.id && (
-                      <div
-                        ref={(el) => (dropdownRefs.current[inv.id] = el)}
-                        className="absolute right-6 top-12 p-2 w-40 bg-white dark:bg-gray-900 shadow-lg rounded-md z-50"
-                      >
-                        {actions.map((action, i) => (
-                          <button
-                            key={i}
-                            onClick={() => {
-                              action.onClick();
-                              setOpenDropdownId(null);
-                            }}
-                            className="w-full text-left px-4 py-2 text-sm font-semibold hover:bg-muted transition-colors rounded-sm hover:text-black"
-                          >
-                            {action.label}
-                          </button>
-                        ))}
-                      </div>
-                    )}
                   </td>
                 </tr>
               );
@@ -113,7 +115,48 @@ export default function InvoiceTable({ filter, limit }) {
           </tbody>
         </table>
       </div>
+
+      {openDropdownId &&
+        createPortal(
+          <div
+            ref={(el) => (dropdownRefs.current[openDropdownId] = el)}
+            className="absolute p-2 w-40 bg-white dark:bg-gray-900 shadow-lg rounded-md z-[9999] text-sm text-muted-foreground transition-all duration-200 ease-in-out"
+            style={{
+              top: dropdownPosition.flipUp
+                ? dropdownPosition.top - 150 + 40 // shift up
+                : dropdownPosition.top + 40, // 40px below button
+              left: dropdownPosition.left - 160 + 32, // align with button
+            }}
+          >
+            {[
+              {
+                label: "View Invoice",
+                onClick: () => {
+                  handleView(openDropdownId);
+                  setOpenDropdownId(null);
+                },
+              },
+              {
+                label: "Download PDF",
+                onClick: () => {
+                  handleDownload(openDropdownId);
+                  setOpenDropdownId(null);
+                },
+              },
+            ].map((action, i) => (
+              <button
+                key={i}
+                onClick={action.onClick}
+                className="w-full text-left px-4 py-2 font-semibold hover:bg-muted transition-colors rounded-sm hover:text-black dark:hover:text-white"
+              >
+                {action.label}
+              </button>
+            ))}
+          </div>,
+          document.body
+        )}
     </div>
   );
 }
+
 
