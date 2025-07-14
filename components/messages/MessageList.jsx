@@ -28,7 +28,7 @@ export default function MessageList({ conversations, selectedId, onSelect }) {
           <div
             key={conv.id}
             onClick={() => onSelect(conv.id)}
-            className={`flex items-center gap-4 px-1 py-3 cursor-pointer hover:bg-gray-100 hover:rounded-xl ${
+            className={`flex items-center gap-4 px-1 py-3 cursor-pointer hover:bg-gray-100 hover:rounded-xl my-1 ${
               selectedId === conv.id
                 ? "bg-blue-50 border-l-4 border-blue-600 rounded-xl"
                 : ""
