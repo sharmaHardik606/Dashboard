@@ -5,6 +5,18 @@ export const DietData = [
     avgcalories: "Intermediate",
     duration: "4 weeks",
   },
+  {
+    planname: "Fat Loss Diet",
+    type_goal: "Fat Loss",
+    avgcalories: "Beginner",
+    duration: "4 weeks",
+  },
+  {
+    planname: "High Calorie Diet",
+    type_goal: "Weight Gain",
+    avgcalories: "Intermediate",
+    duration: "4 weeks",
+  },
 ]
 
 export const DietColumns = [
