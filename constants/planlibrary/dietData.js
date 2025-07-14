@@ -20,7 +20,7 @@ export const DietData = [
 ]
 
 export const DietColumns = [
-  { key: "planname", header: "Plan Name" },
+  { key: "planname", header: "Plan Name", cellClass: "font-semibold text-indigo-600 uppercase"},
   { key: "type_goal", header: "Type/Goal" },
   { key: "avgcalories", header: "Average Calories" },
   { key: "duration", header: "Duration" },

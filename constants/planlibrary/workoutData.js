@@ -23,7 +23,7 @@ export const WorkoutData = [
 ]
 
 export const WorkoutColumns = [
-  { key: "planname", header: "Plan Name" },
+  { key: "planname", header: "Plan Name", },
   { key: "type", header: "Type" },
   { key: "difficulty", header: "Difficulty" },
   { key: "focus", header: "Focus" },
