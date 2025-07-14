@@ -52,11 +52,11 @@ export default function MessageInput({ onSend }) {
         </button>
 
         {/* Emoji Icon */}
-        <div className="relative">
+        <div className="relative flex items-center">
           <button
             type="button"
             onClick={() => setShowEmojiPicker((prev) => !prev)}
-            className="text-gray-500 hover:text-gray-700 hover:cursor-pointer"
+            className="text-gray-500  hover:text-gray-700 hover:cursor-pointer "
           >
             <Smile size={18} />
           </button>
