@@ -40,7 +40,7 @@ export default function ChatWindow({ conversation, onBack }) {
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="flex items-center justify-between bg-[#eeeeee] px-4 py-5 rounded-t-lg">
+      <div className="flex items-center justify-between bg-[#eeeeee] px-4 py-5 sm:rounded-t-lg">
         {onBack && (
           <button
             onClick={onBack}

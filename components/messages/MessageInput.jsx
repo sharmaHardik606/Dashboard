@@ -1,13 +1,15 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Paperclip, Smile, Send } from "lucide-react";
-import Picker from "emoji-picker-react";
+import { EmojiButton } from "@joeattardi/emoji-button";
 
 export default function MessageInput({ onSend }) {
   const [text, setText] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const emojiButtonRef = useRef(null);
   const inputRef = useRef(null);
+  const pickerRef = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,25 +18,56 @@ export default function MessageInput({ onSend }) {
     setText("");
   };
 
-  const handleEmojiClick = (emojiData) => {
-    const emoji = emojiData.emoji;
-    const input = inputRef.current;
+  useEffect(() => {
+    if (!emojiButtonRef.current) return;
 
-    if (!input) return;
+    const picker = new EmojiButton({
+      position: "top-start", // default for desktop
+      theme: "light",
+      autoHide: false,
+      zIndex: 9999,
+      emojiSize: "1.2em",
+    });
 
-    const start = input.selectionStart;
-    const end = input.selectionEnd;
+    picker.on("emoji", (selection) => {
+  const emoji = selection.emoji;
+  const input = inputRef.current;
 
-    const newText =
-      text.substring(0, start) + emoji + text.substring(end, text.length);
+  if (!input) return;
 
-    setText(newText);
+  const start = input.selectionStart;
+  const end = input.selectionEnd;
 
-    // move cursor after emoji
-    setTimeout(() => {
-      input.focus();
-      input.setSelectionRange(start + emoji.length, start + emoji.length);
-    }, 0);
+  // 👇 Use input.value instead of state variable `text`
+  const currentValue = input.value;
+
+  const newText =
+    currentValue.substring(0, start) + emoji + currentValue.substring(end);
+
+  setText(newText);
+
+  // Move cursor after inserted emoji
+  setTimeout(() => {
+    input.focus();
+    input.setSelectionRange(start + emoji.length, start + emoji.length);
+  }, 0);
+});
+
+
+    pickerRef.current = picker;
+  }, [text]);
+
+  const toggleEmojiPicker = () => {
+    if (!pickerRef.current || !emojiButtonRef.current) return;
+
+    const isMobile = window.innerWidth < 640; // Tailwind sm: < 640px
+    pickerRef.current.togglePicker(emojiButtonRef.current);
+
+    if (isMobile) {
+      pickerRef.current.options.position = "bottom-start";
+    } else {
+      pickerRef.current.options.position = "top-start";
+    }
   };
 
   return (
@@ -52,21 +85,14 @@ export default function MessageInput({ onSend }) {
         </button>
 
         {/* Emoji Icon */}
-        <div className="relative flex items-center">
-          <button
-            type="button"
-            onClick={() => setShowEmojiPicker((prev) => !prev)}
-            className="text-gray-500  hover:text-gray-700 hover:cursor-pointer "
-          >
-            <Smile size={18} />
-          </button>
-
-          {showEmojiPicker && (
-            <div className="absolute  bottom-12 left-0 z-50">
-              <Picker onEmojiClick={handleEmojiClick} theme="light" />
-            </div>
-          )}
-        </div>
+        <button
+          type="button"
+          ref={emojiButtonRef}
+          onClick={toggleEmojiPicker}
+          className="text-gray-500 hover:text-gray-700 hover:cursor-pointer"
+        >
+          <Smile size={18} />
+        </button>
 
         {/* Text Input */}
         <input
@@ -81,7 +107,7 @@ export default function MessageInput({ onSend }) {
         {/* Send Button */}
         <button
           type="submit"
-          className= " bg-blue-600 text-white px-4 py-1.5 text-sm rounded hover:bg-blue-700 transition cursor-pointer hidden sm:block"
+          className="bg-blue-600 text-white px-4 py-1.5 text-sm rounded hover:bg-blue-700 transition cursor-pointer hidden sm:block"
         >
           Send
         </button>
