@@ -32,11 +32,11 @@ export default function DashboardPage() {
         <h1 className="text-3xl font-semibold">Dashboard</h1>
 
         <div className="flex gap-2">
-          <Button variant="hollow" size="xl">
+          <Button variant="hollow" size="lg">
             <Plus strokeWidth={3} />
             Log Payment
           </Button>
-          <Button variant="mainblue" size="xl">
+          <Button variant="mainblue" size="lg">
             <Plus strokeWidth={3} />
             Add New Member
           </Button>
