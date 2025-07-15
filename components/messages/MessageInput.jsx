@@ -38,7 +38,7 @@ export default function MessageInput({ onSend }) {
   };
 
   return (
-    <div className="relative">
+    <div className="relative w-full">
       <form
         onSubmit={handleSubmit}
         className="flex items-center gap-2 bg-white rounded-lg px-4 py-2 border border-gray-300 shadow-sm"
@@ -81,7 +81,7 @@ export default function MessageInput({ onSend }) {
         {/* Send Button */}
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-1.5 text-sm rounded hover:bg-blue-700 transition cursor-pointer"
+          className= " bg-blue-600 text-white px-4 py-1.5 text-sm rounded hover:bg-blue-700 transition cursor-pointer hidden sm:block"
         >
           Send
         </button>

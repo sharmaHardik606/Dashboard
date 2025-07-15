@@ -109,7 +109,7 @@ export default function ChatWindow({ conversation, onBack }) {
       </div>
 
       {/* Message Input */}
-      <div className="p-4 border-t border-gray-200">
+      <div className="md:p-4 border-t border-gray-200">
         <MessageInput onSend={handleSend} />
       </div>
     </div>

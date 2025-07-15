@@ -13,8 +13,8 @@ export default function MessagesPage() {
   const isMobile = useIsMobile();
 
   return (
-    <div className="flex h-[calc(100vh-64px)] px-4 gap-4 pt-4">
-      <ContainerCard className="flex gap-4 w-full">
+    <div className="flex h-[calc(100vh-64px)] md:px-4 md:gap-4 md:pt-4">
+      <ContainerCard className="flex md:gap-4 w-full">
         {/* Chat List */}
         <div
           className={`w-full md:w-1/3 ${
