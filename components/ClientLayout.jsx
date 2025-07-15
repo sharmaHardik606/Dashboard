@@ -49,7 +49,7 @@ export default function ClientLayout({ children }) {
         <Navbar />
         <div className="flex flex-1 w-full">
           <Sidebar />
-          <main className="flex-1 p-4 overflow-auto">{children}</main>
+          <main className="flex-1 sm:p-4 overflow-auto">{children}</main>
         </div>
       </div>
     </SidebarProvider>

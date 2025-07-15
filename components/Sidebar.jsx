@@ -2,6 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUser,faHouse, faSquarePollVertical, faBook, faMessage, faFileLines, faGear } from '@fortawesome/free-solid-svg-icons';
+
 import {
   ChevronDown,
   ChevronUp,
@@ -28,11 +31,11 @@ export function Sidebar() {
     {
       name: "Dashboard",
       href: "/dashboard",
-      icon: <House className="h-5 w-5" strokeWidth={3} />,
+      icon: <FontAwesomeIcon icon={faHouse} className="h-5 w-5" />,
     },
     {
       name: "Management",
-      icon: <UserRound className="h-5 w-5" strokeWidth={3} />,
+      icon: <FontAwesomeIcon icon={faUser} className="h-5 w-5" />,
       subItems: [
         {
           name: "Members",
@@ -54,27 +57,27 @@ export function Sidebar() {
     {
       name: "Payment",
       href: "/payment",
-      icon: <ChartColumnBig strokeWidth={3} className="h-5 w-5" />,
+      icon: <FontAwesomeIcon icon={faSquarePollVertical} className="h-5 w-5 " />,
     },
     {
       name: "Plan Library",
       href: "/planlibrary",
-      icon: <NotepadText strokeWidth={3} className="h-5 w-5" />,
+      icon: <FontAwesomeIcon icon={faBook} className="h-5 w-5" />,
     },
     {
       name: "Messages",
       href: "/messages",
-      icon: <MessageSquareMore strokeWidth={3} className="h-5 w-5" />,
+      icon: <FontAwesomeIcon icon={faMessage} className="h-5 w-5"/>,
     },
     {
       name: "Reports",
       href: "/reports",
-      icon: <NotepadTextDashed strokeWidth={3} className="h-5 w-5" />,
+      icon: <FontAwesomeIcon icon={faFileLines} className="h-5 w-5"/>,
     },
     {
       name: "Settings",
       href: "/settings",
-      icon: <Settings strokeWidth={3} className="h-5 w-5" />,
+      icon: <FontAwesomeIcon icon={faGear} className="h-5 w-5"/>,
     },
   ];
 
@@ -145,7 +148,7 @@ export function Sidebar() {
               <Link
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-2 py-3 px-2 rounded-lg  ",
+                  "flex items-center gap-2 py-3 px-2 rounded-lg",
                   pathname === item.href && "bg-blue-600 text-white"
                 )}
               >

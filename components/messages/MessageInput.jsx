@@ -62,7 +62,7 @@ export default function MessageInput({ onSend }) {
           </button>
 
           {showEmojiPicker && (
-            <div className="absolute bottom-12 left-0 z-50">
+            <div className="absolute  bottom-12 left-0 z-50">
               <Picker onEmojiClick={handleEmojiClick} theme="light" />
             </div>
           )}

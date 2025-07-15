@@ -14,18 +14,21 @@ export default function PlanLibrary() {
       <div className="flex flex-col justify-between gap-4 sm:flex-row">
         <h1 className="text-3xl font-semibold">Plan Library</h1>
         <div className="flex gap-2">
-          <Button variant="mainblue" size="lg">
-            <Plus strokeWidth={3} />
-            Create Workout Plan
-          </Button>
-          <Button variant="mainblue" size="lg">
-            <Plus strokeWidth={3} />
-            Create Diet Plan
-          </Button>
+          {activeTab === "workout" ? (
+            <Button variant="mainblue" size="lg">
+              <Plus strokeWidth={3} />
+              Create Workout Plan
+            </Button>
+          ) : (
+            <Button variant="mainblue" size="lg">
+              <Plus strokeWidth={3} />
+              Create Diet Plan
+            </Button>
+          )}
         </div>
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex gap-2 transition ">
         <Button
           variant={activeTab === "workout" ? "default" : "outline"}
           onClick={() => setActiveTab("workout")}
