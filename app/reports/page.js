@@ -1,13 +1,43 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ReportsSidebar from '@/components/reports/ReportsSidebar';
 import ExportSection from '@/components/reports/ExportSection';
 
 export default function ReportsPage() {
-  const [activeReport, setActiveReport] = useState('members-list');
+  const [activeReport, setActiveReport] = useState(null); // initially null
+  const [isMobileView, setIsMobileView] = useState(false);
+  const [showSidebarOnly, setShowSidebarOnly] = useState(true);
+
+  // Detect screen width
+  useEffect(() => {
+    const handleResize = () => {
+      const isMobile = window.innerWidth < 768;
+      setIsMobileView(isMobile);
+
+      if (!isMobile && activeReport === null) {
+        // If desktop and no report selected yet → set default
+        setActiveReport('members-list');
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [activeReport]);
+
+  const handleSelect = (key) => {
+    setActiveReport(key);
+    if (isMobileView) {
+      setShowSidebarOnly(false);
+    }
+  };
 
   const renderReport = () => {
+    if (!activeReport) {
+      return <div className="text-gray-500 text-sm">Please select a report.</div>;
+    }
+
     switch (activeReport) {
       case 'members-list':
         return (
@@ -15,14 +45,13 @@ export default function ReportsPage() {
             title="Members List Report"
             defaultStartDate="2025-04-25"
             defaultEndDate="2025-05-03"
-            filters={[ 'Membership Status','Membership Plan']}
+            filters={['Membership Status', 'Membership Plan']}
             showDateRange={true}
             showFilters={true}
             showFormat={true}
             onExport={() => console.log('Export Members List')}
           />
         );
-
       case 'new-signups':
         return (
           <ExportSection
@@ -35,7 +64,6 @@ export default function ReportsPage() {
             onExport={() => console.log('Export New Signups')}
           />
         );
-
       case 'membership-expiry':
         return (
           <ExportSection
@@ -48,7 +76,6 @@ export default function ReportsPage() {
             onExport={() => console.log('Export Expiry')}
           />
         );
-
       case 'payment-summary':
         return (
           <ExportSection
@@ -62,7 +89,6 @@ export default function ReportsPage() {
             onExport={() => console.log('Export Payments')}
           />
         );
-
       case 'revenue-by-plan':
         return (
           <ExportSection
@@ -75,21 +101,19 @@ export default function ReportsPage() {
             onExport={() => console.log('Export Revenue')}
           />
         );
-
       case 'attendance-log':
         return (
           <ExportSection
             title="Attendance Log Report"
             defaultStartDate="2025-04-25"
             defaultEndDate="2025-05-03"
-            filters={['User Type','Check-in Method']}
+            filters={['User Type', 'Check-in Method']}
             showDateRange={true}
             showFilters={true}
             showFormat={true}
             onExport={() => console.log('Export Attendance')}
           />
         );
-
       default:
         return <div>Please select a report.</div>;
     }
@@ -99,11 +123,30 @@ export default function ReportsPage() {
     <div className="p-3 space-y-6">
       <h1 className="text-3xl font-semibold">Reports</h1>
 
-      <div className="flex gap-4 w-full">
-        <div className="w-1/3">
-          <ReportsSidebar active={activeReport} onSelect={setActiveReport} />
+      <div className="w-full">
+        <div className="md:flex gap-4 w-full">
+          {/* Sidebar */}
+          {(showSidebarOnly || !isMobileView) && (
+            <div className="w-full md:w-1/3">
+              <ReportsSidebar active={activeReport} onSelect={handleSelect} />
+            </div>
+          )}
+
+          {/* Report View */}
+          {(!showSidebarOnly || !isMobileView) && (
+            <div className="w-full md:w-2/3">
+              {isMobileView && (
+                <button
+                  className="mb-4 text-sm text-blue-600 underline"
+                  onClick={() => setShowSidebarOnly(true)}
+                >
+                  ← Back to Reports
+                </button>
+              )}
+              {renderReport()}
+            </div>
+          )}
         </div>
-        <div className="w-2/3">{renderReport()}</div>
       </div>
     </div>
   );

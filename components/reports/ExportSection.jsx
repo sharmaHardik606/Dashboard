@@ -24,8 +24,8 @@ export default function ExportSection({
           <div className="">
             <h3 className="font-semibold text-sm ">Date Range</h3>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border rounded-xl py-4 px-2 mt-2">
-              <div>
+            <div className="flex gap-4 border rounded-xl py-4 px-2 mt-2">
+              <div className="w-full">
                 <label className="text-xs font-medium mb-1 block">
                   Start Date
                 </label>
@@ -35,7 +35,7 @@ export default function ExportSection({
                   className="w-full border border-gray-300 px-3 py-2 rounded-md"
                 />
               </div>
-              <div>
+              <div className="w-full">
                 <label className="text-xs font-medium mb-1 block">
                   End Date
                 </label>
@@ -45,7 +45,10 @@ export default function ExportSection({
                   className="w-full border border-gray-300 px-3 py-2 rounded-md"
                 />
               </div>
-              <div className="flex gap-2">
+            </div>
+
+            <div className="px-2 mt-2">
+              <div className="w-full flex gap-2">
                 {["Today", "This Week", "This Month"].map((label) => (
                   <button
                     key={label}
@@ -84,11 +87,16 @@ export default function ExportSection({
             <h3 className="font-semibold text-sm">Output Format</h3>
             <div className="flex items-center gap-4">
               <label className="flex items-center gap-2 text-sm">
-                <input type="radio" name="format" />
+                <input type="radio" name="format" className="accent-blue-600" />
                 Excel (CSV)
               </label>
               <label className="flex items-center gap-2 text-sm">
-                <input type="radio" name="format" defaultChecked />
+                <input
+                  type="radio"
+                  name="format"
+                  className="accent-blue-600"
+                  defaultChecked
+                />
                 PDF
               </label>
             </div>
@@ -97,8 +105,12 @@ export default function ExportSection({
 
         {/* Export Button */}
         <div className="flex gap-2 items-center justify-end border-t pt-4">
-          <Button onClick={onExport} variant={"hollow"}>Reset Parameters</Button>
-          <Button onClick={onExport} variant={"mainblue"}>Generate & Export</Button>
+          <Button onClick={onExport} variant={"hollow"}>
+            Reset Parameters
+          </Button>
+          <Button onClick={onExport} variant={"mainblue"}>
+            Generate & Export
+          </Button>
         </div>
       </ContainerCard>
     </div>

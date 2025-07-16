@@ -2,7 +2,6 @@
 @import "tw-animate-css";
 
 
-
 body {
   overflow-y: scroll;        /* ensures scroll functionality */
   -ms-overflow-style: none; /* IE and Edge */
