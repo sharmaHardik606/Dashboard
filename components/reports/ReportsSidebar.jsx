@@ -1,26 +1,23 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-
 const groupedLinks = [
   {
     section: "Members Reports",
     links: [
       {
         label: "Members List",
-        tagline: "Complete list of all registerd members",
-        href: "/reports/members-list",
+        tagline: "Complete list of all registered members.",
+        key: "members-list",
       },
       {
         label: "New Sign-ups",
-        tagline: "Complete list of all registerd members",
-        href: "/reports/new-signups",
+        tagline: "Members who joined in a specific period.",
+        key: "new-signups",
       },
       {
         label: "Membership Expiry",
-        tagline: "Complete list of all registerd members",
-        href: "/reports/membership-expiry",
+        tagline: "Memberships expiring soon or recently expired.",
+        key: "membership-expiry",
       },
     ],
   },
@@ -29,13 +26,13 @@ const groupedLinks = [
     links: [
       {
         label: "Payment Summary",
-        tagline: "Complete list of all registerd members",
-        href: "/reports/payment-summary",
+        tagline: "Overview of payment received and pending.",
+        key: "payment-summary",
       },
       {
         label: "Revenue by Plan",
-        tagline: "Complete list of all registerd members",
-        href: "/reports/revenue-by-plan",
+        tagline: "Breakdown of revenue per membership plan.",
+        key: "revenue-by-plan",
       },
     ],
   },
@@ -44,38 +41,46 @@ const groupedLinks = [
     links: [
       {
         label: "Attendance Log",
-        tagline: "Complete list of all registerd members",
-        href: "/reports/attendance-log",
+        tagline: "Detailed log of members and staff check-ins.",
+        key: "attendance-log",
       },
     ],
   },
 ];
 
-export default function ReportsSidebar() {
-  const pathname = usePathname();
-
+export default function ReportsSidebar({ active, onSelect }) {
   return (
-    <div className="">
+    <div>
       {groupedLinks.map((group) => (
         <div key={group.section}>
           <p className="text-md font-semibold capitalize mb-3 mt-2">
             {group.section}
           </p>
           <div className="space-y-1 flex flex-col gap-2">
-            {group.links.map((link) => (
-              <Link key={link.href} href={link.href}>
+            {group.links.map((link) => {
+              const isActive = active === link.key;
+
+              return (
                 <div
-                  className={`cursor-pointer flex flex-col gap-2 px-3 py-4 rounded-md text-sm font-semibold bg-white shadow space-y-6 ${
-                    pathname === link.href
+                  key={link.key}
+                  onClick={() => onSelect(link.key)}
+                  className={`cursor-pointer px-4 py-4 rounded-md shadow transition-colors duration-150 ${
+                    isActive
                       ? "bg-blue-600 text-white"
-                      : "hover:bg-gray-100 text-gray-700"
+                      : "bg-white hover:bg-gray-100 text-gray-800"
                   }`}
                 >
-                  {link.label}
-                  <div className="text-xs font-semibold ">{link.tagline}</div>
+                  <div className="text-md font-semibold mb-2">{link.label}</div>
+                  <div
+                    className={`text-xs font-medium ${
+                      isActive ? "text-white/80" : "text-neutral-500"
+                    }`}
+                  >
+                    {link.tagline}
+                  </div>
                 </div>
-              </Link>
-            ))}
+              );
+            })}
           </div>
         </div>
       ))}

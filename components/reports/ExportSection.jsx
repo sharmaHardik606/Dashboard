@@ -1,85 +1,106 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { ContainerCard } from "../sharedcomponents/ContainerCard";
 
 export default function ExportSection({
-  title = '',
+  title,
   defaultStartDate,
   defaultEndDate,
   filters = [],
+  showDateRange = true,
+  showFilters = true,
+  showFormat = true,
   onExport,
 }) {
-  const [startDate, setStartDate] = useState(defaultStartDate);
-  const [endDate, setEndDate] = useState(defaultEndDate);
-  const [format, setFormat] = useState('pdf');
-
-  const [filterValues, setFilterValues] = useState(() =>
-    filters.reduce((acc, f) => ({ ...acc, [f.name]: f.options[0] }), {})
-  );
-
-  const handleExport = () => {
-    onExport({
-      startDate,
-      endDate,
-      format,
-      ...filterValues,
-    });
-  };
-
   return (
-    <div className="bg-white p-6 rounded-xl shadow space-y-6">
-      <h2 className="text-xl font-semibold">{title}</h2>
+    <div className="space-y-6">
+      <ContainerCard className="space-y-6">
+        {/* Title */}
+        <h2 className="text-xl font-semibold">{title}</h2>
 
-      {/* Date Range */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label className="block mb-1 font-medium">Start Date</label>
-          <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="w-full border rounded px-3 py-2" />
-        </div>
-        <div>
-          <label className="block mb-1 font-medium">End Date</label>
-          <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="w-full border rounded px-3 py-2" />
-        </div>
-      </div>
+        {/* Date Range */}
+        {showDateRange && (
+          <div className="border rounded-xl p-4 space-y-4">
+            <h3 className="font-semibold">Date Range</h3>
 
-      {/* Dynamic Filters */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {filters.map((filter) => (
-          <div key={filter.name}>
-            <label className="block mb-1 font-medium">{filter.label}</label>
-            <select
-              value={filterValues[filter.name]}
-              onChange={(e) => setFilterValues(prev => ({ ...prev, [filter.name]: e.target.value }))}
-              className="w-full border rounded px-3 py-2"
-            >
-              {filter.options.map((opt) => (
-                <option key={opt} value={opt}>{opt}</option>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="text-sm font-medium mb-1 block">Start Date</label>
+                <input
+                  type="date"
+                  defaultValue={defaultStartDate}
+                  className="w-full border border-gray-300 px-3 py-2 rounded-md"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium mb-1 block">End Date</label>
+                <input
+                  type="date"
+                  defaultValue={defaultEndDate}
+                  className="w-full border border-gray-300 px-3 py-2 rounded-md"
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-2">
+              {["Today", "This Week", "This Month"].map((label) => (
+                <button
+                  key={label}
+                  className="border px-3 py-1.5 rounded-md text-sm hover:bg-gray-100"
+                >
+                  {label}
+                </button>
               ))}
-            </select>
+            </div>
           </div>
-        ))}
-      </div>
+        )}
 
-      {/* Format */}
-      <div>
-        <p className="font-medium mb-2">Output Format</p>
-        <div className="flex items-center gap-4">
-          <label className="flex items-center gap-2">
-            <input type="radio" name="format" value="csv" onChange={() => setFormat('csv')} />
-            Excel (CSV)
-          </label>
-          <label className="flex items-center gap-2">
-            <input type="radio" name="format" value="pdf" checked={format === 'pdf'} onChange={() => setFormat('pdf')} />
-            PDF
-          </label>
+        {/* Filters */}
+        {showFilters && filters.length > 0 && (
+          <div className="border rounded-xl p-4 space-y-4">
+            <h3 className="font-semibold">Filters</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {filters.map((filterLabel, index) => (
+                <div key={index}>
+                  <label className="text-sm font-medium text-gray-700 mb-2 block">
+                    {filterLabel}
+                  </label>
+                  <select className="w-full border border-gray-300 px-3 py-2 rounded-md">
+                    <option>All</option>
+                  </select>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Output Format */}
+        {showFormat && (
+          <div className="border rounded-xl p-4 space-y-4">
+            <h3 className="font-semibold">Output Format</h3>
+            <div className="flex items-center gap-4">
+              <label className="flex items-center gap-2 text-sm">
+                <input type="radio" name="format" />
+                Excel (CSV)
+              </label>
+              <label className="flex items-center gap-2 text-sm">
+                <input type="radio" name="format" defaultChecked />
+                PDF
+              </label>
+            </div>
+          </div>
+        )}
+
+        {/* Export Button */}
+        <div>
+          <button
+            onClick={onExport}
+            className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition"
+          >
+            Generate & Export
+          </button>
         </div>
-      </div>
-
-      {/* Buttons */}
-      <div className="flex justify-end gap-4">
-        <button className="px-4 py-2 rounded border" onClick={() => window.location.reload()}>Reset</button>
-        <button className="px-4 py-2 rounded bg-blue-600 text-white" onClick={handleExport}>Generate & Export</button>
-      </div>
+      </ContainerCard>
     </div>
   );
 }
