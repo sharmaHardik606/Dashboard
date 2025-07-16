@@ -1,8 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { format } from "date-fns";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar"
 
 export default function LogPaymentForm({ onCancel }) {
   const [formData, setFormData] = useState({
@@ -64,13 +70,28 @@ export default function LogPaymentForm({ onCancel }) {
         <label className="text-xs font-semibold mb-1 block">
           Date of Payment
         </label>
-        <input
-          type="date"
-          name="date"
-          value={formData.date}
-          onChange={handleChange}
-          className="w-full border px-3 py-1.5 rounded-md text-sm font-semibold uppercase"
-        />
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              className="w-full justify-start text-left font-normal text-sm px-3 py-1.5"
+            >
+              {formData.date ? (
+                format(formData.date, "DD MM YYYY")
+              ) : (
+                <span className="text-muted-foreground">Select a date</span>
+              )}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar
+              mode="single"
+              selected={formData.date}
+              onSelect={(date) => setFormData((prev) => ({ ...prev, date }))}
+              initialFocus
+            />
+          </PopoverContent>
+        </Popover>
       </div>
 
       <div>
@@ -103,18 +124,20 @@ export default function LogPaymentForm({ onCancel }) {
         </div>
       </div>
 
-      <div>
-        <label className="text-xs font-semibold mb-1 block">
-          Transaction ID
-        </label>
-        <input
-          type="text"
-          name="transactionId"
-          value={formData.transactionId}
-          onChange={handleChange}
-          className="w-full border px-3 py-1.5 rounded-md text-sm font-semibold"
-        />
-      </div>
+      {formData.method === "Online" && (
+        <div>
+          <label className="text-xs font-semibold mb-1 block">
+            Transaction ID
+          </label>
+          <input
+            type="text"
+            name="transactionId"
+            value={formData.transactionId}
+            onChange={handleChange}
+            className="w-full border px-3 py-2 rounded-md text-sm font-semibold"
+          />
+        </div>
+      )}
 
       <div>
         <label className="text-xs font-semibold mb-1 block">Notes</label>
