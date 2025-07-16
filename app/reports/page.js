@@ -15,7 +15,7 @@ export default function ReportsPage() {
             title="Members List Report"
             defaultStartDate="2025-04-25"
             defaultEndDate="2025-05-03"
-            filters={['Membership Plan', 'Status']}
+            filters={[ 'Membership Status','Membership Plan']}
             showDateRange={true}
             showFilters={true}
             showFormat={true}
@@ -82,7 +82,7 @@ export default function ReportsPage() {
             title="Attendance Log Report"
             defaultStartDate="2025-04-25"
             defaultEndDate="2025-05-03"
-            filters={['Check-in Method']}
+            filters={['User Type','Check-in Method']}
             showDateRange={true}
             showFilters={true}
             showFormat={true}
