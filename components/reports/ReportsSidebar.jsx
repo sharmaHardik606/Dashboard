@@ -64,7 +64,7 @@ export default function ReportsSidebar({ active, onSelect }) {
                 <div
                   key={link.key}
                   onClick={() => onSelect(link.key)}
-                  className={`cursor-pointer px-4 py-4 rounded-md shadow transition-colors duration-150 ${
+                  className={`cursor-pointer px-4 py-4 rounded-md shadow transition-colors duration-600 ease-in-out ${
                     isActive
                       ? "bg-blue-600 text-white"
                       : "bg-white hover:bg-gray-100 text-gray-800"

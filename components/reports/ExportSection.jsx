@@ -14,7 +14,7 @@ export default function ExportSection({
   onExport,
 }) {
   return (
-    <div className="space-y-6 h-full">
+    <div className="space-y-6 h-full ">
       <ContainerCard className="space-y-6">
         {/* Title */}
         <h2 className="text-lg font-semibold">{title}</h2>

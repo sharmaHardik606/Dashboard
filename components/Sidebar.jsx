@@ -125,7 +125,7 @@ export function Sidebar() {
                       key={subItem.name}
                       href={subItem.href}
                       className={cn(
-                        "flex items-center gap-2 py-3 px-2 rounded-lg ",
+                        "flex items-center gap-2 py-3 px-2 rounded-lg transition-colors duration-600 ease-in-out",
                         pathname === subItem.href && "bg-blue-600 text-white"
                       )}
                     >
@@ -148,8 +148,8 @@ export function Sidebar() {
               <Link
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-2 py-3 px-2 rounded-lg",
-                  pathname === item.href && "bg-blue-600 text-white"
+                  "flex items-center gap-2 py-3 px-2 rounded-lg transition-colors duration-600 ease-in-out",
+                  pathname === item.href && "bg-blue-600 text-white "
                 )}
               >
                 {item.icon}
