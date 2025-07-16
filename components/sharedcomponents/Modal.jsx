@@ -22,18 +22,14 @@ export default function Modal({ children }) {
     };
   }, [show]);
 
-  function closeModal() {
-    const params = new URLSearchParams(searchParams.toString());
-    params.delete("showForm");
-    router.push(`${pathname}?${params.toString()}`);
-  }
+  
 
   if (!show) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+    <div className="w-full h-full fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
       <div className="relative bg-white rounded-xl shadow-xl w-full max-w-lg">
-        <div className="p-6">{children}</div>
+        <div className="p-4">{children}</div>
       </div>
     </div>
   );
