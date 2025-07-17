@@ -140,7 +140,7 @@ export default function ReportsPage() {
             <div className="w-full md:w-2/3 -mt-2">
               {isMobileView && (
                 <button
-                  className="text-sm md:hidden active:bg-gray-100 rounded-full self-end"
+                  className="py-2 text-sm md:hidden active:bg-gray-100 rounded-full self-end"
                   onClick={() => setShowSidebarOnly(true)}
                 >
                   <ArrowLeft />
