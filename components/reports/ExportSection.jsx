@@ -24,7 +24,7 @@ export default function ExportSection({
           <div className="">
             <h3 className="font-semibold text-sm ">Date Range</h3>
 
-            <div className="flex gap-4 border rounded-xl py-4 px-2 mt-2">
+            <div className="flex flex-col sm:flex-row  gap-4 border rounded-xl py-4 px-2 mt-2">
               <div className="w-full">
                 <label className="text-xs font-medium mb-1 block">
                   Start Date
