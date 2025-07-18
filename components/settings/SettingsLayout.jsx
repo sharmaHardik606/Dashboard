@@ -12,6 +12,7 @@ import CommunicationSettings from "./sections/CommunicationSettings";
 
 export default function SettingsLayout() {
   const [activeSection, setActiveSection] = useState("general");
+  const generateKey = (label) => label.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
   return (
     <div className="w-full flex gap-4">
@@ -22,11 +23,11 @@ export default function SettingsLayout() {
       <ContainerCard className={"w-3/4"}>
         <div className="">
           {activeSection === "general-settings" && <GeneralSettings />}
-          {activeSection === "user-&-role-management" && <UserRoleSettings /> }
+          {activeSection === generateKey("User & Role Management") && <UserRoleSettings />}
           {activeSection === "membership-plan-settings" && (
             <MembershipSettings />
           )}
-          {activeSection === "billing-&-payment-settings" && (
+          {activeSection === generateKey("billing & payment-settings") && (
             <BillingSettings />
           )}
           {activeSection === "attendance-system-settings" && (

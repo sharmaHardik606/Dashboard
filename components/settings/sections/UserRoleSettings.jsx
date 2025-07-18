@@ -25,14 +25,17 @@ const roles = [
 
 export default function UserRoleSettings() {
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-semibold">Staff roles and permissions</h2>
-        <p className="text-sm text-muted-foreground">
+        <h2 className="text-3xl font-semibold mb-2">
+          Staff roles and permissions
+        </h2>
+        <p className="text-muted-foreground text-sm ">
           Manage staff roles, permissions, and account policies
         </p>
       </div>
 
+      <h2 className="text-xl font-semibold mb-2">Roles</h2>
       <div className="border rounded-xl overflow-hidden">
         <table className="w-full text-sm">
           <thead className="bg-muted text-left">
@@ -47,12 +50,12 @@ export default function UserRoleSettings() {
           <tbody>
             {roles.map((r, i) => (
               <tr key={i} className="border-t">
-                <td className="px-4 py-3">{r.role}</td>
-                <td className="px-4 py-3">{r.description}</td>
-                <td className="px-4 py-3">{r.permissions}</td>
-                <td className="px-4 py-3">{r.staffCount}</td>
-                <td className="px-4 py-3">
-                  <button className="text-primary hover:underline text-sm font-medium">
+                <td className="px-4 py-4">{r.role}</td>
+                <td className="px-4 py-4">{r.description}</td>
+                <td className="px-4 py-4">{r.permissions}</td>
+                <td className="px-4 py-4">{r.staffCount}</td>
+                <td className="px-4 py-4">
+                  <button className="text-primary hover:cursor-pointer hover:underline text-sm font-medium">
                     Edit
                   </button>
                 </td>

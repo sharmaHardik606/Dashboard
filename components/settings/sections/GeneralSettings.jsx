@@ -61,7 +61,7 @@ export default function GeneralSettings() {
     <div className="space-y-6">
       <div>
         <h2 className="text-3xl font-semibold mb-2">Gym Information</h2>
-        <p className="text-muted-foreground text-sm font-light">
+        <p className="text-muted-foreground text-sm ">
           Manage basic information, localization, formatting, and operating
           hours for your gym.
         </p>
