@@ -83,11 +83,12 @@ export function Sidebar() {
   return (
     <aside
       className={cn(
-  "bg-[#eeeeee] rounded-4xl transition-all duration-300 ease-in-out z-40 flex flex-col justify-between",
-  iconOnly ? "w-20 p-4 fixed top-16 left-0 h-[calc(100vh-4rem)]" : "",
-  isSidebarOpen ? "block fixed top-16 left-0 w-72 h-[calc(100vh-4rem)]" : "hidden lg:flex w-72 p-6",
-)}
-
+        "ml-6 mt-4 mb-4 bg-[#eeeeee] rounded-4xl p-6 flex flex-col justify-between",
+        "transition-all duration-300 ease-in-out z-40",
+        !isIconOnlyMode && "w-70",
+        isIconOnlyMode && "w-20 p-4",
+        isSidebarOpen ? "block fixed top-16 left-0 w-72" : "hidden lg:flex"
+      )}
     >
       <nav className="flex flex-col space-y-1">
         {menuItems.map((item) => {
