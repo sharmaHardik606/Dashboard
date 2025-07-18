@@ -78,17 +78,16 @@ export function Sidebar() {
   ];
 
   const isSettingsPage = pathname === "/settings";
-  const isIconOnlyMode = isSettingsPage;
+  const isIconOnlyMode = isSettingsPage && !isSidebarOpen;
 
   return (
     <aside
       className={cn(
-        "ml-6 mt-4 mb-4 bg-[#eeeeee] rounded-4xl p-6 flex flex-col justify-between",
-        "transition-all duration-300 ease-in-out z-40",
-        !isIconOnlyMode && "w-70", 
-        isIconOnlyMode && "w-20 p-4", 
-        isSidebarOpen ? "block fixed top-16 left-0 w-72" : "hidden lg:flex"
-      )}
+  "bg-[#eeeeee] rounded-4xl transition-all duration-300 ease-in-out z-40 flex flex-col justify-between",
+  iconOnly ? "w-20 p-4 fixed top-16 left-0 h-[calc(100vh-4rem)]" : "",
+  isSidebarOpen ? "block fixed top-16 left-0 w-72 h-[calc(100vh-4rem)]" : "hidden lg:flex w-72 p-6",
+)}
+
     >
       <nav className="flex flex-col space-y-1">
         {menuItems.map((item) => {
@@ -129,7 +128,7 @@ export function Sidebar() {
                     onClick={() => setIsManagementOpen(!isManagementOpen)}
                     className={cn(
                       "flex items-center gap-2 py-3 px-2 w-full rounded-md cursor-pointer",
-                      pathname.startsWith("/management") 
+                      pathname.startsWith("/management")
                     )}
                   >
                     {item.icon}
