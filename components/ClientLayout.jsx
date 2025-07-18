@@ -30,10 +30,10 @@ export default function ClientLayout({ children }) {
   }, [pathname]);
 
   if (loading) return null;
-
   if (!authenticated && !isAuthPage) return null;
 
-  // === If login or signup, show only form ===
+  const iconOnly = pathname === "/settings";
+
   if (isAuthPage) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -42,17 +42,15 @@ export default function ClientLayout({ children }) {
     );
   }
 
-  // === Else: show full layout ===
   return (
     <SidebarProvider>
       <div className="flex flex-col min-h-screen w-full">
         <Navbar />
         <div className="flex flex-1 w-full">
-          <Sidebar />
+          <Sidebar iconOnly={iconOnly} />
           <main className="flex-1 sm:p-4 overflow-auto">{children}</main>
         </div>
       </div>
     </SidebarProvider>
   );
 }
-

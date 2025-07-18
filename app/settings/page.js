@@ -1,7 +1,7 @@
-export default function SettingsPage(){
-    return(
-        <div>
-            <h1>settings</h1>
-        </div>
-    );
+'use client';
+
+import SettingsLayout from '@/components/settings/SettingsLayout';
+
+export default function SettingsPage() {
+  return <SettingsLayout />;
 }

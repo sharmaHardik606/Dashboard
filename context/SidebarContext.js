@@ -1,20 +1,26 @@
 "use client";
-
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 const SidebarContext = createContext();
 
 export function SidebarProvider({ children }) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const pathname = usePathname();
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
-  const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
-  const closeSidebar = () => setIsSidebarOpen(false);
+  useEffect(() => {
+    setIsCollapsed(pathname === "/settings");
+  }, [pathname]);
+
+  const expandSidebar = () => setIsCollapsed(false);
 
   return (
-    <SidebarContext.Provider value={{ isSidebarOpen, toggleSidebar, closeSidebar }}>
+    <SidebarContext.Provider value={{ isCollapsed, expandSidebar }}>
       {children}
     </SidebarContext.Provider>
   );
 }
 
 export const useSidebar = () => useContext(SidebarContext);
+
+
