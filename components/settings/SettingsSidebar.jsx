@@ -9,21 +9,21 @@ export default function SettingsSidebar({ active, onChange }) {
   ];
 
   return (
-    <div className="w-64 bg-white border-r p-4 space-y-2">
+    <div className=" flex flex-col space-y-2 gap-2">
       {tabs.map((label, index) => {
-        const key = label.toLowerCase().replace(/ /g, '-');
+        const key = label.toLowerCase().replace(/[^a-z0-9]+/g, '-');
         const isActive = active === key;
         return (
           <button
             key={key}
             onClick={() => onChange(key)}
-            className={`w-full text-left px-4 py-2 rounded-lg transition font-medium ${
-              isActive ? 'bg-blue-600 text-white' : 'hover:bg-gray-100 text-gray-700'
+            className={`w-full text-left px-3 py-2  rounded-lg transition font-semibold  ${
+              isActive ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 shadow'
             }`}
           >
             {label}
           </button>
-        );
+        )
       })}
     </div>
   );
