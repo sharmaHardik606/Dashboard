@@ -1,12 +1,11 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
 import ClientLayout from "@/components/ClientLayout";
-import StoreProvider from "./store-provider"; // 👈 Add this
+import StoreProvider from "./store-provider";
 
 const inter = Inter({
-  variable: "--font-inter",
   subsets: ["latin"],
-  display: "swap",
+  variable: "--font-inter",
 });
 
 export const metadata = {
@@ -17,7 +16,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="h-full">
-      <body className={`${inter.variable} font-sans antialiased min-h-screen`}>
+      <body className={`${inter.className} antialiased min-h-screen`}>
         <StoreProvider>
           <ClientLayout>{children}</ClientLayout>
         </StoreProvider>
@@ -25,5 +24,6 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+
 
 
