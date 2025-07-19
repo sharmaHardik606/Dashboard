@@ -7,7 +7,7 @@ import { useSidebar } from "@/context/SidebarContext";
 import { useState, useRef, useEffect } from "react";
 import { logout } from "@/utils/auth";
 import { useRouter } from "next/navigation";
-import NotificationPanel from "./NotificationPanel"; // 👈 Import panel
+import NotificationPanel from "./NotificationPanel"; 
 
 export function Navbar() {
   const { toggleSidebar } = useSidebar();
@@ -15,6 +15,8 @@ export function Navbar() {
   const [showNotifications, setShowNotifications] = useState(false);
   const dropdownRef = useRef(null);
   const router = useRouter();
+  const [showPanel, setShowPanel] = useState(false);
+  const [hasUnread, setHasUnread] = useState(true);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -55,16 +57,25 @@ export function Navbar() {
         <div className="flex items-center gap-4 relative" ref={dropdownRef}>
           {/* Notification Bell */}
           <div className="relative">
-            <button
-              onClick={() => setShowNotifications(!showNotifications)}
-              className="relative p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
-            >
-              <Bell className="h-6 w-6" />
-              <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full" />
-            </button>
+      <button
+        className="relative hover:cursor-pointer"
+        onClick={() => setShowPanel((prev) => !prev)}
+      >
+        <Bell className="h-6 w-6" />
+        {hasUnread && (
+          <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full" />
+        )}
+      </button>
 
-            {showNotifications && <NotificationPanel />}
-          </div>
+      {showPanel && (
+        <NotificationPanel
+          onMarkRead={() => {
+            setHasUnread(false);
+            setShowPanel(false);
+          }}
+        />
+      )}
+    </div>
 
           {/* Avatar */}
           <button
