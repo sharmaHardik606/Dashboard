@@ -72,8 +72,8 @@ export default function GeneralSettings() {
         <div>
           <h3 className="text-sm font-semibold mb-2">Gym Logo</h3>
         </div>
-        <div className="flex items-center gap-6">
-          <div className="h-20 w-20 rounded-full bg-black flex items-center justify-center overflow-hidden">
+        <div className="flex items-center gap-6 sm:justify-between justify-center">
+          <div className="h-20 w-20  rounded-full bg-black flex items-center justify-center overflow-hidden">
             {userImage ? (
               <Image
                 src={userImage}
@@ -96,7 +96,7 @@ export default function GeneralSettings() {
             onChange={handleImageChange}
           />
 
-          <div className="space-x-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <Button
               variant="default"
               className="font-semibold"

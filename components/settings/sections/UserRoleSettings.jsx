@@ -37,32 +37,34 @@ export default function UserRoleSettings() {
 
       <h2 className="text-xl font-semibold mb-2">Roles</h2>
       <div className="border rounded-xl overflow-hidden">
-        <table className="w-full text-sm">
-          <thead className="bg-muted text-left">
-            <tr>
-              <th className="px-4 py-3 font-medium">Role</th>
-              <th className="px-4 py-3 font-medium">Description</th>
-              <th className="px-4 py-3 font-medium">Permissions</th>
-              <th className="px-4 py-3 font-medium">Staff members</th>
-              <th className="px-4 py-3 font-medium">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {roles.map((r, i) => (
-              <tr key={i} className="border-t">
-                <td className="px-4 py-4">{r.role}</td>
-                <td className="px-4 py-4">{r.description}</td>
-                <td className="px-4 py-4">{r.permissions}</td>
-                <td className="px-4 py-4">{r.staffCount}</td>
-                <td className="px-4 py-4">
-                  <button className="text-primary hover:cursor-pointer hover:underline text-sm font-medium">
-                    Edit
-                  </button>
-                </td>
+        <div className="w-full overflow-x-auto">
+          <table className="w-full min-w-[700px] text-sm">
+            <thead className="bg-muted text-left">
+              <tr>
+                <th className="px-4 py-3 font-medium">Role</th>
+                <th className="px-4 py-3 font-medium">Description</th>
+                <th className="px-4 py-3 font-medium">Permissions</th>
+                <th className="px-4 py-3 font-medium">Staff members</th>
+                <th className="px-4 py-3 font-medium">Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {roles.map((r, i) => (
+                <tr key={i} className="border-t">
+                  <td className="px-4 py-4">{r.role}</td>
+                  <td className="px-4 py-4">{r.description}</td>
+                  <td className="px-4 py-4">{r.permissions}</td>
+                  <td className="px-4 py-4">{r.staffCount}</td>
+                  <td className="px-4 py-4">
+                    <button className="text-primary hover:cursor-pointer hover:underline text-sm font-medium">
+                      Edit
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <Button className="text-sm rounded-md" variant="outline">

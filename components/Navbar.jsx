@@ -7,18 +7,23 @@ import { useSidebar } from "@/context/SidebarContext";
 import { useState, useRef, useEffect } from "react";
 import { logout } from "@/utils/auth";
 import { useRouter } from "next/navigation";
+import NotificationPanel from "./NotificationPanel"; // 👈 Import panel
 
 export function Navbar() {
   const { toggleSidebar } = useSidebar();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
   const dropdownRef = useRef(null);
   const router = useRouter();
 
-  // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target)
+      ) {
         setDropdownOpen(false);
+        setShowNotifications(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -26,8 +31,8 @@ export function Navbar() {
   }, []);
 
   const handleLogout = () => {
-    logout(); // remove from localStorage
-    router.push("/login"); 
+    logout();
+    router.push("/login");
   };
 
   return (
@@ -40,7 +45,7 @@ export function Navbar() {
           >
             <Menu className="h-6 w-6" />
           </button>
-          <Link href="/" className="flex items-center gap-2 ">
+          <Link href="/" className="flex items-center gap-2">
             <span className="lg:text-3xl text-2xl font-bold uppercase">
               Logo
             </span>
@@ -48,7 +53,18 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-4 relative" ref={dropdownRef}>
-          <Bell className="h-6 w-6" />
+          {/* Notification Bell */}
+          <div className="relative">
+            <button
+              onClick={() => setShowNotifications(!showNotifications)}
+              className="relative p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
+            >
+              <Bell className="h-6 w-6" />
+              <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full" />
+            </button>
+
+            {showNotifications && <NotificationPanel />}
+          </div>
 
           {/* Avatar */}
           <button
@@ -64,12 +80,12 @@ export function Navbar() {
             />
           </button>
 
-          {/* Dropdown part*/}
+          {/* Logout Dropdown */}
           {dropdownOpen && (
             <div className="absolute right-0 top-14 w-40 bg-white dark:bg-gray-800 shadow-lg rounded-md p-2 z-50">
               <button
                 onClick={handleLogout}
-                className="w-full hover:cursor-pointer text-left font-bold text-red-600 text-sm px-3 py-2 bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+                className="w-full text-left font-bold text-red-600 text-sm px-3 py-2 bg-gray-100 dark:hover:bg-gray-700 rounded-md"
               >
                 Log out
               </button>
