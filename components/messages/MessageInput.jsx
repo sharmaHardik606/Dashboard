@@ -30,29 +30,28 @@ export default function MessageInput({ onSend }) {
     });
 
     picker.on("emoji", (selection) => {
-  const emoji = selection.emoji;
-  const input = inputRef.current;
+      const emoji = selection.emoji;
+      const input = inputRef.current;
 
-  if (!input) return;
+      if (!input) return;
 
-  const start = input.selectionStart;
-  const end = input.selectionEnd;
+      const start = input.selectionStart;
+      const end = input.selectionEnd;
 
-  // 👇 Use input.value instead of state variable `text`
-  const currentValue = input.value;
+      // 👇 Use input.value instead of state variable `text`
+      const currentValue = input.value;
 
-  const newText =
-    currentValue.substring(0, start) + emoji + currentValue.substring(end);
+      const newText =
+        currentValue.substring(0, start) + emoji + currentValue.substring(end);
 
-  setText(newText);
+      setText(newText);
 
-  // Move cursor after inserted emoji
-  setTimeout(() => {
-    input.focus();
-    input.setSelectionRange(start + emoji.length, start + emoji.length);
-  }, 0);
-});
-
+      // Move cursor after inserted emoji
+      setTimeout(() => {
+        input.focus();
+        input.setSelectionRange(start + emoji.length, start + emoji.length);
+      }, 0);
+    });
 
     pickerRef.current = picker;
   }, [text]);
@@ -61,13 +60,18 @@ export default function MessageInput({ onSend }) {
     if (!pickerRef.current || !emojiButtonRef.current) return;
 
     const isMobile = window.innerWidth < 640; // Tailwind sm: < 640px
-    pickerRef.current.togglePicker(emojiButtonRef.current);
 
+    // 👉 Blur the input to prevent keyboard
+    inputRef.current?.blur();
+
+    // Update picker position for mobile
     if (isMobile) {
       pickerRef.current.options.position = "bottom-start";
     } else {
       pickerRef.current.options.position = "top-start";
     }
+
+    pickerRef.current.togglePicker(emojiButtonRef.current);
   };
 
   return (

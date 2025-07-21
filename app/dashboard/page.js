@@ -19,17 +19,8 @@ export default function DashboardPage() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [authChecked, setAuthChecked] = useState(false);
 
   const showAddMemberModal = searchParams.get("showForm") === "1";
-
-  useEffect(() => {
-    if (!isLoggedIn()) {
-      router.replace("/login");
-    } else {
-      setAuthChecked(true);
-    }
-  }, [router]);
 
   const openModal = () => {
     const params = new URLSearchParams(searchParams.toString());
@@ -37,7 +28,6 @@ export default function DashboardPage() {
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  if (!authChecked) return null;
 
   return (
     <div className="p-3 space-y-6">

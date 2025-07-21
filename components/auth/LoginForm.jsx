@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { login } from "@/utils/auth";
 import { Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { Button } from "../ui/button";
+import { useDispatch } from "react-redux";
+import { login as loginAction } from "@/redux/slices/authSlice";
+// import { loginUser } from "@/lib/api/auth"; // TODO: Uncomment this when backend is ready
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -13,30 +15,59 @@ export default function LoginPage() {
   const [rememberMe, setRememberMe] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = (e) => {
+  const dispatch = useDispatch();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const validEmail = "admin123@gmail.com";
-    const validPassword = "123456";
+    // ✅ TEMP LOGIN SIMULATION
+    const dummyEmail = "admin@ayuprofit.in";
+    const dummyPassword = "test123";
 
-    if (email === validEmail && password === validPassword) {
-      login(); // localStorage
+    if (email === dummyEmail && password === dummyPassword) {
+      const fakeToken = "FAKE_TOKEN_123";
+      const fakeUser = {
+        name: "Admin",
+        email: dummyEmail,
+        role: "admin",
+      };
+
+      // Save fake token
+      localStorage.setItem("token", fakeToken);
+
+      // Dispatch fake user to redux
+      dispatch(loginAction({ user: fakeUser, token: fakeToken }));
+
+      // Navigate to dashboard
       router.push("/dashboard");
     } else {
-      alert("Invalid email or password");
+      alert("Invalid credentials. Try:\nadmin@ayuprofit.in / test123");
     }
+
+    // 🔒 TODO: Replace above block with real API call
+    /*
+    try {
+      const data = await loginUser(email, password); // call real API
+      localStorage.setItem("token", data.token); // store token
+      dispatch(loginAction({ user: data.user, token: data.token })); // update redux
+      router.push("/dashboard");
+    } catch (err) {
+      alert(err.message);
+    }
+    */
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center w-full px-4 relative">
-      
       <div className="absolute top-10 right-10 text-sm">
         <span className="text-gray-600">Don’t have an account? </span>
-        <a
-          href="/signup"
-          className="text-blue-600 font-semibold text-sm"
-        >
-          <Button variant={'hollowblue'} className="text-blue-600 font-semibold"> SIGN UP</Button>
+        <a href="/signup" className="text-blue-600 font-semibold text-sm">
+          <Button
+            variant={"hollowblue"}
+            className="text-blue-600 font-semibold"
+          >
+            SIGN UP
+          </Button>
         </a>
       </div>
 
@@ -122,4 +153,3 @@ export default function LoginPage() {
     </div>
   );
 }
-

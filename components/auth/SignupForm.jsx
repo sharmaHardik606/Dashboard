@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { Button } from "../ui/button";
+import { signupUser } from "@/lib/api/auth";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -22,23 +23,28 @@ export default function SignupPage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (form.password !== form.confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
 
-    // TEMP: Mock success
-    alert("Account created successfully!");
-    router.push("/login");
+    try {
+      const data = await signupUser(form);
+      alert("Account created successfully!");
+      router.push("/login");
+    } catch (err) {
+      alert(err.message);
+    }
   };
 
   return (
     <div className="min-h-screen px-4 py-8 flex items-center justify-center w-full">
       <div className="absolute top-10 right-10 text-sm">
-        <span className="text-gray-600">Already have an Account?{" "}</span>
-        
+        <span className="text-gray-600">Already have an Account? </span>
+
         <a href="/login" className="text-blue-600 font-semibold text-sm">
           <Button
             variant={"hollowblue"}

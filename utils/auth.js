@@ -1,12 +1,14 @@
-export const login = () => {
-  localStorage.setItem("isLoggedIn", "true");
+export const login = (token) => {
+  localStorage.setItem("token", token);
 };
 
 export const logout = () => {
-  localStorage.removeItem("isLoggedIn");
+  localStorage.removeItem("token");
 };
 
 export const isLoggedIn = () => {
   if (typeof window === "undefined") return false;
-  return localStorage.getItem("isLoggedIn") === "true";
+  const token = localStorage.getItem("token");
+  return !!token;
 };
+

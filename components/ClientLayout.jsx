@@ -1,19 +1,23 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { SidebarProvider } from "@/context/SidebarContext";
 import { Navbar } from "@/components/Navbar";
 import { Sidebar } from "@/components/Sidebar";
 import { isLoggedIn } from "@/utils/auth";
-import { useEffect, useState } from "react";
+
+// List of public (non-auth) routes
+const PUBLIC_ROUTES = ["/login", "/signup"];
 
 export default function ClientLayout({ children }) {
   const pathname = usePathname();
   const router = useRouter();
+
   const [loading, setLoading] = useState(true);
   const [authenticated, setAuthenticated] = useState(false);
 
-  const isAuthPage = pathname === "/login" || pathname === "/signup";
+  const isPublicRoute = PUBLIC_ROUTES.includes(pathname);
 
   useEffect(() => {
     const checkAuth = () => {
@@ -21,26 +25,31 @@ export default function ClientLayout({ children }) {
       setAuthenticated(valid);
       setLoading(false);
 
-      if (!valid && !isAuthPage) {
+      // If not authenticated and not on public route → redirect to /login
+      if (!valid && !isPublicRoute) {
         router.replace("/login");
       }
     };
 
-    setTimeout(checkAuth, 0); // Ensure localStorage is ready
+    setTimeout(checkAuth, 0); // Needed for localStorage access
   }, [pathname]);
 
   if (loading) return null;
-  if (!authenticated && !isAuthPage) return null;
 
-  const iconOnly = pathname === "/settings";
-
-  if (isAuthPage) {
+  // Show public layout for login/signup
+  if (isPublicRoute) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
         {children}
       </div>
     );
   }
+
+  // Don't show protected content if not authenticated
+  if (!authenticated) return null;
+
+  // Icon-only Sidebar logic
+  const iconOnly = pathname === "/settings";
 
   return (
     <SidebarProvider>
