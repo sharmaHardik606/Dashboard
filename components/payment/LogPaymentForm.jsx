@@ -77,7 +77,7 @@ export default function LogPaymentForm({ onCancel }) {
               className="w-full justify-start text-left font-normal text-sm px-3 py-1.5"
             >
               {formData.date ? (
-                format(formData.date, "DD MM YYYY")
+                format(formData.date, "dd/MM/yyyy")
               ) : (
                 <span className="text-muted-foreground">Select a date</span>
               )}

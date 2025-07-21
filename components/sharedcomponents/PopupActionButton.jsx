@@ -1,11 +1,11 @@
-// src/components/common/PopupMenu.jsx
+
 "use client";
 
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 
 export default function PopupMenu({
-  trigger,           // JSX button/icon (e.g., <MoreVertical />)
+  trigger,           // JSX button/icon )
   items = [],        // Array of { label, onClick }
   customContent,     // Optional: Custom JSX instead of default list
   align = "right",   // "right" or "left"
@@ -60,7 +60,7 @@ export default function PopupMenu({
         createPortal(
           <div
             ref={menuRef}
-            className="absolute z-50 w-40 p-2 bg-white dark:bg-gray-900 shadow-lg rounded-md border border-gray-200 dark:border-gray-700"
+            className="absolute z-50 w-42 p-2 bg-white dark:bg-gray-900 shadow-lg rounded-md border border-gray-200 dark:border-gray-700"
             style={{ top: pos.top, left: pos.left }}
           >
             {customContent ? (
@@ -73,7 +73,7 @@ export default function PopupMenu({
                     item.onClick();
                     setOpen(false);
                   }}
-                  className="w-full text-left px-4 py-2 text-sm hover:bg-muted hover:text-black dark:hover:text-white rounded-sm hover:cursor-pointer"
+                  className="w-full text-left px-4 py-2 text-sm hover:bg-muted hover:text-black dark:hover:text-white rounded-sm hover:cursor-pointer active:bg-gray-200"
                 >
                   {item.label}
                 </button>
