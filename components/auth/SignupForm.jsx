@@ -69,7 +69,7 @@ export default function SignupPage() {
           <p className="text-blue-600 font-semibold text-sm uppercase mb-1">
             SIGN UP
           </p>
-          <h2 className="text-2xl font-bold text-gray-900">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
             Welcome to AyuProFit
           </h2>
         </div>

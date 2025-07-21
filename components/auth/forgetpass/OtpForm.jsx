@@ -49,7 +49,7 @@ export default function OtpForm() {
 
       <div className="space-y-1">
         <p className="text-sm font-semibold text-blue-600">ONE TIME PASSWORD</p>
-        <h2 className="text-2xl font-bold">Welcome to <span className="text-[#14183E]">AyuProFit</span></h2>
+        <h2 className="text-xl sm:text-2xl font-bold">Welcome to <span className="text-[#14183E]">AyuProFit</span></h2>
         <p className="text-sm text-muted-foreground">
           We've sent a One-Time Password (OTP) to your registered Email Address.
         </p>

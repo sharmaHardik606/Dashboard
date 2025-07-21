@@ -28,10 +28,10 @@ export default function ResetForm() {
 
         <div>
           <p className="text-blue-600 font-semibold text-sm uppercase mb-1">
-            Reset Password
+            Forgot Password
           </p>
-          <h2 className="text-2xl font-bold text-gray-900">
-            Choose a new password
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
+            Welcome To AyuProfit
           </h2>
         </div>
 
@@ -54,7 +54,11 @@ export default function ResetForm() {
                 onClick={() => setShow(!show)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
               >
-                {show ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                {show ? (
+                  <EyeOff className="w-5 h-5" />
+                ) : (
+                  <Eye className="w-5 h-5" />
+                )}
               </button>
             </div>
           </div>
@@ -72,6 +76,15 @@ export default function ResetForm() {
               className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
+          <ul className="text-xs text-gray-500 space-y-1 list-disc pl-4">
+            <li>Must be at least 8 characters or more.</li>
+            <li>
+              Use a combination of uppercase and lowercase letters, numbers, and
+              symbols.
+            </li>
+            <li>Don't start or end your password with a blank space.</li>
+            <li>Must be different from your last 12 passwords.</li>
+          </ul>
 
           <button
             type="submit"
