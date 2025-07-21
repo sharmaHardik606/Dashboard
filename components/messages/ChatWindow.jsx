@@ -8,14 +8,14 @@ import PopupMenu from "../sharedcomponents/PopupActionButton";
 
 export default function ChatWindow({ conversation, onBack }) {
   const [messages, setMessages] = useState(conversation.messages);
-  const scrollRef = useRef(null); // <-- New scroll ref
+  const scrollRef = useRef(null); 
 
-  // ✅ Sync messages when conversation changes
+  
   useEffect(() => {
     setMessages(conversation.messages);
   }, [conversation]);
 
-  // ✅ Auto-scroll to bottom on messages change
+  
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -38,7 +38,8 @@ export default function ChatWindow({ conversation, onBack }) {
   };
 
   return (
-    <div className="flex flex-col w-full h-full max-h-[calc(100vh-120px)] border border-gray-200 rounded-lg overflow-hidden">
+    <div className="flex flex-col w-full h-[calc(100vh-120px)] border border-gray-200 rounded-lg overflow-hidden">
+
 
       {/* Sticky Header */}
       <div className="sticky top-0 z-10 bg-[#eeeeee] px-4 py-5 flex items-center justify-between border-b border-gray-300">
@@ -112,7 +113,7 @@ export default function ChatWindow({ conversation, onBack }) {
       {/* Sticky Footer Input */}
       <div
         className="sticky bottom-0 z-20 bg-white p-4 border-t border-gray-200"
-        style={{ WebkitOverflowScrolling: "touch" }} // iOS keyboard & bounce fix
+        style={{ WebkitOverflowScrolling: "touch" }} 
       >
         <MessageInput onSend={handleSend} />
       </div>
