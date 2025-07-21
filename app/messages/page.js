@@ -16,7 +16,7 @@ export default function MessagesPage() {
   const showChat = !isMobile || (isMobile && selectedId);
 
   return (
-    <div className="flex h-[calc(100vh-64px)] md:px-4 md:gap-4 md:pt-4 w-full">
+    <div className="flex flex-col h-[calc(100vh-64px)] md:px-4 md:gap-4 md:pt-4 w-full min-h-0">
       {/* Desktop layout: wrap both in ContainerCard */}
       <div className="hidden md:flex w-full">
         <ContainerCard className="flex gap-4 w-full">

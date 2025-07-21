@@ -14,7 +14,7 @@ export default function ChatLayout() {
   );
 
   return (
-    <div className="flex h-full w-full">
+    <div className="flex h-full w-full relative min-h-0">
       
       <div
         className={`w-full md:w-1/3 border-r ${

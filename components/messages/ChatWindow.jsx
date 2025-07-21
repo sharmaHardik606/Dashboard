@@ -38,9 +38,10 @@ export default function ChatWindow({ conversation, onBack }) {
   };
 
   return (
-    <div className="flex flex-col h-[100dvh] relative">
+    <div className="flex flex-col w-full h-full max-h-[calc(100vh-120px)] border border-gray-200 rounded-lg overflow-hidden">
+
       {/* Sticky Header */}
-      <div className="sticky top-0 z-10 bg-[#eeeeee] px-4 py-5 flex items-center justify-between sm:rounded-t-lg">
+      <div className="sticky top-0 z-10 bg-[#eeeeee] px-4 py-5 flex items-center justify-between border-b border-gray-300">
         {onBack && (
           <button
             onClick={onBack}
@@ -49,11 +50,9 @@ export default function ChatWindow({ conversation, onBack }) {
             <ArrowLeft />
           </button>
         )}
-
         <p className="font-semibold text-xl text-gray-900">
           {conversation.user.name}
         </p>
-
         <PopupMenu
           trigger={
             <button className="p-2 hover:bg-gray-100 rounded-full hover:cursor-pointer active:bg-gray-100">
@@ -70,11 +69,10 @@ export default function ChatWindow({ conversation, onBack }) {
         />
       </div>
 
-      {/* Chat Messages */}
       <div
+        className="flex-1 overflow-y-auto px-4 py-4 space-y-6"
         ref={scrollRef}
-        className="flex-1 overflow-y-auto p-4 space-y-6"
-        style={{ paddingBottom: "100px" }} // Prevent messages from hiding behind input
+        style={{ paddingBottom: "7rem" }} 
       >
         <div className="flex items-center justify-center space-x-2 mb-6">
           <Button
@@ -87,7 +85,6 @@ export default function ChatWindow({ conversation, onBack }) {
 
         {messages.map((msg, idx) => {
           const isYou = msg.sender === "You";
-
           return (
             <div
               key={idx}
@@ -112,8 +109,11 @@ export default function ChatWindow({ conversation, onBack }) {
         })}
       </div>
 
-      {/* Sticky Input */}
-      <div className="sticky bottom-0 z-10 bg-white p-4 border-t border-gray-200">
+      {/* Sticky Footer Input */}
+      <div
+        className="sticky bottom-0 z-20 bg-white p-4 border-t border-gray-200"
+        style={{ WebkitOverflowScrolling: "touch" }} // iOS keyboard & bounce fix
+      >
         <MessageInput onSend={handleSend} />
       </div>
     </div>
