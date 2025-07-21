@@ -60,16 +60,18 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center w-full">
-      <div className="absolute top-10 right-10 text-sm">
-        <span className="text-gray-600">Don’t have an account? </span>
-        <a href="/signup" className="text-blue-600 font-semibold text-sm">
-          <Button
-            variant={"hollowblue"}
-            className="text-blue-600 font-semibold"
-          >
-            SIGN UP
-          </Button>
-        </a>
+      <div className="absolute top-10 left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-10 text-sm">
+        <div className="flex items-center gap-2 ">
+          <span className="text-gray-600">Don’t have an account?</span>
+          <a href="/signup">
+            <Button
+              variant="hollowblue"
+              className="text-blue-600 font-semibold text-sm"
+            >
+              SIGN UP
+            </Button>
+          </a>
+        </div>
       </div>
 
       <div className="w-full max-w-md space-y-6 p-4">
