@@ -38,15 +38,15 @@ export default function ChatWindow({ conversation, onBack }) {
   };
 
   return (
-    <div className="flex flex-col h-full">
-      {/* Header */}
-      <div className="flex items-center justify-between bg-[#eeeeee] px-4 py-5 sm:rounded-t-lg">
+    <div className="flex flex-col h-[100dvh] relative">
+      {/* Sticky Header */}
+      <div className="sticky top-0 z-10 bg-[#eeeeee] px-4 py-5 flex items-center justify-between sm:rounded-t-lg">
         {onBack && (
           <button
             onClick={onBack}
             className="text-sm md:hidden hover:cursor-pointer active:bg-gray-100 rounded-full"
           >
-          <ArrowLeft />
+            <ArrowLeft />
           </button>
         )}
 
@@ -71,7 +71,11 @@ export default function ChatWindow({ conversation, onBack }) {
       </div>
 
       {/* Chat Messages */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-6">
+      <div
+        ref={scrollRef}
+        className="flex-1 overflow-y-auto p-4 space-y-6"
+        style={{ paddingBottom: "100px" }} // Prevent messages from hiding behind input
+      >
         <div className="flex items-center justify-center space-x-2 mb-6">
           <Button
             variant="hollow"
@@ -108,8 +112,8 @@ export default function ChatWindow({ conversation, onBack }) {
         })}
       </div>
 
-      {/* Message Input */}
-      <div className="p-4 border-t border-gray-200">
+      {/* Sticky Input */}
+      <div className="sticky bottom-0 z-10 bg-white p-4 border-t border-gray-200">
         <MessageInput onSend={handleSend} />
       </div>
     </div>
