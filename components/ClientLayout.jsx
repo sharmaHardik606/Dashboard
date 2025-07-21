@@ -8,7 +8,8 @@ import { Sidebar } from "@/components/Sidebar";
 import { isLoggedIn } from "@/utils/auth";
 
 // List of public (non-auth) routes
-const PUBLIC_ROUTES = ["/login", "/signup"];
+const PUBLIC_ROUTES = ["/login", "/signup", "/forgot-password"];
+
 
 export default function ClientLayout({ children }) {
   const pathname = usePathname();

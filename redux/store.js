@@ -6,10 +6,13 @@ import memberReducer from "./slices/memberSlice";
 import planReducer from "./slices/planSlice";
 import paymentReducer from "./slices/paymentSlice";
 import notificationReducer from "./slices/notificationSlice";
+import forgotpassReducer from "./slices/forgotPasswordSlice";
+
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    forgotpass: forgotpassReducer, 
     modal: modalReducer,
     members: memberReducer,
     plans: planReducer,
@@ -17,3 +20,4 @@ export const store = configureStore({
     notifications: notificationReducer,
   },
 });
+

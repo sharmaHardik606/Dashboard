@@ -6,6 +6,7 @@ import { Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { Button } from "../ui/button";
 import { useDispatch } from "react-redux";
 import { login as loginAction } from "@/redux/slices/authSlice";
+import Link from "next/link";
 // import { loginUser } from "@/lib/api/auth"; // TODO: Uncomment this when backend is ready
 
 export default function LoginPage() {
@@ -58,7 +59,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center w-full px-4 relative">
+    <div className="min-h-screen flex items-center justify-center w-full">
       <div className="absolute top-10 right-10 text-sm">
         <span className="text-gray-600">Don’t have an account? </span>
         <a href="/signup" className="text-blue-600 font-semibold text-sm">
@@ -137,9 +138,12 @@ export default function LoginPage() {
               />
               Remember me
             </label>
-            <a href="#" className="text-blue-700 font-medium hover:underline">
+            <Link
+              href="/forgot-password"
+              className="text-blue-700 font-medium hover:underline"
+            >
               Forgot Password?
-            </a>
+            </Link>
           </div>
 
           <button
