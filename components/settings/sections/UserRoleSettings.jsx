@@ -1,40 +1,35 @@
 "use client";
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-
-const roles = [
-  {
-    role: "Administrator",
-    description: "Full access to all features and settings",
-    permissions: "All",
-    staffCount: 2,
-  },
-  {
-    role: "Manager",
-    description: "Manage members, classes, and staff",
-    permissions: "Members, Classes, Staff",
-    staffCount: 5,
-  },
-  {
-    role: "Trainer",
-    description: "Manage classes and member workouts",
-    permissions: "Classes, Workouts",
-    staffCount: 10,
-  },
-];
+import { roles } from "@/constants/roles/roles";
+import Modal from "@/components/sharedcomponents/Modal";
+import CreateRoleForm from "../forms/CreateRoleForm";
+import { useRouter, usePathname } from "next/navigation";
 
 export default function UserRoleSettings() {
+  const [showForm, setShowForm] = useState(false);
+
+  const router = useRouter();
+  const pathname = usePathname();
+
+  function openCreateRoleForm() {
+    router.push(`${pathname}?showForm=1`);
+  }
+
   return (
     <div className="space-y-6">
+      {/* Header */}
       <div>
         <h2 className="text-3xl font-semibold mb-2">
           Staff roles and permissions
         </h2>
-        <p className="text-muted-foreground text-sm ">
+        <p className="text-muted-foreground text-sm">
           Manage staff roles, permissions, and account policies
         </p>
       </div>
 
+      {/* Roles Table */}
       <h2 className="text-xl font-semibold mb-2">Roles</h2>
       <div className="border rounded-xl overflow-hidden">
         <div className="w-full overflow-x-auto">
@@ -67,9 +62,14 @@ export default function UserRoleSettings() {
         </div>
       </div>
 
-      <Button className="text-sm rounded-md" variant="outline">
-        + Create Role
-      </Button>
+      {/* Create Role Button */}
+      <Button onClick={() => setShowForm(true)}>+ Create Role</Button>
+
+      {showForm && (
+        <Modal>
+          <CreateRoleForm onCancel={() => setShowForm(false)} />
+        </Modal>
+      )}
     </div>
   );
 }

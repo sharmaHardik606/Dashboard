@@ -3,125 +3,104 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
-export default function CreateRoleForm() {
-  const [roleName, setRoleName] = useState("");
-  const [description, setDescription] = useState("");
-  const [permissions, setPermissions] = useState({
-    members: true,
-    classes: true,
-    workout: true,
-    diet: true,
-    staff: false,
+const PERMISSIONS = ["Members", "Classes", "Workout", "Diet", "Staff"];
+
+export default function CreateRoleForm({ onCancel }) {
+  const [formData, setFormData] = useState({
+    role: "",
+    description: "",
+    permissions: [],
   });
 
-  const [selectedMembers, setSelectedMembers] = useState([0]);
-
-  const memberList = [
-    { name: "Liam Smith", id: "M1001", plan: "Gold Annual" },
-    { name: "Liam Smith", id: "M1001", plan: "Silver Monthly" },
-    { name: "Liam Smith", id: "M1001", plan: "Platinum Quarterly" },
-  ];
-
-  const togglePermission = (key) => {
-    setPermissions((prev) => ({ ...prev, [key]: !prev[key] }));
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const toggleMemberSelection = (index) => {
-    setSelectedMembers((prev) =>
-      prev.includes(index)
-        ? prev.filter((i) => i !== index)
-        : [...prev, index]
-    );
+  const handlePermissionToggle = (permission) => {
+    setFormData((prev) => {
+      const alreadySelected = prev.permissions.includes(permission);
+      const updatedPermissions = alreadySelected
+        ? prev.permissions.filter((perm) => perm !== permission)
+        : [...prev.permissions, permission];
+      return { ...prev, permissions: updatedPermissions };
+    });
+  };
+
+  const handleSubmit = () => {
+    console.log("Submitted Role:", formData);
+    // send to API here when ready
+    onCancel();
   };
 
   return (
-    <form className="w-full max-w-2xl bg-white rounded-xl p-6 space-y-6">
-      <h2 className="text-xl font-semibold">Create Role</h2>
+    <div className="space-y-5">
+      {/* Header */}
+      <div className="flex items-center justify-between border-b pb-3">
+        <h2 className="text-lg font-semibold">Create Role</h2>
+        <button
+          onClick={onCancel}
+          className="text-gray-600 hover:text-black text-sm"
+        >
+          ✕
+        </button>
+      </div>
 
+      {/* Role Name */}
       <div>
-        <label className="block mb-1 text-sm font-medium">Role Name</label>
+        <label className="text-sm font-medium block mb-1">Role Name</label>
         <input
           type="text"
-          value={roleName}
-          onChange={(e) => setRoleName(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Enter role name"
+          name="role"
+          value={formData.role}
+          onChange={handleChange}
+          className="w-full border px-3 py-2 rounded-md text-sm"
+          placeholder="e.g., Trainer, Manager"
         />
       </div>
 
+      {/* Permissions */}
       <div>
-        <label className="block mb-2 text-sm font-medium">Permissions</label>
-        <div className="flex flex-wrap gap-4">
-          {Object.keys(permissions).map((perm) => (
-            <label key={perm} className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={permissions[perm]}
-                onChange={() => togglePermission(perm)}
-                className="form-checkbox accent-blue-600"
+        <Label className="text-sm font-medium mb-2 block">Permissions</Label>
+        <div className="grid grid-cols-2 gap-3">
+          {PERMISSIONS.map((permission) => (
+            <div key={permission} className="flex items-center gap-2">
+              <Checkbox
+                id={permission}
+                checked={formData.permissions.includes(permission)}
+                onCheckedChange={() => handlePermissionToggle(permission)}
+                className="data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
               />
-              <span className="text-sm capitalize">{perm}</span>
-            </label>
+              <Label htmlFor={permission} className="text-sm">
+                {permission}
+              </Label>
+            </div>
           ))}
         </div>
-      </div>
 
+      {/* Description */}
       <div>
-        <label className="block mb-1 text-sm font-medium">Description</label>
+        <label className="text-sm font-medium block mb-1">Description</label>
         <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Placeholder"
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
           rows={3}
+          className="w-full border px-3 py-2 rounded-md text-sm"
+          placeholder="Brief role description"
         />
       </div>
 
-      <div>
-        <table className="w-full border rounded-lg overflow-hidden text-sm">
-          <thead className="bg-blue-100 text-left text-gray-700">
-            <tr>
-              <th className="px-4 py-2 font-medium">
-                <input
-                  type="checkbox"
-                  checked={selectedMembers.length === memberList.length}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setSelectedMembers(memberList.map((_, i) => i));
-                    } else {
-                      setSelectedMembers([]);
-                    }
-                  }}
-                />
-              </th>
-              <th className="px-4 py-2 font-medium">Member Name</th>
-              <th className="px-4 py-2 font-medium">Member ID</th>
-              <th className="px-4 py-2 font-medium">Plan</th>
-            </tr>
-          </thead>
-          <tbody>
-            {memberList.map((member, index) => (
-              <tr key={index} className="border-t">
-                <td className="px-4 py-2">
-                  <input
-                    type="checkbox"
-                    checked={selectedMembers.includes(index)}
-                    onChange={() => toggleMemberSelection(index)}
-                  />
-                </td>
-                <td className="px-4 py-2">{member.name}</td>
-                <td className="px-4 py-2">{member.id}</td>
-                <td className="px-4 py-2">{member.plan}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      
       </div>
 
-      <div className="flex justify-end gap-4 pt-4">
-        <Button variant="outline">Cancel</Button>
-        <Button className="bg-blue-600 text-white">Create Role</Button>
+      {/* Actions */}
+      <div className="pt-4 flex justify-end gap-3">
+        <Button variant="outline" onClick={onCancel}>
+          Cancel
+        </Button>
+        <Button onClick={handleSubmit}>Save</Button>
       </div>
-    </form>
+    </div>
   );
 }

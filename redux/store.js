@@ -1,5 +1,16 @@
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
-import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./slices/authSlice";
 import modalReducer from "./slices/modalSlice";
 import memberReducer from "./slices/memberSlice";
@@ -8,16 +19,38 @@ import paymentReducer from "./slices/paymentSlice";
 import notificationReducer from "./slices/notificationSlice";
 import forgotpassReducer from "./slices/forgotPasswordSlice";
 
+// 🔒 Choose slices to persist (keep it minimal)
+const persistConfig = {
+  key: "root",
+  storage,
+  whitelist: ["auth", "forgotpass"], // persist only login and forgot password
+};
 
-export const store = configureStore({
-  reducer: {
-    auth: authReducer,
-    forgotpass: forgotpassReducer, 
-    modal: modalReducer,
-    members: memberReducer,
-    plans: planReducer,
-    payments: paymentReducer,
-    notifications: notificationReducer,
-  },
+// Combine all reducers
+const rootReducer = combineReducers({
+  auth: authReducer,
+  forgotpass: forgotpassReducer,
+  modal: modalReducer,
+  members: memberReducer,
+  plans: planReducer,
+  payments: paymentReducer,
+  notifications: notificationReducer,
 });
+
+// Apply persistence
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+// Create store with middleware adjustments
+export const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+});
+
+export const persistor = persistStore(store);
+
 
