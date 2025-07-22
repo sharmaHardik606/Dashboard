@@ -41,7 +41,6 @@ export default function ChatWindow({ conversation, onBack }) {
     <div className="flex flex-col w-full h-[90vh]
     md:h-[calc(100vh-120px)]  border border-gray-200 rounded-lg overflow-hidden">
 
-
       {/* Sticky Header */}
       <div className="sticky top-0 z-10 bg-[#eeeeee] px-4 py-5 flex items-center justify-between border-b border-gray-300">
         {onBack && (
