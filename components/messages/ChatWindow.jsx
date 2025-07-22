@@ -38,7 +38,7 @@ export default function ChatWindow({ conversation, onBack }) {
   };
 
   return (
-    <div className="flex flex-col w-full h-[100dvh] 
+    <div className="flex flex-col w-full h-[90vh]
     md:h-[calc(100vh-120px)]  border border-gray-200 rounded-lg overflow-hidden">
 
 
