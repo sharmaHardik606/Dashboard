@@ -11,7 +11,6 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
-// Import your reducers
 import authReducer from "./slices/authSlice";
 import modalReducer from "./slices/modalSlice";
 import memberReducer from "./slices/memberSlice";
@@ -19,18 +18,21 @@ import planReducer from "./slices/planSlice";
 import paymentReducer from "./slices/paymentSlice";
 import notificationReducer from "./slices/notificationSlice";
 import forgotpassReducer from "./slices/forgotPasswordSlice";
+import signupSliceReducer from "./slices/signupSlice"; 
 
-// 🔒 Choose slices to persist
+
+// slices to persist
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["auth", "members", "plans", "payments"],
+  whitelist: ["auth", "members", "plans", "payments", "signup"],
 };
 
 // Combine all reducers
 const rootReducer = combineReducers({
   auth: authReducer,
   forgotpass: forgotpassReducer,
+  signup: signupSliceReducer,
   modal: modalReducer,
   members: memberReducer,
   plans: planReducer,

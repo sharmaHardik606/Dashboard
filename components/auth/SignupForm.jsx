@@ -3,11 +3,21 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, ArrowLeft } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../ui/button";
 import { signupUser } from "@/lib/api/auth";
+import OtpForm from "./forgetpass/OtpForm";
+import {
+  setSignupEmail,
+  setSignupStep,
+  resetSignup,
+} from "@/redux/slices/signupSlice";
 
 export default function SignupPage() {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const step = useSelector((state) => state.signup.step);
+  const email = useSelector((state) => state.signup.email);
 
   const [form, setForm] = useState({
     name: "",
@@ -32,18 +42,23 @@ export default function SignupPage() {
     }
 
     try {
-      const data = await signupUser(form);
-      alert("Account created successfully!");
-      router.push("/login");
+      await signupUser(form); // simulate API, assume OTP sent
+      dispatch(setSignupEmail(form.email));
+      dispatch(setSignupStep("otp"));
     } catch (err) {
       alert(err.message);
     }
   };
 
+  if (step === "otp") {
+    return <OtpForm email={email} />;
+  }
+
   return (
-    <div className="min-h-screen w-full flex items-start justify-center pt-24 ">
+ 
+    <div className="min-h-screen w-full flex items-start justify-center pt-24">
       <div className="absolute top-6 left-1/2 -translate-x-1/2 sm:left-auto sm:right-6 sm:translate-x-0 text-sm">
-        <div className="flex items-center gap-2 ">
+        <div className="flex items-center gap-2">
           <span className="text-gray-600">Already have an Account?</span>
           <a href="/login">
             <Button
@@ -76,6 +91,7 @@ export default function SignupPage() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Name */}
             <div>
               <label className="block text-sm font-medium mb-1">
                 Full name <span className="text-red-500">*</span>
@@ -85,11 +101,12 @@ export default function SignupPage() {
                 value={form.name}
                 onChange={handleChange}
                 required
-                placeholder="Enter your first and last name"
+                placeholder="Enter your full name"
                 className="w-full px-3 py-2 border rounded-md border-gray-300 outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
+            {/* Email */}
             <div>
               <label className="block text-sm font-medium mb-1">
                 Email <span className="text-red-500">*</span>
@@ -105,6 +122,7 @@ export default function SignupPage() {
               />
             </div>
 
+            {/* Contact */}
             <div>
               <label className="block text-sm font-medium mb-1">
                 Contact Number <span className="text-red-500">*</span>
@@ -120,6 +138,7 @@ export default function SignupPage() {
               />
             </div>
 
+            {/* Password */}
             <div>
               <label className="block text-sm font-medium mb-1">
                 Password <span className="text-red-500">*</span>
@@ -139,15 +158,12 @@ export default function SignupPage() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
                 >
-                  {showPassword ? (
-                    <EyeOff className="w-5 h-5" />
-                  ) : (
-                    <Eye className="w-5 h-5" />
-                  )}
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
             </div>
 
+            {/* Confirm Password */}
             <div>
               <label className="block text-sm font-medium mb-1">
                 Confirm Password <span className="text-red-500">*</span>
@@ -165,17 +181,14 @@ export default function SignupPage() {
 
             <ul className="text-xs text-gray-500 space-y-1 list-disc pl-4">
               <li>Must be at least 8 characters or more.</li>
-              <li>
-                Use a combination of uppercase and lowercase letters, numbers,
-                and symbols.
-              </li>
+              <li>Use uppercase, lowercase, numbers, and symbols.</li>
               <li>Don't start or end your password with a blank space.</li>
               <li>Must be different from your last 12 passwords.</li>
             </ul>
 
             <button
               type="submit"
-              className="w-full bg-blue-700 text-white py-2 rounded-md font-semibold hover:bg-blue-800 hover:cursor-pointer transition"
+              className="w-full bg-blue-700 text-white py-2 rounded-md font-semibold hover:bg-blue-800 transition"
             >
               Sign up
             </button>

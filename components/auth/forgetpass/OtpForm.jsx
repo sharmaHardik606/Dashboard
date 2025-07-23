@@ -1,15 +1,23 @@
 "use client";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft } from "lucide-react";
-import { moveToResetStep, resendOtp, verifyOtpCode } from "/redux/slices/forgotPasswordSlice.js";
 import { Button } from "@/components/ui/button";
+import {
+  moveToResetStep,
+  resendOtp as resendForgotOtp,
+  verifyOtpCode as verifyForgotOtp,
+} from "@/redux/slices/forgotPasswordSlice";
+import {
+  resendSignupOtp,
+  verifySignupOtp,
+} from "@/redux/slices/signupSlice"; // 🆕 import
 
-export default function OtpForm() {
+export default function OtpForm({ type = "signup" }) {
   const dispatch = useDispatch();
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-  const [timer, setTimer] = useState(90); // 90 seconds
+  const [timer, setTimer] = useState(90);
   const inputRefs = useRef([]);
 
   useEffect(() => {
@@ -23,8 +31,6 @@ export default function OtpForm() {
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
-
-    // Auto-focus next
     if (value && index < 5) inputRefs.current[index + 1]?.focus();
   };
 
@@ -37,19 +43,39 @@ export default function OtpForm() {
   const handleVerify = () => {
     const otpCode = otp.join("");
     if (otpCode.length === 6) {
-      dispatch(verifyOtpCode(otpCode));
+      if (type === "forgot") {
+        dispatch(verifyForgotOtp(otpCode));
+      } else {
+        dispatch(verifySignupOtp(otpCode)); // ✅ uses correct logic
+      }
     }
+  };
+
+  const handleResend = () => {
+    if (type === "forgot") {
+      dispatch(resendForgotOtp());
+    } else {
+      dispatch(resendSignupOtp());
+    }
+    setTimer(90);
   };
 
   return (
     <div className="max-w-md mx-auto p-6 flex flex-col gap-6">
-      <button onClick={() => dispatch(moveToResetStep("email"))} className="text-gray-600 w-fit">
-        <ArrowLeft />
-      </button>
+      {type === "forgot" && (
+        <button
+          onClick={() => dispatch(moveToResetStep("email"))}
+          className="text-gray-600 w-fit"
+        >
+          <ArrowLeft />
+        </button>
+      )}
 
       <div className="space-y-1">
         <p className="text-sm font-semibold text-blue-600">ONE TIME PASSWORD</p>
-        <h2 className="text-xl sm:text-2xl font-bold">Welcome to <span className="text-[#14183E]">AyuProFit</span></h2>
+        <h2 className="text-xl sm:text-2xl font-bold">
+          Welcome to <span className="text-[#14183E]">AyuProFit</span>
+        </h2>
         <p className="text-sm text-muted-foreground">
           We've sent a One-Time Password (OTP) to your registered Email Address.
         </p>
@@ -73,14 +99,14 @@ export default function OtpForm() {
         <button
           className="text-blue-600 hover:underline"
           disabled={timer > 0}
-          onClick={() => {
-            dispatch(resendOtp());
-            setTimer(90);
-          }}
+          onClick={handleResend}
         >
           Resend code?
         </button>
-        <span className="text-gray-500">{String(Math.floor(timer / 60)).padStart(2, "0")}:{String(timer % 60).padStart(2, "0")}</span>
+        <span className="text-gray-500">
+          {String(Math.floor(timer / 60)).padStart(2, "0")}:
+          {String(timer % 60).padStart(2, "0")}
+        </span>
       </div>
 
       <Button className="w-full mt-2" onClick={handleVerify} variant={"mainblue"}>
