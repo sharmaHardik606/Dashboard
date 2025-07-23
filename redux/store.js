@@ -11,6 +11,7 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
+// Import your reducers
 import authReducer from "./slices/authSlice";
 import modalReducer from "./slices/modalSlice";
 import memberReducer from "./slices/memberSlice";
@@ -19,11 +20,11 @@ import paymentReducer from "./slices/paymentSlice";
 import notificationReducer from "./slices/notificationSlice";
 import forgotpassReducer from "./slices/forgotPasswordSlice";
 
-// 🔒 Choose slices to persist (keep it minimal)
+// 🔒 Choose slices to persist
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["auth", "forgotpass"], // persist only login and forgot password
+  whitelist: ["auth", "members", "plans", "payments"],
 };
 
 // Combine all reducers
@@ -52,5 +53,3 @@ export const store = configureStore({
 });
 
 export const persistor = persistStore(store);
-
-
