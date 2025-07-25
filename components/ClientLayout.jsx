@@ -7,10 +7,10 @@ import { Navbar } from "@/components/Navbar";
 import { Sidebar } from "@/components/Sidebar";
 import { isLoggedIn } from "@/utils/auth";
 import CompleteProfileForm from "@/components/complete-profile/CompleteProfileForm";
+import { useDispatch, useSelector } from "react-redux";
 
 // List of public (non-auth) routes
-const PUBLIC_ROUTES = ["/login", "/signup", "/forgot-password" ];
-
+const PUBLIC_ROUTES = ["/login", "/signup", "/forgot-password"];
 
 export default function ClientLayout({ children }) {
   const pathname = usePathname();
@@ -20,6 +20,10 @@ export default function ClientLayout({ children }) {
   const [authenticated, setAuthenticated] = useState(false);
 
   const isPublicRoute = PUBLIC_ROUTES.includes(pathname);
+
+  const isProfileComplete = useSelector(
+    (state) => state.profile.isProfileComplete
+  );
 
   useEffect(() => {
     const checkAuth = () => {
@@ -53,19 +57,36 @@ export default function ClientLayout({ children }) {
   // Icon-only Sidebar logic
   const iconOnly = pathname === "/settings";
 
-return (
-  <SidebarProvider>
-    <div className="flex flex-col min-h-screen w-full">
-      <Navbar />
-      <div className="flex flex-1 w-full">
-        <Sidebar iconOnly={iconOnly} />
-        <main className="flex-1 sm:p-4 overflow-auto">{children}</main>
+  return (
+    <SidebarProvider>
+      <div className="flex flex-col min-h-screen w-full relative">
+        {/* ONE wrapper to apply blur and disable interaction */}
+        <div
+          className={`relative flex flex-col min-h-screen w-full transition-all duration-200 
+            ${
+              !isProfileComplete
+                ? "backdrop-blur-sm pointer-events-none select-none"
+                : ""
+            }`}
+        >
+          <Navbar />
+          <div className="flex flex-1 w-full">
+            <Sidebar iconOnly={iconOnly} />
+            <main className="flex-1 sm:p-4 overflow-auto relative">
+              {children}
+            </main>
+          </div>
+        </div>
+        {/* Overlay the modal above all layout */}
+        {!isProfileComplete && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <div className="absolute inset-0 bg-black/40 backdrop-blur-md pointer-events-none" />
+            <div className="relative z-10">
+              <CompleteProfileForm />
+            </div>
+          </div>
+        )}
       </div>
-    </div>
-
-    {/* This is overlaid on top of everything */}
-    <CompleteProfileForm />
-  </SidebarProvider>
-);
-
+    </SidebarProvider>
+  );
 }
