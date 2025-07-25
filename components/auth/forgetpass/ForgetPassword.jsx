@@ -7,8 +7,7 @@ import ResetForm from "./ResetForm";
 export default function ForgotPassword() {
   const step = useSelector((state) => state.forgotpass.step);
 
-
   if (step === "email") return <EmailForm />;
-  if (step === "otp") return <OtpForm />;
+  if (step === "otp") return <OtpForm type="forgot" />;
   if (step === "reset") return <ResetForm />;
 }

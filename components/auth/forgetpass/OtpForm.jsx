@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
-  moveToResetStep,
+  moveToResetStep, setStep,
   resendOtp as resendForgotOtp,
   verifyOtpCode as verifyForgotOtp,
 } from "@/redux/slices/forgotPasswordSlice";
@@ -46,7 +46,7 @@ export default function OtpForm({ type = "signup", email }) {
   const otpCode = otp.join("");
   if (otpCode.length === 6) {
     if (type === "forgot") {
-      dispatch(moveToResetStep("reset"));
+      dispatch(setStep("reset"));
     } else {
       // 👇 MOCK LOGIN ON SIGNUP OTP SUCCESS!
       const mockUser = {
