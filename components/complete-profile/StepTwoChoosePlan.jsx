@@ -12,7 +12,14 @@ import {
 } from "@/redux/slices/paymentModalSlice";
 
 export default function StepTwoChoosePlan({ onBack }) {
-  const { register, handleSubmit, setValue, watch } = useForm({
+  const { 
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    trigger,
+    formState: { errors }
+  } = useForm({
     defaultValues: {
       plan: "",
       paymentMethod: "card",
@@ -57,11 +64,9 @@ export default function StepTwoChoosePlan({ onBack }) {
     },
   ];
 
-  // When user submits plan, open payment modal (do not complete profile yet)
   const submitHandler = (data) => {
-    console.log("Form Data at submit:", data);
     dispatch(setPaymentMethod(data.paymentMethod));
-    dispatch(showPayment()); // <---  openes  payment modal!
+    dispatch(showPayment());
   };
 
   return (
@@ -79,7 +84,15 @@ export default function StepTwoChoosePlan({ onBack }) {
                 ? "border-blue-600 shadow-md bg-blue-50"
                 : "border-gray-300"
             )}
-            onClick={() => setValue("plan", plan.id)}
+            onClick={() => { setValue("plan", plan.id); trigger("plan"); }}
+            tabIndex={0}
+            onKeyPress={e => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                setValue("plan", plan.id); trigger("plan");
+              }
+            }}
+            role="button"
+            aria-pressed={selectedPlan === plan.id}
           >
             <div className="text-lg font-bold">{plan.name}</div>
             <div className="text-xl font-semibold">{plan.price}</div>
@@ -88,12 +101,17 @@ export default function StepTwoChoosePlan({ onBack }) {
                 <li key={feat}>✔ {feat}</li>
               ))}
             </ul>
-            {selectedPlan === plan.id && (
-              <div className="mt-3 text-blue-600 font-medium">Selected</div>
-            )}
           </div>
         ))}
       </div>
+      {/* PLAN ERROR */}
+      {errors.plan && (
+        <p className="text-xs text-red-500">Please select a plan</p>
+      )}
+      <input
+        type="hidden"
+        {...register("plan", { required: true })}
+      />
 
       <div>
         <Label className="mb-2 block text-sm font-medium">
@@ -101,7 +119,7 @@ export default function StepTwoChoosePlan({ onBack }) {
         </Label>
         <RadioGroup
           defaultValue="card"
-          onValueChange={(val) => setValue("paymentMethod", val)}
+          onValueChange={(val) => { setValue("paymentMethod", val); trigger("paymentMethod"); }}
           className="flex gap-6"
         >
           <div className="flex items-center gap-2">
@@ -117,31 +135,62 @@ export default function StepTwoChoosePlan({ onBack }) {
           type="hidden"
           {...register("paymentMethod", { required: true })}
         />
+        {errors.paymentMethod && (
+          <p className="text-xs text-red-500">Please select a payment method</p>
+        )}
       </div>
+
       {paymentMethod === "card" && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <Label className={"mb-2"}>Card Number</Label>
-            <Input {...register("cardNumber")} />
+            <Input
+              {...register("cardNumber", { required: "Card number required" })}
+            />
+            {errors.cardNumber && (
+              <p className="text-xs text-red-500">{errors.cardNumber.message}</p>
+            )}
           </div>
           <div>
             <Label className={"mb-2"}>Expiry Date</Label>
-            <Input placeholder="MM/YY" {...register("expiry")} />
+            <Input
+              placeholder="MM/YY"
+              {...register("expiry", { required: "Expiry required" })}
+            />
+            {errors.expiry && (
+              <p className="text-xs text-red-500">{errors.expiry.message}</p>
+            )}
           </div>
           <div>
             <Label className={"mb-2"}>CVV</Label>
-            <Input type="password" {...register("cvv")} />
+            <Input
+              type="password"
+              {...register("cvv", { required: "CVV required" })}
+            />
+            {errors.cvv && (
+              <p className="text-xs text-red-500">{errors.cvv.message}</p>
+            )}
           </div>
           <div>
             <Label className={"mb-2"}>Card Holder's Name</Label>
-            <Input {...register("cardName")} />
+            <Input
+              {...register("cardName", { required: "Name required" })}
+            />
+            {errors.cardName && (
+              <p className="text-xs text-red-500">{errors.cardName.message}</p>
+            )}
           </div>
         </div>
       )}
       {paymentMethod === "upi" && (
         <div>
           <Label className={"mb-2"}>UPI ID</Label>
-          <Input {...register("upiId")} />
+          <Input
+            {...register("upiId", { required: "UPI ID required" })}
+          />
+          {errors.upiId && (
+            <p className="text-xs text-red-500">{errors.upiId.message}</p>
+          )}
         </div>
       )}
       <div className="flex justify-between pt-4 ">
