@@ -3,6 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   showPaymentModal: false,
   paymentCompleted: false,
+  paymentMethod: null, // "card" or "upi"
+  showUpiPopup: false,
   modalTimeoutId: null,
 };
 
@@ -32,6 +34,15 @@ const paymentModalSlice = createSlice({
         state.modalTimeoutId = null;
       }
     },
+    setPaymentMethod(state, action) {
+      state.paymentMethod = action.payload;
+    },
+    showUpiPopup(state) {
+      state.showUpiPopup = true;
+    },
+    hideUpiPopup(state) {
+      state.showUpiPopup = false;
+    },
   },
 });
 
@@ -41,6 +52,9 @@ export const {
   hidePayment,
   setModalTimeout,
   clearModal,
+  setPaymentMethod,
+  showUpiPopup,
+  hideUpiPopup,
 } = paymentModalSlice.actions;
 
 export default paymentModalSlice.reducer;

@@ -56,7 +56,7 @@ export default function StepTwoChoosePlan({ onBack }) {
 
   // When user submits plan, open payment modal (do not complete profile yet)
   const submitHandler = (data) => {
-    dispatch(showPayment());
+    dispatch(setPaymentMethod(data.paymentMethod));
     // handle 10min session at modal level
     // for future production: send plan+payment intent to backend here (commented for now)
   };
