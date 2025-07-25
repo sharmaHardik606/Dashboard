@@ -19,7 +19,7 @@ export default function StepOneBasicDetails({ onNext }) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 pb-5">
       <h2 className="text-lg font-semibold">Complete Profile</h2>
      <div className="border-b"></div>
       <h2 className="text-lg font-semibold">Step 1 - Basic Details</h2>

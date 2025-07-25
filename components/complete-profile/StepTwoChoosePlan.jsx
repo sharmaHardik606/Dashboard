@@ -6,7 +6,10 @@ import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import clsx from "clsx";
 import { useDispatch } from "react-redux";
-import { showPayment, setModalTimeout } from "@/redux/slices/paymentModalSlice";
+import {
+  showPayment,
+  setPaymentMethod,
+} from "@/redux/slices/paymentModalSlice";
 
 export default function StepTwoChoosePlan({ onBack }) {
   const { register, handleSubmit, setValue, watch } = useForm({
@@ -56,13 +59,13 @@ export default function StepTwoChoosePlan({ onBack }) {
 
   // When user submits plan, open payment modal (do not complete profile yet)
   const submitHandler = (data) => {
+    console.log("Form Data at submit:", data);
     dispatch(setPaymentMethod(data.paymentMethod));
-    // handle 10min session at modal level
-    // for future production: send plan+payment intent to backend here (commented for now)
+    dispatch(showPayment()); // <--- Add this to open your payment modal!
   };
 
   return (
-    <form onSubmit={handleSubmit(submitHandler)} className="space-y-6">
+    <form onSubmit={handleSubmit(submitHandler)} className="space-y-6 pb-5">
       <h2 className="text-xl font-semibold text-center">
         Step 2 - Choose Plan
       </h2>
@@ -93,7 +96,7 @@ export default function StepTwoChoosePlan({ onBack }) {
       </div>
 
       <div>
-        <Label className="mb-1 block text-sm font-medium">
+        <Label className="mb-2 block text-sm font-medium">
           Payment Method:
         </Label>
         <RadioGroup
@@ -110,38 +113,42 @@ export default function StepTwoChoosePlan({ onBack }) {
             <Label htmlFor="upi">UPI</Label>
           </div>
         </RadioGroup>
+        <input
+          type="hidden"
+          {...register("paymentMethod", { required: true })}
+        />
       </div>
       {paymentMethod === "card" && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <Label>Card Number</Label>
+            <Label className={"mb-2"}>Card Number</Label>
             <Input {...register("cardNumber")} />
           </div>
           <div>
-            <Label>Expiry Date</Label>
+            <Label className={"mb-2"}>Expiry Date</Label>
             <Input placeholder="MM/YY" {...register("expiry")} />
           </div>
           <div>
-            <Label>CVV</Label>
+            <Label className={"mb-2"}>CVV</Label>
             <Input type="password" {...register("cvv")} />
           </div>
           <div>
-            <Label>Card Holder's Name</Label>
+            <Label className={"mb-2"}>Card Holder's Name</Label>
             <Input {...register("cardName")} />
           </div>
         </div>
       )}
       {paymentMethod === "upi" && (
         <div>
-          <Label>UPI ID</Label>
+          <Label className={"mb-2"}>UPI ID</Label>
           <Input {...register("upiId")} />
         </div>
       )}
-      <div className="flex justify-between pt-4">
+      <div className="flex justify-between pt-4 ">
         <Button type="button" variant="ghost" onClick={onBack}>
           Back
         </Button>
-        <Button type="submit">Submit</Button>
+        <Button type="submit" variant={"mainblue"}>Submit</Button>
       </div>
     </form>
   );

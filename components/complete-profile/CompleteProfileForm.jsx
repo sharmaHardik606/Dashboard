@@ -1,6 +1,6 @@
 "use client";
 import { useSelector, useDispatch } from "react-redux";
-import { useState } from "react";
+import { useState, useEffect,  } from "react";
 import StepOneBasicDetails from "./StepOneBasicDetails";
 import StepTwoChoosePlan from "./StepTwoChoosePlan";
 import PaymentModal from "./PaymentModal";
@@ -11,6 +11,14 @@ export default function CompleteProfileForm() {
   );
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({});
+
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev; // Restore to what was there before
+    };
+  }, []);
 
   if (isProfileComplete) return null;
 
@@ -31,10 +39,7 @@ export default function CompleteProfileForm() {
           <div
             className={`${step === 2 ? "block" : "hidden"} absolute inset-0`}
           >
-            <StepTwoChoosePlan
-              formData={formData}
-              onBack={() => setStep(1)}
-            />
+            <StepTwoChoosePlan formData={formData} onBack={() => setStep(1)} />
           </div>
         </div>
         <PaymentModal />

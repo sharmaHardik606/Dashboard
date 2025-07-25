@@ -74,7 +74,7 @@ export default function PaymentModal() {
         <div className="bg-white p-4 rounded-lg shadow-lg relative max-w-md w-full">
           {/* Swap for your UPI waiting PNG */}
           <Image
-            src="/public/payment.png"
+            src="/payment.png"
             alt="Waiting for UPI payment"
             width={400}
             height={300}
@@ -105,7 +105,7 @@ export default function PaymentModal() {
       <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
         <div className="bg-white p-4 rounded-lg shadow-lg relative max-w-md w-full">
           <Image
-            src="/public/sucess-popover.png"
+            src="/sucess-popover.png"
             alt="Payment Successful"
             width={400}
             height={300}
@@ -129,7 +129,7 @@ export default function PaymentModal() {
       <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
         <div className="bg-white p-4 rounded-lg shadow-lg relative max-w-md w-full flex flex-col items-center">
           <Image
-            src="/public/sucess-popover.png"
+            src="/sucess-popover.png"
             alt="Processing..."
             width={400}
             height={300}
