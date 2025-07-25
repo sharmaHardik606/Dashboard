@@ -33,7 +33,7 @@ export default function PaymentModal() {
     return () => clearTimeout(timeoutId);
   }, [showPaymentModal, dispatch]);
 
-  // Success sequence: dashboard unlock after 2 seconds
+  // dashboard unlock after 2 seconds
   useEffect(() => {
     if (paymentCompleted) {
       dispatch(completeProfile());
@@ -66,7 +66,7 @@ export default function PaymentModal() {
     );
   }
 
-  // UPI: Show waiting popup until payment finishes
+  // Show waiting popup until upi payment finishes
   if (paymentMethod === "upi" && !paymentCompleted && !showUpiPopupState) {
     // First step: Show UPI "waiting" popup with manual success in mock
     return (

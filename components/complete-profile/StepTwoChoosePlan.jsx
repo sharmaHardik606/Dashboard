@@ -61,11 +61,11 @@ export default function StepTwoChoosePlan({ onBack }) {
   const submitHandler = (data) => {
     console.log("Form Data at submit:", data);
     dispatch(setPaymentMethod(data.paymentMethod));
-    dispatch(showPayment()); // <--- Add this to open your payment modal!
+    dispatch(showPayment()); // <---  openes  payment modal!
   };
 
   return (
-    <form onSubmit={handleSubmit(submitHandler)} className="space-y-6 pb-5">
+    <form onSubmit={handleSubmit(submitHandler)} className="space-y-6 ">
       <h2 className="text-xl font-semibold text-center">
         Step 2 - Choose Plan
       </h2>

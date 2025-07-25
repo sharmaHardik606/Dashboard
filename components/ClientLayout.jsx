@@ -77,7 +77,7 @@ export default function ClientLayout({ children }) {
             </main>
           </div>
         </div>
-        {/* Overlay the modal above all layout */}
+    
         {!isProfileComplete && (
           <div className="fixed inset-0 z-50 flex items-center justify-center">
             <div className="absolute inset-0 bg-black/40 backdrop-blur-md pointer-events-none" />
