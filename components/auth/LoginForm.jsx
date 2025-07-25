@@ -7,9 +7,9 @@ import { Button } from "../ui/button";
 import { useDispatch } from "react-redux";
 import { login as loginAction } from "@/redux/slices/authSlice";
 import Link from "next/link";
-// import { loginUser } from "@/lib/api/auth"; // TODO: Uncomment this when backend is ready
+import { loginUser } from "@/lib/api/auth"; // useing mock loginUser
 
-export default function LoginPage() {
+export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
@@ -21,42 +21,28 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // ✅ TEMP LOGIN SIMULATION
-    const dummyEmail = "admin@ayuprofit.in";
-    const dummyPassword = "test123";
-
-    if (email === dummyEmail && password === dummyPassword) {
-      const fakeToken = "FAKE_TOKEN_123";
-      const fakeUser = {
-        name: "Admin",
-        email: dummyEmail,
-        role: "admin",
-      };
-
-      // Save fake token
-      localStorage.setItem("token", fakeToken);
-
-      // Dispatch fake user to redux
-      dispatch(loginAction({ user: fakeUser, token: fakeToken }));
-
-      // Navigate to dashboard
+    try {
+      // --- Mocked logic, backend-ready ---
+      const data = await loginUser(email, password); // will use mock in dev
+      localStorage.setItem("token", data.token);
+      dispatch(loginAction({ user: data.user, token: data.token }));
       router.push("/dashboard");
-    } else {
-      alert("Invalid credentials. Try:\nadmin@ayuprofit.in / test123");
+    } catch (err) {
+      alert(err.message);
     }
 
-    // 🔒 TODO: Replace above block with real API call
+    // --- WHEN BACKEND IS READY ---
     /*
     try {
-      const data = await loginUser(email, password); // call real API
-      localStorage.setItem("token", data.token); // store token
-      dispatch(loginAction({ user: data.user, token: data.token })); // update redux
+      const data = await loginUser(email, password);
+      localStorage.setItem("token", data.token);
+      dispatch(loginAction({ user: data.user, token: data.token }));
       router.push("/dashboard");
     } catch (err) {
       alert(err.message);
     }
     */
-  };
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center w-full">

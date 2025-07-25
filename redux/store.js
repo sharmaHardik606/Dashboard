@@ -10,7 +10,6 @@ import {
   REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-
 import authReducer from "./slices/authSlice";
 import modalReducer from "./slices/modalSlice";
 import memberReducer from "./slices/memberSlice";
@@ -19,18 +18,23 @@ import paymentReducer from "./slices/paymentSlice";
 import notificationReducer from "./slices/notificationSlice";
 import forgotpassReducer from "./slices/forgotPasswordSlice";
 import signupSliceReducer from "./slices/signupSlice"; 
+import profileReducer from "./slices/profileSlice";
+import paymentModalReducer from "./slices/paymentModalSlice";
+
+
 
 
 // slices to persist
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["auth", "members", "plans", "payments", "signup"],
+  whitelist: ["auth", "members", "plans", "payments", "signup", "profile"],
 };
 
 // Combine all reducers
 const rootReducer = combineReducers({
   auth: authReducer,
+  profile: profileReducer,
   forgotpass: forgotpassReducer,
   signup: signupSliceReducer,
   modal: modalReducer,
@@ -38,6 +42,7 @@ const rootReducer = combineReducers({
   plans: planReducer,
   payments: paymentReducer,
   notifications: notificationReducer,
+  paymentModal: paymentModalReducer, 
 });
 
 // Apply persistence

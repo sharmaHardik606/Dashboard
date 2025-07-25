@@ -6,6 +6,7 @@ import { SidebarProvider } from "@/context/SidebarContext";
 import { Navbar } from "@/components/Navbar";
 import { Sidebar } from "@/components/Sidebar";
 import { isLoggedIn } from "@/utils/auth";
+import CompleteProfileForm from "@/components/complete-profile/CompleteProfileForm";
 
 // List of public (non-auth) routes
 const PUBLIC_ROUTES = ["/login", "/signup", "/forgot-password" ];
@@ -52,15 +53,19 @@ export default function ClientLayout({ children }) {
   // Icon-only Sidebar logic
   const iconOnly = pathname === "/settings";
 
-  return (
-    <SidebarProvider>
-      <div className="flex flex-col min-h-screen w-full">
-        <Navbar />
-        <div className="flex flex-1 w-full">
-          <Sidebar iconOnly={iconOnly} />
-          <main className="flex-1 sm:p-4 overflow-auto">{children}</main>
-        </div>
+return (
+  <SidebarProvider>
+    <div className="flex flex-col min-h-screen w-full">
+      <Navbar />
+      <div className="flex flex-1 w-full">
+        <Sidebar iconOnly={iconOnly} />
+        <main className="flex-1 sm:p-4 overflow-auto">{children}</main>
       </div>
-    </SidebarProvider>
-  );
+    </div>
+
+    {/* This is overlaid on top of everything */}
+    <CompleteProfileForm />
+  </SidebarProvider>
+);
+
 }

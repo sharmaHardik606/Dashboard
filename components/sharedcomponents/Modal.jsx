@@ -23,7 +23,15 @@ export default function Modal({ children }) {
     };
   }, [show]);
 
-  
+  useEffect(() => {
+    // Lock scroll
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      // Reset scroll on unmount
+      document.body.style.overflow = "";
+    };
+  }, []);
 
   if (!show) return null;
 

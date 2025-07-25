@@ -1,5 +1,5 @@
-"use client";
-
+import { login as loginAction } from "@/redux/slices/authSlice";
+import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft } from "lucide-react";
@@ -12,10 +12,12 @@ import {
 import {
   resendSignupOtp,
   verifySignupOtp,
-} from "@/redux/slices/signupSlice"; // 🆕 import
+  setSignupStep, // <-- ADD THIS for advancing signup step in mock!
+} from "@/redux/slices/signupSlice";
 
-export default function OtpForm({ type = "signup" }) {
+export default function OtpForm({ type = "signup", email }) {
   const dispatch = useDispatch();
+  const router = useRouter();
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [timer, setTimer] = useState(90);
   const inputRefs = useRef([]);
@@ -41,15 +43,34 @@ export default function OtpForm({ type = "signup" }) {
   };
 
   const handleVerify = () => {
-    const otpCode = otp.join("");
-    if (otpCode.length === 6) {
-      if (type === "forgot") {
-        dispatch(verifyForgotOtp(otpCode));
-      } else {
-        dispatch(verifySignupOtp(otpCode)); // ✅ uses correct logic
-      }
+  const otpCode = otp.join("");
+  if (otpCode.length === 6) {
+    if (type === "forgot") {
+      dispatch(moveToResetStep("reset"));
+    } else {
+      // 👇 MOCK LOGIN ON SIGNUP OTP SUCCESS!
+      const mockUser = {
+        name: "New User",
+        email, // you have this in OtpForm props
+        // add any other user info as needed
+      };
+      const mockToken = "mocked-signup-token-123";
+      dispatch(loginAction({ user: mockUser, token: mockToken }));
+      localStorage.setItem("token", mockToken); // if your app checks localStorage on reload
+      router.push("/dashboard");
     }
-  };
+  }
+};
+
+
+  // When backend is ready, replace above with your dispatches/side-effects:
+  /*
+  if (type === "forgot") {
+    dispatch(verifyForgotOtp(otpCode));
+  } else {
+    dispatch(verifySignupOtp(otpCode));
+  }
+  */
 
   const handleResend = () => {
     if (type === "forgot") {
@@ -60,6 +81,7 @@ export default function OtpForm({ type = "signup" }) {
     setTimer(90);
   };
 
+  // ... rest of your render code (unchanged) ...
   return (
     <div className="max-w-md mx-auto p-6 flex flex-col gap-6">
       {type === "forgot" && (
@@ -70,7 +92,6 @@ export default function OtpForm({ type = "signup" }) {
           <ArrowLeft />
         </button>
       )}
-
       <div className="space-y-1">
         <p className="text-sm font-semibold text-blue-600">ONE TIME PASSWORD</p>
         <h2 className="text-xl sm:text-2xl font-bold">
@@ -109,7 +130,11 @@ export default function OtpForm({ type = "signup" }) {
         </span>
       </div>
 
-      <Button className="w-full mt-2" onClick={handleVerify} variant={"mainblue"}>
+      <Button
+        className="w-full mt-2"
+        onClick={handleVerify}
+        variant={"mainblue"}
+      >
         Verify OTP
       </Button>
     </div>
