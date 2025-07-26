@@ -1,17 +1,30 @@
 "use client";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 
 export default function ResetForm() {
-  const [password, setPassword] = useState("");
-  const [confirm, setConfirm] = useState("");
   const [show, setShow] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (password !== confirm) {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors }
+  } = useForm({
+    defaultValues: {
+      password: "",
+      confirm: ""
+    }
+  });
+
+  // Watch passwords for validation
+  const password = watch("password");
+
+  const onSubmit = (data) => {
+    if (data.password !== data.confirm) {
       alert("Passwords do not match.");
       return;
     }
@@ -35,7 +48,7 @@ export default function ResetForm() {
           </h2>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <label className="text-sm font-medium text-gray-900 block mb-1">
               New Password <span className="text-red-500">*</span>
@@ -43,16 +56,24 @@ export default function ResetForm() {
             <div className="relative">
               <input
                 type={show ? "text" : "password"}
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter new password"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md pr-10 outline-none focus:ring-2 focus:ring-blue-500"
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 8,
+                    message: "Must be at least 8 characters"
+                  },
+                  // You can add extra validations here if needed!
+                  validate: value => 
+                    value.trim() === value || "Don't start or end with a space"
+                })}
               />
               <button
                 type="button"
-                onClick={() => setShow(!show)}
+                onClick={() => setShow((v) => !v)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                tabIndex={-1}
               >
                 {show ? (
                   <EyeOff className="w-5 h-5" />
@@ -61,6 +82,9 @@ export default function ResetForm() {
                 )}
               </button>
             </div>
+            {errors.password && (
+              <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
+            )}
           </div>
 
           <div>
@@ -69,13 +93,19 @@ export default function ResetForm() {
             </label>
             <input
               type="password"
-              required
-              value={confirm}
-              onChange={(e) => setConfirm(e.target.value)}
               placeholder="Re-enter password"
               className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-500"
+              {...register("confirm", {
+                required: "Confirmation required",
+                validate: value =>
+                  value === password || "Passwords do not match"
+              })}
             />
+            {errors.confirm && (
+              <p className="text-red-500 text-xs mt-1">{errors.confirm.message}</p>
+            )}
           </div>
+
           <ul className="text-xs text-gray-500 space-y-1 list-disc pl-4">
             <li>Must be at least 8 characters or more.</li>
             <li>

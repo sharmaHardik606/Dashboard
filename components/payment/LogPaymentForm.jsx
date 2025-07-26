@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useForm, Controller } from "react-hook-form";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -11,30 +11,36 @@ import {
 import { Button } from "@/components/ui/button";
 
 export default function LogPaymentForm({ onCancel }) {
-  const [formData, setFormData] = useState({
-    member: "",
-    amount: "",
-    date: null,
-    method: "Cash",
-    transactionId: "",
-    notes: "",
+  const {
+    register,
+    control,
+    handleSubmit,
+    watch,
+    formState: { errors }
+  } = useForm({
+    defaultValues: {
+      member: "",
+      amount: "",
+      date: null,
+      method: "Cash",
+      transactionId: "",
+      notes: "",
+    }
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const method = watch("method");
 
-  const handleSubmit = () => {
-    console.log("Submitted Payment:", formData);
+  const onSubmit = (data) => {
+    console.log("Submitted Payment:", data);
     onCancel(); // Close modal after submit
   };
 
   return (
-    <div className="space-y-4">
+    <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
       <div className="flex items-center justify-between border-b-[1.5px] pb-3">
         <h2 className="text-xl font-semibold mb-2">Log Payment</h2>
         <button
+          type="button"
           onClick={onCancel}
           className="hover:text-gray-800 text-sm hover:cursor-pointer"
         >
@@ -46,52 +52,65 @@ export default function LogPaymentForm({ onCancel }) {
         <label className="text-xs font-semibold mb-1 block">Member</label>
         <input
           type="text"
-          name="member"
           placeholder="John Doe"
-          value={formData.member}
-          onChange={handleChange}
           className="w-full border px-3 py-1.5 rounded-md text-sm font-semibold"
+          {...register("member", { required: "Member is required" })}
         />
+        {errors.member && (
+          <p className="text-red-500 text-xs mt-1">{errors.member.message}</p>
+        )}
       </div>
 
       <div>
         <label className="text-xs font-semibold mb-1 block">Amount Paid</label>
         <input
           type="text"
-          name="amount"
           placeholder="₹ 2500"
-          value={formData.amount}
-          onChange={handleChange}
           className="w-full border px-3 py-1.5 rounded-md text-sm font-semibold"
+          {...register("amount", { required: "Amount is required" })}
         />
+        {errors.amount && (
+          <p className="text-red-500 text-xs mt-1">{errors.amount.message}</p>
+        )}
       </div>
 
       <div>
         <label className="text-xs font-semibold mb-1 block">
           Date of Payment
         </label>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              className="w-full justify-start text-left font-normal text-sm px-3 py-1.5"
-            >
-              {formData.date ? (
-                format(formData.date, "dd/MM/yyyy")
-              ) : (
-                <span className="text-muted-foreground">Select a date</span>
-              )}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
-            <Calendar
-              mode="single"
-              selected={formData.date}
-              onSelect={(date) => setFormData((prev) => ({ ...prev, date }))}
-              initialFocus
-            />
-          </PopoverContent>
-        </Popover>
+        <Controller
+          control={control}
+          name="date"
+          rules={{ required: "Date is required" }}
+          render={({ field }) => (
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full justify-start text-left font-normal text-sm px-3 py-1.5"
+                >
+                  {field.value ? (
+                    format(field.value, "dd/MM/yyyy")
+                  ) : (
+                    <span className="text-muted-foreground">Select a date</span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={field.value}
+                  onSelect={field.onChange}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+          )}
+        />
+        {errors.date && (
+          <p className="text-red-500 text-xs mt-1">{errors.date.message}</p>
+        )}
       </div>
 
       <div>
@@ -102,10 +121,8 @@ export default function LogPaymentForm({ onCancel }) {
           <label className="flex items-center gap-2 text-sm">
             <input
               type="radio"
-              name="method"
               value="Online"
-              checked={formData.method === "Online"}
-              onChange={handleChange}
+              {...register("method")}
               className="accent-blue-600"
             />
             Online
@@ -113,10 +130,8 @@ export default function LogPaymentForm({ onCancel }) {
           <label className="flex items-center gap-2 text-sm">
             <input
               type="radio"
-              name="method"
               value="Cash"
-              checked={formData.method === "Cash"}
-              onChange={handleChange}
+              {...register("method")}
               className="accent-blue-600"
             />
             Cash
@@ -124,41 +139,42 @@ export default function LogPaymentForm({ onCancel }) {
         </div>
       </div>
 
-      {formData.method === "Online" && (
+      {method === "Online" && (
         <div>
           <label className="text-xs font-semibold mb-1 block">
             Transaction ID
           </label>
           <input
             type="text"
-            name="transactionId"
-            value={formData.transactionId}
-            onChange={handleChange}
+            {...register("transactionId", {
+              required: "Transaction ID is required for Online payment"
+            })}
             className="w-full border px-3 py-2 rounded-md text-sm font-semibold"
           />
+          {errors.transactionId && (
+            <p className="text-red-500 text-xs mt-1">{errors.transactionId.message}</p>
+          )}
         </div>
       )}
 
       <div>
         <label className="text-xs font-semibold mb-1 block">Notes</label>
         <textarea
-          name="notes"
           rows={2}
-          value={formData.notes}
-          onChange={handleChange}
           placeholder="Placeholder"
           className="w-full border px-3 py-1.5 rounded-md text-sm font-semibold resize-none"
+          {...register("notes")}
         />
       </div>
 
       <div className="mt-6 flex justify-end gap-3">
-        <Button variant="hollow" onClick={onCancel}>
+        <Button type="button" variant="hollow" onClick={onCancel}>
           Cancel
         </Button>
-        <Button variant="mainblue" onClick={handleSubmit}>
+        <Button type="submit" variant="mainblue">
           Save
         </Button>
       </div>
-    </div>
+    </form>
   );
 }

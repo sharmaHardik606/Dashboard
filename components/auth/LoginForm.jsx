@@ -1,48 +1,48 @@
 "use client";
 
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { Button } from "../ui/button";
 import { useDispatch } from "react-redux";
 import { login as loginAction } from "@/redux/slices/authSlice";
 import Link from "next/link";
-import { loginUser } from "@/lib/api/auth"; // useing mock loginUser
+import { loginUser } from "@/lib/api/auth"; // mock loginUser
 
 export default function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
   const router = useRouter();
-
   const dispatch = useDispatch();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // react-hook-form instance
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch
+  } = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+      rememberMe: false,
+    },
+  });
 
+  const onSubmit = async (values) => {
+    const { email, password, rememberMe } = values;
     try {
-      // --- Mocked logic, backend-ready ---
-      const data = await loginUser(email, password); // will use mock in dev
+      const data = await loginUser(email, password); // mock in dev
       localStorage.setItem("token", data.token);
       dispatch(loginAction({ user: data.user, token: data.token }));
       router.push("/dashboard");
     } catch (err) {
       alert(err.message);
     }
+  };
 
-    // --- WHEN BACKEND IS READY ---
-    /*
-    try {
-      const data = await loginUser(email, password);
-      localStorage.setItem("token", data.token);
-      dispatch(loginAction({ user: data.user, token: data.token }));
-      router.push("/dashboard");
-    } catch (err) {
-      alert(err.message);
-    }
-    */
-  }
+  // for "show password" toggle
+  const passwordValue = watch("password");
 
   return (
     <div className="min-h-screen flex items-center justify-center w-full">
@@ -74,19 +74,20 @@ export default function LoginForm() {
           </h2>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <label className="text-sm font-medium text-gray-900 block mb-1">
               Email <span className="text-red-500">*</span>
             </label>
             <input
               type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
               className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-500"
+              {...register("email", { required: "Email is required" })}
             />
+            {errors.email && (
+              <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+            )}
           </div>
 
           <div>
@@ -96,16 +97,15 @@ export default function LoginForm() {
             <div className="relative">
               <input
                 type={showPass ? "text" : "password"}
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md pr-10 outline-none focus:ring-2 focus:ring-blue-500"
+                {...register("password", { required: "Password is required" })}
               />
               <button
                 type="button"
-                onClick={() => setShowPass(!showPass)}
+                onClick={() => setShowPass((v) => !v)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                tabIndex={-1}
               >
                 {showPass ? (
                   <EyeOff className="w-5 h-5" />
@@ -114,15 +114,17 @@ export default function LoginForm() {
                 )}
               </button>
             </div>
+            {errors.password && (
+              <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
+            )}
           </div>
 
           <div className="flex items-center justify-between text-sm">
             <label className="flex items-center gap-2">
               <input
                 type="checkbox"
-                checked={rememberMe}
-                onChange={() => setRememberMe(!rememberMe)}
                 className="accent-blue-600"
+                {...register("rememberMe")}
               />
               Remember me
             </label>
