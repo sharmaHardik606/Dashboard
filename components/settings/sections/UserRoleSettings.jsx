@@ -1,20 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { roles } from "@/constants/roles/roles";
 import Modal from "@/components/sharedcomponents/Modal";
 import CreateRoleForm from "../forms/CreateRoleForm";
-import { useRouter, usePathname } from "next/navigation";
 
 export default function UserRoleSettings() {
   const [showForm, setShowForm] = useState(false);
-
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
+  // Sync the state with the URL query param
+  useEffect(() => {
+    setShowForm(searchParams.get("showForm") === "1");
+  }, [searchParams]);
+
+  // For button: update URL with query param
   function openCreateRoleForm() {
     router.push(`${pathname}?showForm=1`);
+  }
+
+  // Remove the query param when modal closes
+  function closeModal() {
+    router.push(pathname);
   }
 
   return (
@@ -63,11 +74,11 @@ export default function UserRoleSettings() {
       </div>
 
       {/* Create Role Button */}
-      <Button onClick={() => setShowForm(true)}>+ Create Role</Button>
+      <Button onClick={openCreateRoleForm}>+ Create Role</Button>
 
       {showForm && (
-        <Modal>
-          <CreateRoleForm onCancel={() => setShowForm(false)} />
+        <Modal className="">
+          <CreateRoleForm onCancel={closeModal} />
         </Modal>
       )}
     </div>
