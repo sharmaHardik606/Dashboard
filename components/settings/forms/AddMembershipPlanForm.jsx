@@ -10,7 +10,7 @@ export function AddMembershipPlanForm({ onCancel, onSubmit }) {
     register,
     handleSubmit,
     control,
-    formState: { errors }
+    formState: { errors },
   } = useForm({
     defaultValues: {
       planName: "",
@@ -23,12 +23,12 @@ export function AddMembershipPlanForm({ onCancel, onSubmit }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between border-b pb-3">
         <h2 className="text-lg font-semibold">Add New Plan</h2>
         <button
           type="button"
           onClick={onCancel}
-          className="text-xl leading-none px-2 py-1 hover:text-gray-800"
+          className="text-xl leading-none px-2 py-1 hover:text-gray-800 hover:cursor-pointer"
           aria-label="Close"
         >
           &times;
@@ -42,26 +42,31 @@ export function AddMembershipPlanForm({ onCancel, onSubmit }) {
             {...register("planName", { required: "Plan Name is required" })}
             placeholder="Plan Name"
           />
-          {errors.planName && <span className="text-xs text-red-500">{errors.planName.message}</span>}
+          {errors.planName && (
+            <span className="text-xs text-red-500">
+              {errors.planName.message}
+            </span>
+          )}
         </div>
         {/* Price */}
         <div>
           <label className="text-sm font-medium mb-1 block">Price</label>
-          <div className="flex items-center gap-2">
-            <span className="text-base font-semibold opacity-80">₹</span>
+          <div className="flex items-center">
             <Input
               type="number"
               min={0}
               step={1}
               {...register("price", {
                 required: "Price is required",
-                min: { value: 0, message: "Price cannot be negative" }
+                min: { value: 0, message: "Price cannot be negative" },
               })}
-              placeholder="0"
+              placeholder="₹"
               className="w-full"
             />
           </div>
-          {errors.price && <span className="text-xs text-red-500">{errors.price.message}</span>}
+          {errors.price && (
+            <span className="text-xs text-red-500">{errors.price.message}</span>
+          )}
         </div>
         {/* Duration */}
         <div>
@@ -76,29 +81,32 @@ export function AddMembershipPlanForm({ onCancel, onSubmit }) {
                 onValueChange={field.onChange}
               >
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="monthly" id="monthly" />
-                  <label
-                    htmlFor="monthly"
-                    className="text-sm font-medium"
-                  >
+                  <RadioGroupItem
+                    value="monthly"
+                    id="monthly"
+                    className="accent-blue-600"
+                  />
+                  <label htmlFor="monthly" className="text-sm font-medium">
                     Monthly
                   </label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="quarterly" id="quarterly" />
-                  <label
-                    htmlFor="quarterly"
-                    className="text-sm font-medium"
-                  >
+                  <RadioGroupItem
+                    value="quarterly"
+                    id="quarterly"
+                    className="accent-blue-600"
+                  />
+                  <label htmlFor="quarterly" className="text-sm font-medium">
                     Quarterly
                   </label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="yearly" id="yearly" />
-                  <label
-                    htmlFor="yearly"
-                    className="text-sm font-medium"
-                  >
+                  <RadioGroupItem
+                    value="yearly"
+                    id="yearly"
+                    className="accent-blue-600"
+                  />
+                  <label htmlFor="yearly" className="text-sm font-medium">
                     Yearly
                   </label>
                 </div>
@@ -109,11 +117,7 @@ export function AddMembershipPlanForm({ onCancel, onSubmit }) {
         {/* Notes */}
         <div>
           <label className="text-sm font-medium mb-1 block">Notes</label>
-          <Textarea
-            {...register("notes")}
-            placeholder="Placeholder"
-            rows={3}
-          />
+          <Textarea {...register("notes")} placeholder="Placeholder" rows={3} />
         </div>
       </div>
       <div className="flex justify-end gap-2">

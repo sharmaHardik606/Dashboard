@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Table from "@/components/sharedcomponents/Table";
@@ -8,8 +8,10 @@ import Modal from "@/components/sharedcomponents/Modal";
 import { AddMembershipPlanForm } from "../forms/AddMembershipPlanForm";
 
 export default function MembershipSettings() {
-  const [showAdd, setShowAdd] = useState(false);
-
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const showForm = searchParams.get("showForm") === "1";
 
   const membershipColumns = [
     { key: "planName", header: "Plan Name" },
@@ -61,8 +63,9 @@ export default function MembershipSettings() {
     },
   ];
 
-  function handleAdd(planData) {
-    setShowAdd(false);
+  function handleAdd(data) {
+    // handle new plan addition here (API or local update)
+    router.push(pathname); // close modal
   }
 
   return (
@@ -72,7 +75,7 @@ export default function MembershipSettings() {
         <Button
           variant="outline"
           size="lg"
-          onClick={() => setShowAdd(true)}
+          onClick={() => router.push(`${pathname}?showForm=1`)}
         >
           <Plus strokeWidth={3} />
           Add New plan
@@ -88,10 +91,10 @@ export default function MembershipSettings() {
           { label: "Delete", onClick: () => console.log("Delete", item.id) },
         ]}
       />
-      {showAdd && (
+      {showForm && (
         <Modal>
           <AddMembershipPlanForm
-            onCancel={() => setShowAdd(false)}
+            onCancel={() => router.push(pathname)}
             onSubmit={handleAdd}
           />
         </Modal>
