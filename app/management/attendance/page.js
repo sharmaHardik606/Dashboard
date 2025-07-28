@@ -5,15 +5,17 @@ import Table from "@/components/sharedcomponents/Table";
 import { Data } from "@/constants/management/data";
 import { attendanceColumns } from "@/constants/management/columns";
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
 import FilterBar from "@/components/sharedcomponents/FilterBar";
+import QrCodeModal from "@/components/management/QrCodeModal";
 
 export default function AttendancePage() {
   const filteredData = Data.filter((item) => item.checkInTime && item.method);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Format today's date
   const [today, setToday] = useState("");
+
+  const [showQrModal, setShowQrModal] = useState(false); // Control modal
+  const qrValue = "AyuProfit-QR-Placeholder"; //  later fetch this from backend
 
   useEffect(() => {
     const getFormattedDateTime = () => {
@@ -58,7 +60,7 @@ export default function AttendancePage() {
         }}
         secondaryButton={{
           label: "Scan QR",
-          onClick: () => console.log("Import clicked"),
+          onClick: () => setShowQrModal(true), 
         }}
         label="Search Members/Staff or Scan ID/QR"
       />
@@ -84,6 +86,13 @@ export default function AttendancePage() {
           ]}
         />
       </ContainerCard>
+
+      {/* ✅ QR Code Modal */}
+      <QrCodeModal
+        open={showQrModal}
+        onClose={() => setShowQrModal(false)}
+        value={qrValue}
+      />
     </div>
   );
 }
