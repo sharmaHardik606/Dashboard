@@ -9,9 +9,9 @@ import { memberColumns } from "@/constants/management/columns";
 import { Plus, HardDriveDownload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import FilterBar from "@/components/sharedcomponents/FilterBar";
-import AddMemberForm from "@/components/management/AddMemberForm";
+import AddMemberForm from "@/components/management/members/AddMemberForm";
 import Modal from "@/components/sharedcomponents/Modal";
-import ImportMembersCSVPanel from "@/components/management/ImportMembersCSVPanel";
+import ImportMembersCSVPanel from "@/components/management/members/ImportMembersCSVPanel";
 
 export default function MembersPage() {
   const router = useRouter();
@@ -63,7 +63,10 @@ export default function MembersPage() {
       </div>
 
       {showForm && (
-        <Modal isOpen={showForm} onClose={() => router.push("/management/members")}>
+        <Modal
+          isOpen={showForm}
+          onClose={() => router.push("/management/members")}
+        >
           <AddMemberForm onCancel={() => router.push("/management/members")} />
         </Modal>
       )}

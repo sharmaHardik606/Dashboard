@@ -10,7 +10,7 @@ import { statsData } from "@/constants/dashboard/dashboardState";
 import RecentActivitySection from "@/components/dashboard/sections/RecentActivitySection";
 import NotificationSection from "@/components/dashboard/sections/NotificationSection";
 import Modal from "@/components/sharedcomponents/Modal";
-import AddMemberForm from "@/components/management/AddMemberForm";
+import AddMemberForm from "@/components/management/members/AddMemberForm";
 
 export default function DashboardPage() {
   const router = useRouter();
