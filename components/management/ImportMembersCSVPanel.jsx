@@ -12,55 +12,97 @@ export default function ImportMembersCSVPanel({ onCancel, onImport }) {
   const handleFile = (e) => {
     const uploadedFile = e.target.files[0];
     setFile(uploadedFile);
-
     if (uploadedFile) {
       Papa.parse(uploadedFile, {
         header: true,
         complete: (results) => {
-          setPreview(results.data.filter(row => row.Name)); // Skip empty rows
+          const rows = results.data.filter((row) => row.Name || row.Email); // Filter empty rows
+          setPreview(rows);
         },
       });
     }
   };
 
   const handleImport = () => {
-    // Implement saving/import logic, or call callback
     onImport?.(preview);
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl p-6 max-w-3xl w-full mx-auto">
-      <h2 className="text-2xl font-semibold mb-2">Import Members from CSV</h2>
-      <p className="mb-6 text-gray-600">
-        The CSV file should have columns: <span className="font-mono">Name</span>, <span className="font-mono">Email</span>, <span className="font-mono">Phone</span>, <span className="font-mono">Membership Type</span>, <span className="font-mono">Join Date</span>.
+    <div className="pt-8 pb-16">
+      {/* Title */}
+      <h1 className="text-3xl font-bold mb-2">Import Members from CSV</h1>
+
+      {/* Instruction */}
+      <p className="text-sm text-gray-600 mb-6">
+        To import members, your CSV file must be formatted correctly. The first
+        row should contain the following headers:
+        <span className="font-medium">
+          {" "}
+          'Name', 'Email', 'Phone', 'Membership Type', 'Join Date'
+        </span>
+        . Ensure all fields are populated for each member.
       </p>
 
+      {/* Upload Area */}
       <div
-        className="border-2 border-dashed rounded-xl h-40 flex flex-col items-center justify-center mb-8 bg-white cursor-pointer"
-        onClick={() => fileRef.current.click()}
+        className="border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 hover:bg-gray-100 transition cursor-pointer h-48 flex flex-col items-center justify-center text-center mb-6"
+        onClick={() => {
+          if (fileRef.current) fileRef.current.click();
+        }}
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={(e) => {
+          e.preventDefault();
+          const droppedFile = e.dataTransfer.files[0];
+          if (droppedFile) {
+            setFile(droppedFile);
+            Papa.parse(droppedFile, {
+              header: true,
+              complete: (results) => {
+                const rows = results.data.filter(
+                  (row) => row.Name || row.Email
+                );
+                setPreview(rows);
+              },
+            });
+          }
+        }}
       >
         <input
           type="file"
           accept=".csv"
-          className="hidden"
           ref={fileRef}
           onChange={handleFile}
+          className="hidden"
         />
-        <Button variant="mainblue" size="lg">
+        <span className="text-gray-700 font-medium">
+          Drag and drop your CSV file here, or
+        </span>
+
+        <Button
+          variant="mainblue"
+          size="lg"
+          className="mt-3"
+          onClick={(e) => {
+            e.stopPropagation(); // ✅ Fix here
+            if (fileRef.current) fileRef.current.click();
+          }}
+        >
           Select CSV File
         </Button>
-        <span className="mt-2 text-gray-500">
-          {file ? file.name : "Drag and drop your CSV file here, or browse files."}
-        </span>
+
+        {file && (
+          <span className="mt-2 text-sm text-gray-500">{file.name}</span>
+        )}
       </div>
 
+      {/* Preview Table */}
       {preview.length > 0 && (
-        <>
+        <div className="mb-10">
           <h3 className="font-semibold mb-2">Preview</h3>
-          <div className="overflow-x-auto">
-            <table className="min-w-full border rounded-xl bg-white mb-4">
+          <div className="overflow-x-auto border rounded-xl bg-white">
+            <table className="min-w-full text-sm">
               <thead>
-                <tr className="bg-gray-100 border-b">
+                <tr className="bg-gray-100">
                   <th className="py-2 px-4 text-left">Name</th>
                   <th className="py-2 px-4 text-left">Email</th>
                   <th className="py-2 px-4 text-left">Phone</th>
@@ -69,28 +111,36 @@ export default function ImportMembersCSVPanel({ onCancel, onImport }) {
                 </tr>
               </thead>
               <tbody>
-                {preview.map((m, i) => (
-                  <tr key={i} className="border-b">
-                    <td className="py-2 px-4 text-blue-600">{m.Name}</td>
-                    <td className="py-2 px-4">{m.Email}</td>
-                    <td className="py-2 px-4">{m.Phone}</td>
-                    <td className="py-2 px-4">{m["Membership Type"]}</td>
-                    <td className="py-2 px-4">{m["Join Date"]}</td>
-                  </tr>
-                ))}
+                {preview.map((row, idx) => {
+                  console.log("Row data:", row); // For debugging
+                  return (
+                    <tr key={idx} className="border-b">
+                      <td className="py-2 px-4 text-blue-600">{row.Name}</td>
+                      <td className="py-2 px-4">{row.Email}</td>
+                      <td className="py-2 px-4">{row.Phone || row["Phone"]}</td>
+                      <td className="py-2 px-4">
+                        {row["Membership Type"] || row.MembershipType}
+                      </td>
+                      <td className="py-2 px-4">
+                        {row["Join Date"] || row.JoinDate}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
-        </>
+        </div>
       )}
 
-      <div className="flex justify-end gap-4 mt-8">
-        <Button variant="hollow" size="xl" onClick={onCancel}>
+      {/* Action Buttons */}
+      <div className="flex justify-end gap-3">
+        <Button variant="hollow" size="lg" onClick={onCancel} className="">
           Cancel
         </Button>
         <Button
           variant="mainblue"
-          size="xl"
+          size="lg"
           disabled={!preview.length}
           onClick={handleImport}
         >

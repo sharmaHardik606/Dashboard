@@ -22,6 +22,21 @@ export default function MembersPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showImportSection, setShowImportSection] = useState(false);
 
+  // Main swap: if importing, show only import panel. Otherwise, show full normal view
+  if (showImportSection) {
+    return (
+      <div className="p-3 space-y-6">
+        <ImportMembersCSVPanel
+          onCancel={() => setShowImportSection(false)}
+          onImport={(importedMembers) => {
+            // Handle import as needed; return to main view:
+            setShowImportSection(false);
+            // Optionally, notify user or refresh list
+          }}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="p-3 space-y-6">
@@ -53,50 +68,37 @@ export default function MembersPage() {
         </Modal>
       )}
 
-      {showImportSection ? (
-        <ImportMembersCSVPanel
-          onCancel={() => setShowImportSection(false)}
-          onImport={(importedMembers) => {
-            // You can update your state here or handle backend upload,
-            // then hide import section:
-            setShowImportSection(false);
-            // Optionally, show a toast, refresh your table, etc.
-          }}
+      <FilterBar
+        searchValue={searchQuery}
+        onSearchChange={setSearchQuery}
+        primaryButton={{
+          label: "Filters",
+          onClick: () => console.log("Filters clicked"),
+        }}
+        label="Search Members"
+      />
+
+      <ContainerCard>
+        <Table
+          columns={memberColumns}
+          data={filteredData}
+          getActions={(item) => [
+            { label: "View/Edit", onClick: () => console.log("View", item.id) },
+            {
+              label: "Assign Workout",
+              onClick: () => console.log("Workout", item.id),
+            },
+            {
+              label: "Assign Diet",
+              onClick: () => console.log("Assign Diet", item.id),
+            },
+            {
+              label: "Delete Member",
+              onClick: () => console.log("Delete", item.id),
+            },
+          ]}
         />
-      ) : (
-        <>
-          <FilterBar
-            searchValue={searchQuery}
-            onSearchChange={setSearchQuery}
-            primaryButton={{
-              label: "Filters",
-              onClick: () => console.log("Filters clicked"),
-            }}
-            label="Search Members"
-          />
-          <ContainerCard>
-            <Table
-              columns={memberColumns}
-              data={filteredData}
-              getActions={(item) => [
-                { label: "View/Edit", onClick: () => console.log("View", item.id) },
-                {
-                  label: "Assign Workout",
-                  onClick: () => console.log("Workout", item.id),
-                },
-                {
-                  label: "Assign Diet",
-                  onClick: () => console.log("Assign Diet", item.id),
-                },
-                {
-                  label: "Delete Member",
-                  onClick: () => console.log("Delete", item.id),
-                },
-              ]}
-            />
-          </ContainerCard>
-        </>
-      )}
+      </ContainerCard>
     </div>
   );
 }
