@@ -1,7 +1,23 @@
 "use client";
 
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 import { ContainerCard } from "../sharedcomponents/ContainerCard";
-import { Button } from "../ui/button";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns"; 
 
 export default function ExportSection({
   title,
@@ -13,49 +29,118 @@ export default function ExportSection({
   showFormat = true,
   onExport,
 }) {
+  const [startDate, setStartDate] = useState(
+    defaultStartDate ? new Date(defaultStartDate) : null
+  );
+  const [endDate, setEndDate] = useState(
+    defaultEndDate ? new Date(defaultEndDate) : null
+  );
+
+  const formatDate = (date) => date.toISOString().split("T")[0];
+
+  const setQuickDate = (range) => {
+    const today = new Date();
+    if (range === "Today") {
+      setStartDate(today);
+      setEndDate(today);
+    } else if (range === "This Week") {
+      const start = new Date(today);
+      start.setDate(today.getDate() - today.getDay());
+      const end = new Date(start);
+      end.setDate(start.getDate() + 6);
+      setStartDate(start);
+      setEndDate(end);
+    } else if (range === "This Month") {
+      const start = new Date(today.getFullYear(), today.getMonth(), 1);
+      const end = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+      setStartDate(start);
+      setEndDate(end);
+    }
+  };
+
   return (
-    <div className="space-y-6 h-full ">
+    <div className="space-y-6 h-full">
       <ContainerCard className="space-y-6">
-        {/* Title */}
         <h2 className="text-lg font-semibold">{title}</h2>
 
         {/* Date Range */}
+        {/* Date Range */}
         {showDateRange && (
-          <div className="">
-            <h3 className="font-semibold text-sm ">Date Range</h3>
-
-            <div className="flex flex-col sm:flex-row  gap-4 border rounded-xl py-4 px-2 mt-2">
+          <div>
+            <h3 className="font-semibold text-sm">Date Range</h3>
+            <div className="flex flex-col sm:flex-row gap-4 border rounded-xl py-4 px-2 mt-2">
               <div className="w-full">
                 <label className="text-xs font-medium mb-1 block">
                   Start Date
                 </label>
-                <input
-                  type="date"
-                  defaultValue={defaultStartDate}
-                  className="w-full border border-gray-300 px-3 py-2 rounded-md"
-                />
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start text-left"
+                    >
+                      {startDate ? (
+                        format(startDate, "dd/MM/yyyy")
+                      ) : (
+                        <span className="text-muted-foreground">
+                          Pick a date
+                        </span>
+                      )}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="p-0 w-auto">
+                    <Calendar
+                      mode="single"
+                      selected={startDate}
+                      onSelect={setStartDate}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
               </div>
+
               <div className="w-full">
                 <label className="text-xs font-medium mb-1 block">
                   End Date
                 </label>
-                <input
-                  type="date"
-                  defaultValue={defaultEndDate}
-                  className="w-full border border-gray-300 px-3 py-2 rounded-md"
-                />
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start text-left"
+                    >
+                      {endDate ? (
+                        format(endDate, "dd/MM/yyyy")
+                      ) : (
+                        <span className="text-muted-foreground">
+                          Pick a date
+                        </span>
+                      )}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="p-0 w-auto">
+                    <Calendar
+                      mode="single"
+                      selected={endDate}
+                      onSelect={setEndDate}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
               </div>
             </div>
-
+            {/* Rest unchanged */}
             <div className="px-2 mt-2">
-              <div className="w-full flex gap-2">
+              <div className="w-full flex flex-wrap gap-2">
                 {["Today", "This Week", "This Month"].map((label) => (
-                  <button
+                  <Button
                     key={label}
-                    className="border px-3 py-1.5 rounded-md text-sm hover:bg-gray-100"
+                    variant="hollow"
+                    onClick={() => setQuickDate(label)}
+                    className="text-sm"
                   >
                     {label}
-                  </button>
+                  </Button>
                 ))}
               </div>
             </div>
@@ -64,17 +149,23 @@ export default function ExportSection({
 
         {/* Filters */}
         {showFilters && filters.length > 0 && (
-          <div className="">
-            <h3 className="font-semibold text-sm ">Filters</h3>
+          <div>
+            <h3 className="font-semibold text-sm">Filters</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border rounded-xl py-4 px-2 mt-2">
               {filters.map((filterLabel, index) => (
                 <div key={index}>
                   <label className="font-medium text-gray-700 mb-2 block text-xs">
                     {filterLabel}
                   </label>
-                  <select className="w-full border border-gray-300 px-3 py-2 rounded-md">
-                    <option>All</option>
-                  </select>
+                  <Select>
+                    <SelectTrigger className={"w-full"}>
+                      <SelectValue placeholder="All" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All</SelectItem>
+                      {/* Add more <SelectItem>s as needed */}
+                    </SelectContent>
+                  </Select>
                 </div>
               ))}
             </div>
@@ -104,11 +195,11 @@ export default function ExportSection({
         )}
 
         {/* Export Button */}
-        <div className="flex gap-2 items-center justify-end border-t pt-4">
-          <Button onClick={onExport} variant={"hollow"}>
+        <div className="flex flex-wrap gap-2 items-center justify-end border-t pt-4">
+          <Button onClick={onExport} variant="hollow">
             Reset Parameters
           </Button>
-          <Button onClick={onExport} variant={"mainblue"}>
+          <Button onClick={onExport} variant="mainblue">
             Generate & Export
           </Button>
         </div>

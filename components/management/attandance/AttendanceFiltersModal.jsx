@@ -92,7 +92,7 @@ export default function AttendanceFiltersModal({ open, onClose }) {
         {/* Date Range */}
         <div className="mt-4 ">
           <label className="text-sm font-medium mb-2 block">Renewal Date Range</label>
-          <div className="flex gap-2 w-full">
+          <div className="flex items-center flex-col sm:flex-row gap-2 w-full">
             <Popover>
               <PopoverTrigger asChild>
                 <Button variant="outline" className="w-1/2 justify-start text-left">
