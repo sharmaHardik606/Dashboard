@@ -47,7 +47,7 @@ export default function CompleteProfileForm() {
             <div
               className={`${step === 2 ? "block" : "hidden"}  inset-0`}
             >
-              <StepTwoChoosePlan formData={formData} onBack={() => setStep(1)} />
+              <StepTwoChoosePlan formData={formData} onBack={() => setStep(1)} mode="profile" />
             </div>
           </div>
           <PaymentModal />

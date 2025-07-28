@@ -11,7 +11,7 @@ import {
   setPaymentMethod,
 } from "@/redux/slices/paymentModalSlice";
 
-export default function StepTwoChoosePlan({ onBack }) {
+export default function StepTwoChoosePlan({ onBack, mode = "profile" }) {
   const { 
     register,
     handleSubmit,
@@ -34,6 +34,9 @@ export default function StepTwoChoosePlan({ onBack }) {
 
   const selectedPlan = watch("plan");
   const paymentMethod = watch("paymentMethod");
+
+  // switching the heading for different uses
+  const heading = mode === "billing" ? "Upgrade Plan" : "Step 2: Choose Plan";
 
   const plans = [
     {
@@ -71,8 +74,8 @@ export default function StepTwoChoosePlan({ onBack }) {
 
   return (
     <form onSubmit={handleSubmit(submitHandler)} className="space-y-6 ">
-      <h2 className="text-xl font-semibold text-center">
-        Step 2 - Choose Plan
+      <h2 className="text-xl font-semibold text-left">
+        {heading}
       </h2>
       <div className="grid sm:grid-cols-3 gap-4">
         {plans.map((plan) => (
