@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { ContainerCard } from "@/components/sharedcomponents/ContainerCard";
 import Table from "@/components/sharedcomponents/Table";
@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import FilterBar from "@/components/sharedcomponents/FilterBar";
 import AddMemberForm from "@/components/management/AddMemberForm";
 import Modal from "@/components/sharedcomponents/Modal";
+import ImportMembersCSVPanel from "@/components/management/ImportMembersCSVPanel";
 
 export default function MembersPage() {
   const router = useRouter();
@@ -19,13 +20,19 @@ export default function MembersPage() {
 
   const filteredData = Data.filter((item) => item.type === "member");
   const [searchQuery, setSearchQuery] = useState("");
+  const [showImportSection, setShowImportSection] = useState(false);
+
 
   return (
     <div className="p-3 space-y-6">
       <div className="flex flex-col justify-between gap-4 sm:flex-row">
         <h1 className="text-3xl font-semibold">Members</h1>
         <div className="flex gap-2">
-          <Button variant="hollow" size="xl">
+          <Button
+            variant="hollow"
+            size="xl"
+            onClick={() => setShowImportSection(true)}
+          >
             <HardDriveDownload strokeWidth={2} />
             Import Data
           </Button>
@@ -41,45 +48,55 @@ export default function MembersPage() {
       </div>
 
       {showForm && (
-        <Modal
-          isOpen={showForm}
-          onClose={() => router.push("/management/members")}
-        >
+        <Modal isOpen={showForm} onClose={() => router.push("/management/members")}>
           <AddMemberForm onCancel={() => router.push("/management/members")} />
         </Modal>
       )}
 
-      <FilterBar
-        searchValue={searchQuery}
-        onSearchChange={setSearchQuery}
-        primaryButton={{
-          label: "Filters",
-          onClick: () => console.log("Filters clicked"),
-        }}
-        label="Search Members"
-      />
-
-      <ContainerCard>
-        <Table
-          columns={memberColumns}
-          data={filteredData}
-          getActions={(item) => [
-            { label: "View/Edit", onClick: () => console.log("View", item.id) },
-            {
-              label: "Assign Workout",
-              onClick: () => console.log("Workout", item.id),
-            },
-            {
-              label: "Assign Diet",
-              onClick: () => console.log("Assign Diet", item.id),
-            },
-            {
-              label: "Delete Member",
-              onClick: () => console.log("Delete", item.id),
-            },
-          ]}
+      {showImportSection ? (
+        <ImportMembersCSVPanel
+          onCancel={() => setShowImportSection(false)}
+          onImport={(importedMembers) => {
+            // You can update your state here or handle backend upload,
+            // then hide import section:
+            setShowImportSection(false);
+            // Optionally, show a toast, refresh your table, etc.
+          }}
         />
-      </ContainerCard>
+      ) : (
+        <>
+          <FilterBar
+            searchValue={searchQuery}
+            onSearchChange={setSearchQuery}
+            primaryButton={{
+              label: "Filters",
+              onClick: () => console.log("Filters clicked"),
+            }}
+            label="Search Members"
+          />
+          <ContainerCard>
+            <Table
+              columns={memberColumns}
+              data={filteredData}
+              getActions={(item) => [
+                { label: "View/Edit", onClick: () => console.log("View", item.id) },
+                {
+                  label: "Assign Workout",
+                  onClick: () => console.log("Workout", item.id),
+                },
+                {
+                  label: "Assign Diet",
+                  onClick: () => console.log("Assign Diet", item.id),
+                },
+                {
+                  label: "Delete Member",
+                  onClick: () => console.log("Delete", item.id),
+                },
+              ]}
+            />
+          </ContainerCard>
+        </>
+      )}
     </div>
   );
 }
