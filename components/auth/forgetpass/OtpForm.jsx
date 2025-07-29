@@ -46,6 +46,10 @@ export default function OtpForm({ type = "signup", email }) {
   });
 
   useEffect(() => {
+    inputRefs.current[0]?.focus();
+  }, []);
+
+  useEffect(() => {
     if (timer <= 0) return;
     const countdown = setInterval(() => setTimer((t) => t - 1), 1000);
     return () => clearInterval(countdown);
@@ -54,9 +58,11 @@ export default function OtpForm({ type = "signup", email }) {
   // auto-focus/jump and value set for each digit (preserving your logic)
   const handleChange = (idx, value) => {
     if (!/^\d?$/.test(value)) return;
-    setValue(`otp${idx}`, value, { shouldValidate: true });
-    if (value && idx < 5) inputRefs.current[idx + 1]?.focus();
-    trigger(); // validate as user moves through fields
+
+    setValue(`otp${idx}`, value); // only set, no validate here
+    if (value && idx < 5) {
+      inputRefs.current[idx + 1]?.focus();
+    }
   };
 
   const handleBackspace = (idx, e) => {
@@ -65,24 +71,28 @@ export default function OtpForm({ type = "signup", email }) {
     }
   };
 
-  const onSubmit = (data) => {
-    // Gather OTP digits
-    const otpCode = [0, 1, 2, 3, 4, 5].map((i) => data[`otp${i}`] || "").join("");
-    if (otpCode.length === 6) {
+  const onSubmit = async (data) => {
+    const otpCode = [0, 1, 2, 3, 4, 5]
+      .map((i) => data[`otp${i}`] || "")
+      .join("");
+    if (otpCode.length !== 6) return;
+
+    try {
       if (type === "forgot") {
-        dispatch(setStep("reset"));
+        const result = await dispatch(
+          verifyForgotOtp({ email, otp: otpCode })
+        ).unwrap();
+        dispatch(setStep("reset")); // or navigate to reset password form
       } else {
-        // 👇 MOCK LOGIN ON SIGNUP OTP SUCCESS!
-        const mockUser = {
-          name: "New User",
-          email, // you have this in OtpForm props
-          // add any other user info as needed
-        };
-        const mockToken = "mocked-signup-token-123";
-        dispatch(loginAction({ user: mockUser, token: mockToken }));
-        localStorage.setItem("token", mockToken); // if your app checks localStorage on reload
+        const result = await dispatch(
+          verifySignupOtp({ email, otp: otpCode })
+        ).unwrap();
+        dispatch(loginAction({ user: result.user, token: result.token }));
+        localStorage.setItem("token", result.token);
         router.push("/dashboard");
       }
+    } catch (err) {
+      alert(err);
     }
   };
 
@@ -137,17 +147,22 @@ export default function OtpForm({ type = "signup", email }) {
             autoComplete="one-time-code"
             maxLength={1}
             ref={(el) => (inputRefs.current[idx] = el)}
-            {...register(`otp${idx}`, { required: "All fields required" })}
-            value={getValues(`otp${idx}`)}
+            value={getValues(`otp${idx}`) || ""}
             onChange={(e) => handleChange(idx, e.target.value)}
             onKeyDown={(e) => handleBackspace(idx, e)}
             className="w-12 h-12 text-center border border-gray-300 rounded-md text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         ))}
       </div>
+
       {
         // Error if any field missing
-        (errors.otp0 || errors.otp1 || errors.otp2 || errors.otp3 || errors.otp4 || errors.otp5) && (
+        (errors.otp0 ||
+          errors.otp1 ||
+          errors.otp2 ||
+          errors.otp3 ||
+          errors.otp4 ||
+          errors.otp5) && (
           <p className="text-xs text-red-500">Please enter all 6 digits</p>
         )
       }
@@ -166,11 +181,7 @@ export default function OtpForm({ type = "signup", email }) {
         </span>
       </div>
 
-      <Button
-        type="submit"
-        className="w-full mt-2"
-        variant={"mainblue"}
-      >
+      <Button type="submit" className="w-full mt-2" variant={"mainblue"}>
         Verify OTP
       </Button>
     </form>

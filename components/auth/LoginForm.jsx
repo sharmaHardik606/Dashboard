@@ -6,16 +6,14 @@ import { useRouter } from "next/navigation";
 import { Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { Button } from "../ui/button";
 import { useDispatch } from "react-redux";
-import { login as loginAction } from "@/redux/slices/authSlice";
 import Link from "next/link";
-import { loginUser } from "@/lib/api/auth"; // mock loginUser
+import { loginUserThunk } from "@/redux/slices/authSlice";
 
 export default function LoginForm() {
   const [showPass, setShowPass] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
 
-  // react-hook-form instance
   const {
     register,
     handleSubmit,
@@ -29,17 +27,28 @@ export default function LoginForm() {
     },
   });
 
-  const onSubmit = async (values) => {
-    const { email, password, rememberMe } = values;
-    try {
-      const data = await loginUser(email, password); // mock in dev
-      localStorage.setItem("token", data.token);
-      dispatch(loginAction({ user: data.user, token: data.token }));
+const onSubmit = async (values) => {
+  const { email, password } = values;
+
+  try {
+    const resultAction = await dispatch(
+      loginUserThunk({ email, password }) // send to redux thunk
+    );
+
+    if (loginUserThunk.fulfilled.match(resultAction)) {
       router.push("/dashboard");
-    } catch (err) {
-      alert(err.message);
+    } else {
+      const errMsg =
+        resultAction.payload?.message ||
+        resultAction.error?.message ||
+        "Login failed";
+      alert(errMsg);
     }
-  };
+  } catch (err) {
+    alert("Something went wrong: " + err.message);
+  }
+};
+
 
   // for "show password" toggle
   const passwordValue = watch("password");

@@ -5,13 +5,13 @@ import { useRouter } from "next/navigation";
 import { Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../ui/button";
-import { signupUser } from "@/lib/api/auth";
 import OtpForm from "./forgetpass/OtpForm";
 import {
   setSignupEmail,
   setSignupStep,
   resetSignup,
 } from "@/redux/slices/signupSlice";
+import { signupUserThunk } from "@/redux/slices/authSlice";
 import { useForm } from "react-hook-form";
 
 export default function SignupPage() {
@@ -19,6 +19,8 @@ export default function SignupPage() {
   const dispatch = useDispatch();
   const step = useSelector((state) => state.signup.step);
   const email = useSelector((state) => state.signup.email);
+  const loading = useSelector((state) => state.auth.loading);
+  const error = useSelector((state) => state.auth.error);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -26,7 +28,7 @@ export default function SignupPage() {
     register,
     handleSubmit,
     watch,
-    formState: { errors, isSubmitting }
+    formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: {
       name: "",
@@ -40,12 +42,19 @@ export default function SignupPage() {
   const password = watch("password");
 
   const onSubmit = async (data) => {
+    if (data.password !== data.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
     try {
-      await signupUser(data); // mock logic
+      const result = await dispatch(signupUserThunk(data)).unwrap();
+      console.log("✅ Signup successful", result);
+
       dispatch(setSignupEmail(data.email));
       dispatch(setSignupStep("otp"));
     } catch (err) {
-      alert(err.message);
+      alert(err || "Signup failed");
     }
   };
 
@@ -55,6 +64,7 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen w-full flex items-start justify-center pt-24">
+      {/* UI remains unchanged */}
       <div className="absolute top-6 left-1/2 -translate-x-1/2 sm:left-auto sm:right-6 sm:translate-x-0 text-sm">
         <div className="flex items-center gap-2">
           <span className="text-gray-600">Already have an Account?</span>
@@ -146,7 +156,9 @@ export default function SignupPage() {
                 className="w-full px-3 py-2 border rounded-md border-gray-300 outline-none focus:ring-2 focus:ring-blue-500"
               />
               {errors.contact && (
-                <p className="text-xs text-red-500">{errors.contact?.message}</p>
+                <p className="text-xs text-red-500">
+                  {errors.contact?.message}
+                </p>
               )}
             </div>
 
@@ -165,7 +177,9 @@ export default function SignupPage() {
                       message: "Must be at least 8 characters",
                     },
                     validate: {
-                      notBlank: v => v?.trim() === v || "Don't start or end with blank space",
+                      notBlank: (v) =>
+                        v?.trim() === v ||
+                        "Don't start or end with blank space",
                     },
                   })}
                   placeholder="Enter your password"
@@ -173,15 +187,21 @@ export default function SignupPage() {
                 />
                 <button
                   type="button"
-                  onClick={() => setShowPassword(s => !s)}
+                  onClick={() => setShowPassword((s) => !s)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
                   tabIndex={-1}
                 >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  {showPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
                 </button>
               </div>
               {errors.password && (
-                <p className="text-xs text-red-500">{errors.password?.message}</p>
+                <p className="text-xs text-red-500">
+                  {errors.password?.message}
+                </p>
               )}
             </div>
 
@@ -194,13 +214,15 @@ export default function SignupPage() {
                 type={showPassword ? "text" : "password"}
                 {...register("confirmPassword", {
                   required: "Confirm your password",
-                  validate: v => v === password || "Passwords do not match",
+                  validate: (v) => v === password || "Passwords do not match",
                 })}
                 placeholder="Confirm your password"
                 className="w-full px-3 py-2 border rounded-md border-gray-300 outline-none focus:ring-2 focus:ring-blue-500"
               />
               {errors.confirmPassword && (
-                <p className="text-xs text-red-500">{errors.confirmPassword?.message}</p>
+                <p className="text-xs text-red-500">
+                  {errors.confirmPassword?.message}
+                </p>
               )}
             </div>
 
@@ -214,9 +236,9 @@ export default function SignupPage() {
             <button
               type="submit"
               className="w-full bg-blue-700 text-white py-2 rounded-md font-semibold hover:bg-blue-800 transition"
-              disabled={isSubmitting}
+              disabled={loading || isSubmitting}
             >
-              Sign up
+              {loading ? "Signing up..." : "Sign up"}
             </button>
 
             <p className="text-xs text-center text-gray-500 mt-2">
