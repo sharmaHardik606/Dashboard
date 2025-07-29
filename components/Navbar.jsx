@@ -7,7 +7,7 @@ import { useSidebar } from "@/context/SidebarContext";
 import { useState, useRef, useEffect } from "react";
 import { logout } from "@/utils/auth";
 import { useRouter } from "next/navigation";
-import NotificationPanel from "./NotificationPanel"; 
+import NotificationPanel from "./NotificationPanel";
 
 export function Navbar() {
   const { toggleSidebar } = useSidebar();
@@ -20,10 +20,7 @@ export function Navbar() {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target)
-      ) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setDropdownOpen(false);
         setShowNotifications(false);
       }
@@ -40,42 +37,46 @@ export function Navbar() {
   return (
     <header className="w-full sticky top-0 z-50 bg-gray-50 dark:bg-black border-b border-gray-200 dark:border-gray-800">
       <div className="w-full flex h-16 items-center justify-between px-4 sm:px-6">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center">
           <button
             onClick={toggleSidebar}
             className="lg:hidden text-2xl p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
           >
             <Menu className="h-6 w-6" />
           </button>
-          <Link href="/" className="flex items-center gap-2">
-            <span className="lg:text-3xl text-2xl font-bold uppercase">
-              Logo
-            </span>
+          <Link href="/" className="flex items-center ">
+            <Image
+              src="/Logo.svg" 
+              alt="Logo"
+              width={150} 
+              height={150}
+              priority 
+            />
           </Link>
         </div>
 
         <div className="flex items-center gap-4 relative" ref={dropdownRef}>
           {/* Notification Bell */}
           <div className="relative">
-      <button
-        className="relative hover:cursor-pointer"
-        onClick={() => setShowPanel((prev) => !prev)}
-      >
-        <Bell className="h-6 w-6" />
-        {hasUnread && (
-          <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full" />
-        )}
-      </button>
+            <button
+              className="relative hover:cursor-pointer"
+              onClick={() => setShowPanel((prev) => !prev)}
+            >
+              <Bell className="h-6 w-6" />
+              {hasUnread && (
+                <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full" />
+              )}
+            </button>
 
-      {showPanel && (
-        <NotificationPanel
-          onMarkRead={() => {
-            setHasUnread(false);
-            setShowPanel(false);
-          }}
-        />
-      )}
-    </div>
+            {showPanel && (
+              <NotificationPanel
+                onMarkRead={() => {
+                  setHasUnread(false);
+                  setShowPanel(false);
+                }}
+              />
+            )}
+          </div>
 
           {/* Avatar */}
           <button
