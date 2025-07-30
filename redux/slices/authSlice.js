@@ -1,13 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { loginUser, signupUser } from "@/lib/api/auth";
 
-// === THUNKS ===
 export const loginUserThunk = createAsyncThunk(
   "auth/loginUser",
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const res = await loginUser(email, password);
-      return res; // { user, token }
+      return res;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -19,14 +18,13 @@ export const signupUserThunk = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       const res = await signupUser(formData);
-      return res; // { user, token }
+      return res;
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
 
-// === INITIAL STATE ===
 const initialState = {
   user: null,
   token: null,
@@ -36,23 +34,29 @@ const initialState = {
   error: null,
 };
 
-// === SLICE ===
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
     login: (state, action) => {
-    state.user = action.payload.user;
-    state.token = action.payload.token;
-    state.isAuthenticated = true;
-  },
-    logout: () => initialState,
+      state.user = action.payload.user;
+      state.token = action.payload.token;
+      state.isAuthenticated = true;
+      if (typeof window !== "undefined") {
+        localStorage.setItem("token", action.payload.token);
+      }
+    },
+    logout: () => {
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("token");
+      }
+      return initialState;
+    },
     setProfileComplete: (state, action) => {
       state.isProfileComplete = action.payload;
     },
   },
   extraReducers: (builder) => {
-    // login
     builder
       .addCase(loginUserThunk.pending, (state) => {
         state.loading = true;
@@ -63,14 +67,14 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.token = action.payload.token;
         state.isAuthenticated = true;
+        if (typeof window !== "undefined") {
+          localStorage.setItem("token", action.payload.token);
+        }
       })
       .addCase(loginUserThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
-
-    // signup
-    builder
+      })
       .addCase(signupUserThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -80,6 +84,9 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.token = action.payload.token;
         state.isAuthenticated = true;
+        if (typeof window !== "undefined") {
+          localStorage.setItem("token", action.payload.token);
+        }
       })
       .addCase(signupUserThunk.rejected, (state, action) => {
         state.loading = false;
