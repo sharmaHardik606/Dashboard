@@ -11,6 +11,7 @@ import FilterBar from "@/components/sharedcomponents/FilterBar";
 import Modal from "@/components/sharedcomponents/Modal";
 import AddStaffForm from "@/components/management/staff/AddStaffForm";
 import { useState } from "react";
+import StaffFiltersModal from "@/components/management/staff/StaffFiltersModal";
 
 export default function StaffPage() {
   const filteredData = Data.filter((item) => item.type === "staff");
@@ -19,6 +20,12 @@ export default function StaffPage() {
   const searchParams = useSearchParams();
   const showForm = searchParams.get("showForm") === "1";
   const router = useRouter();
+
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [filters, setFilters] = useState({
+    roles: [],
+    status: [],
+  });
 
   const handleView = (id) => {
     console.log("View/Edit", id);
@@ -45,9 +52,16 @@ export default function StaffPage() {
         onSearchChange={setSearchQuery}
         primaryButton={{
           label: "Filters",
-          onClick: () => console.log("Filters clicked"),
+          onClick: () => setFiltersOpen(true),
         }}
         label="Search Staff"
+      />
+
+      <StaffFiltersModal
+        open={filtersOpen}
+        onClose={() => setFiltersOpen(false)}
+        defaultValues={filters}
+        onApply={(payload) => setFilters(payload)}
       />
 
       <ContainerCard>
