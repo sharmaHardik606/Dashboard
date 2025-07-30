@@ -5,7 +5,8 @@ import { Bell, Menu } from "lucide-react";
 import Image from "next/image";
 import { useSidebar } from "@/context/SidebarContext";
 import { useState, useRef, useEffect } from "react";
-import { logout } from "@/utils/auth";
+import { useDispatch } from "react-redux";
+import { logout } from "@/redux/slices/authSlice";
 import { useRouter } from "next/navigation";
 import NotificationPanel from "./NotificationPanel";
 
@@ -17,6 +18,7 @@ export function Navbar() {
   const router = useRouter();
   const [showPanel, setShowPanel] = useState(false);
   const [hasUnread, setHasUnread] = useState(true);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -29,8 +31,9 @@ export function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  
   const handleLogout = () => {
-    logout();
+    dispatch(logout());
     router.push("/login");
   };
 
@@ -46,11 +49,11 @@ export function Navbar() {
           </button>
           <Link href="/" className="flex items-center ">
             <Image
-              src="/Logo.svg" 
+              src="/Logo.svg"
               alt="Logo"
-              width={150} 
+              width={150}
               height={150}
-              priority 
+              priority
             />
           </Link>
         </div>

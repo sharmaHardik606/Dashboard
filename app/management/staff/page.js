@@ -9,7 +9,7 @@ import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import FilterBar from "@/components/sharedcomponents/FilterBar";
 import Modal from "@/components/sharedcomponents/Modal";
-import AddStaffForm from "@/components/management/AddStaffForm";
+import AddStaffForm from "@/components/management/staff/AddStaffForm";
 import { useState } from "react";
 
 export default function StaffPage() {

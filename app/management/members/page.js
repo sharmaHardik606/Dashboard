@@ -12,11 +12,13 @@ import FilterBar from "@/components/sharedcomponents/FilterBar";
 import AddMemberForm from "@/components/management/members/AddMemberForm";
 import Modal from "@/components/sharedcomponents/Modal";
 import ImportMembersCSVPanel from "@/components/management/members/ImportMembersCSVPanel";
+import MemberFiltersModal from "@/components/management/members/MemberFilterModal";
 
 export default function MembersPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const showForm = searchParams.get("showForm") === "1";
+  const [filtersModalOpen, setFiltersModalOpen] = useState(false);
 
   const filteredData = Data.filter((item) => item.type === "member");
   const [searchQuery, setSearchQuery] = useState("");
@@ -76,11 +78,16 @@ export default function MembersPage() {
         onSearchChange={setSearchQuery}
         primaryButton={{
           label: "Filters",
-          onClick: () => console.log("Filters clicked"),
+          onClick: () => setFiltersModalOpen(true),
         }}
         label="Search Members"
       />
 
+      <MemberFiltersModal
+        open={filtersModalOpen}
+        onClose={() => setFiltersModalOpen(false)}
+        // Optionally, add more props here if you want to pass/apply filters
+      />
       <ContainerCard>
         <Table
           columns={memberColumns}
