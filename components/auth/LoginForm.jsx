@@ -18,7 +18,7 @@ export default function LoginForm() {
     register,
     handleSubmit,
     formState: { errors },
-    watch
+    watch,
   } = useForm({
     defaultValues: {
       email: "",
@@ -27,28 +27,27 @@ export default function LoginForm() {
     },
   });
 
-const onSubmit = async (values) => {
-  const { email, password } = values;
+  const onSubmit = async (values) => {
+    const { email, password } = values;
 
-  try {
-    const resultAction = await dispatch(
-      loginUserThunk({ email, password }) // send to redux thunk
-    );
+    try {
+      const resultAction = await dispatch(
+        loginUserThunk({ email, password }) // send to redux thunk
+      );
 
-    if (loginUserThunk.fulfilled.match(resultAction)) {
-      router.push("/dashboard");
-    } else {
-      const errMsg =
-        resultAction.payload?.message ||
-        resultAction.error?.message ||
-        "Login failed";
-      alert(errMsg);
+      if (loginUserThunk.fulfilled.match(resultAction)) {
+        router.push("/dashboard");
+      } else {
+        const errMsg =
+          resultAction.payload || // this is the actual error message
+          resultAction.error?.message ||
+          "Login failed";
+        alert(errMsg);
+      }
+    } catch (err) {
+      alert("Something went wrong: " + err.message);
     }
-  } catch (err) {
-    alert("Something went wrong: " + err.message);
-  }
-};
-
+  };
 
   // for "show password" toggle
   const passwordValue = watch("password");
@@ -95,7 +94,9 @@ const onSubmit = async (values) => {
               {...register("email", { required: "Email is required" })}
             />
             {errors.email && (
-              <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+              <p className="text-red-500 text-xs mt-1">
+                {errors.email.message}
+              </p>
             )}
           </div>
 
@@ -124,7 +125,9 @@ const onSubmit = async (values) => {
               </button>
             </div>
             {errors.password && (
-              <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
+              <p className="text-red-500 text-xs mt-1">
+                {errors.password.message}
+              </p>
             )}
           </div>
 
