@@ -3,33 +3,43 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { resetForgotPassword } from "@/redux/thunks/forgotPasswordThunks";
 
 export default function ResetForm() {
   const [show, setShow] = useState(false);
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const {
     register,
     handleSubmit,
     watch,
-    formState: { errors }
+    formState: { errors },
   } = useForm({
     defaultValues: {
       password: "",
-      confirm: ""
-    }
+      confirm: "",
+    },
   });
 
   // Watch passwords for validation
   const password = watch("password");
 
-  const onSubmit = (data) => {
-    if (data.password !== data.confirm) {
-      alert("Passwords do not match.");
-      return;
+  const email = useSelector((state) => state.forgotpass.email);
+
+  const onSubmit = async (data) => {
+    if (data.password !== data.confirm) return alert("Passwords do not match.");
+
+    try {
+      await dispatch(
+        resetForgotPassword({ email, password: data.password })
+      ).unwrap();
+      router.push("/login");
+    } catch (err) {
+      console.error("Reset error:", err);
+      alert("Failed to reset password.");
     }
-    // Submit new password to backend
-    router.push("/login");
   };
 
   return (
@@ -62,11 +72,11 @@ export default function ResetForm() {
                   required: "Password is required",
                   minLength: {
                     value: 8,
-                    message: "Must be at least 8 characters"
+                    message: "Must be at least 8 characters",
                   },
                   // You can add extra validations here if needed!
-                  validate: value => 
-                    value.trim() === value || "Don't start or end with a space"
+                  validate: (value) =>
+                    value.trim() === value || "Don't start or end with a space",
                 })}
               />
               <button
@@ -83,7 +93,9 @@ export default function ResetForm() {
               </button>
             </div>
             {errors.password && (
-              <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
+              <p className="text-red-500 text-xs mt-1">
+                {errors.password.message}
+              </p>
             )}
           </div>
 
@@ -97,12 +109,14 @@ export default function ResetForm() {
               className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-500"
               {...register("confirm", {
                 required: "Confirmation required",
-                validate: value =>
-                  value === password || "Passwords do not match"
+                validate: (value) =>
+                  value === password || "Passwords do not match",
               })}
             />
             {errors.confirm && (
-              <p className="text-red-500 text-xs mt-1">{errors.confirm.message}</p>
+              <p className="text-red-500 text-xs mt-1">
+                {errors.confirm.message}
+              </p>
             )}
           </div>
 

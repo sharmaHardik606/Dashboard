@@ -5,12 +5,11 @@ import { useDispatch } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  moveToResetStep,
-  setStep,
-  resendOtp as resendForgotOtp,
-  verifyOtpCode as verifyForgotOtp,
-} from "@/redux/slices/forgotPasswordSlice";
+import { moveToResetStep, setStep } from "@/redux/slices/forgotPasswordSlice";
+
+import { verifyForgotOtp } from "@/redux/thunks/forgotPasswordThunks";
+import { sendForgotOtp as resendForgotOtp } from "@/redux/thunks/forgotPasswordThunks";
+
 import {
   resendSignupOtp,
   verifySignupOtp,
@@ -82,8 +81,10 @@ export default function OtpForm({ type = "signup", email }) {
         const result = await dispatch(
           verifyForgotOtp({ email, otp: otpCode })
         ).unwrap();
-        dispatch(setStep("reset")); // or navigate to reset password form
-      } else {
+        dispatch(setStep("reset"));
+      }
+      // or navigate to reset password form
+      else {
         const result = await dispatch(
           verifySignupOtp({ email, otp: otpCode })
         ).unwrap();
@@ -92,7 +93,8 @@ export default function OtpForm({ type = "signup", email }) {
         router.push("/dashboard");
       }
     } catch (err) {
-      alert(err);
+      console.error("OTP verification error:", err);
+      alert(err?.message || err?.error || "Something went wrong");
     }
   };
 

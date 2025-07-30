@@ -1,10 +1,10 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { setStep } from "@/redux/slices/forgotPasswordSlice";
+import { setStep, setEmail } from "@/redux/slices/forgotPasswordSlice";
 import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { sendForgotOtp } from "@/redux/thunks/forgotPasswordThunks";
 
 export default function EmailForm() {
   const dispatch = useDispatch();
@@ -13,14 +13,19 @@ export default function EmailForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
   } = useForm({
-    defaultValues: { email: "" }
+    defaultValues: { email: "" },
   });
 
-  const onSubmit = (data) => {
-    //  integrate backend later
-    dispatch(setStep("otp"));
+  const onSubmit = async (data) => {
+    try {
+      await dispatch(sendForgotOtp(data.email)).unwrap();
+      dispatch(setEmail(data.email));
+      dispatch(setStep("otp"));
+    } catch (err) {
+      alert("Failed to send OTP");
+    }
   };
 
   return (
@@ -53,12 +58,14 @@ export default function EmailForm() {
                 pattern: {
                   // Simple email regex pattern
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: "Enter a valid email"
-                }
+                  message: "Enter a valid email",
+                },
               })}
             />
             {errors.email && (
-              <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+              <p className="text-red-500 text-xs mt-1">
+                {errors.email.message}
+              </p>
             )}
           </div>
           <button
