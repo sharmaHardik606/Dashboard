@@ -5,17 +5,20 @@ import { Ellipsis, ArrowLeft } from "lucide-react";
 import MessageInput from "./MessageInput";
 import { Button } from "../ui/button";
 import PopupMenu from "../sharedcomponents/PopupActionButton";
+import ConfirmationPopup from "../ConfirmationPopup";
 
 export default function ChatWindow({ conversation, onBack }) {
   const [messages, setMessages] = useState(conversation.messages);
-  const scrollRef = useRef(null); 
+  const scrollRef = useRef(null);
 
-  
+  // popup state
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [confirmType, setConfirmType] = useState(""); // "delete" or "block"
+
   useEffect(() => {
     setMessages(conversation.messages);
   }, [conversation]);
 
-  
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -38,9 +41,10 @@ export default function ChatWindow({ conversation, onBack }) {
   };
 
   return (
-    <div className="flex flex-col w-full h-[90vh]
-    md:h-[calc(100vh-120px)]  border border-gray-200 rounded-lg overflow-hidden">
-
+    <div
+      className="flex flex-col w-full h-[90vh]
+    md:h-[calc(100vh-120px)]  border border-gray-200 rounded-lg overflow-hidden"
+    >
       {/* Sticky Header */}
       <div className="sticky top-0 z-10 bg-[#eeeeee] px-4 py-5 flex items-center justify-between border-b border-gray-300">
         {onBack && (
@@ -63,17 +67,43 @@ export default function ChatWindow({ conversation, onBack }) {
           items={[
             {
               label: "Delete Messages",
-              onClick: () => console.log("Delete clicked"),
+              onClick: () => {
+                setConfirmType("delete");
+                setConfirmOpen(true);
+              },
             },
-            { label: "Blocked", onClick: () => console.log("Blocked clicked") },
+            {
+              label: "Blocked",
+              onClick: () => {
+                setConfirmType("block");
+                setConfirmOpen(true);
+              },
+            },
           ]}
         />
       </div>
+      {/* Confirmation Popup Overlay */}
+      {confirmOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20">
+          <div className="bg-white rounded-lg shadow-xl max-w-xs w-full">
+            <ConfirmationPopup
+              message={
+                confirmType === "delete"
+                  ? "Are you sure you want to delete all messages in this conversation?"
+                  : "Are you sure you want to block this user?"
+              }
+              buttonText={confirmType === "delete" ? "Delete" : "Block"}
+              onConfirm={() => setConfirmOpen(false)} 
+              onCancel={() => setConfirmOpen(false)}
+            />
+          </div>
+        </div>
+      )}
 
       <div
         className="flex-1 overflow-y-auto px-4 py-4 space-y-6"
         ref={scrollRef}
-        style={{ paddingBottom: "7rem" }} 
+        style={{ paddingBottom: "7rem" }}
       >
         <div className="flex items-center justify-center space-x-2 mb-6">
           <Button
@@ -113,7 +143,7 @@ export default function ChatWindow({ conversation, onBack }) {
       {/* Sticky Footer Input */}
       <div
         className="sticky bottom-0 z-20 bg-white p-4 border-t border-gray-200"
-        style={{ WebkitOverflowScrolling: "touch" }} 
+        style={{ WebkitOverflowScrolling: "touch" }}
       >
         <MessageInput onSend={handleSend} />
       </div>

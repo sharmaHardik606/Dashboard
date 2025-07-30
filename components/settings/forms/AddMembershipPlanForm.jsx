@@ -1,9 +1,11 @@
 "use client";
+import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import SuccessPopup from "@/components/SuccessPopup";
 
 export function AddMembershipPlanForm({ onCancel, onSubmit }) {
   const {
@@ -20,8 +22,28 @@ export function AddMembershipPlanForm({ onCancel, onSubmit }) {
     },
   });
 
+  // SuccessPopup state
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  // Controlled submit handler
+  const handleFormSubmit = (data) => {
+    if (onSubmit) onSubmit(data);
+    setShowSuccess(true);
+  };
+
+  // IF successful, show the popup and auto-close
+  if (showSuccess) {
+    return (
+      <SuccessPopup
+        message="Plan added successfully!"
+        showButton={false}
+        autoClose = "2000"
+      />
+    );
+  }
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between border-b pb-3">
         <h2 className="text-lg font-semibold">Add New Plan</h2>

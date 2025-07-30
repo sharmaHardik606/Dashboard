@@ -4,6 +4,8 @@ import { useForm, Controller } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import SuccessPopup from "@/components/SuccessPopup";
+import { useState } from "react";
 
 const PERMISSIONS = ["Members", "Classes", "Workout", "Diet", "Staff"];
 
@@ -22,13 +24,31 @@ export default function CreateRoleForm({ onCancel }) {
     },
   });
 
+  // sucesspopup state
+  const [showSuccess, setShowSuccess] = useState(false);
+
   const permissions = watch("permissions");
 
   const onSubmit = (data) => {
     console.log("Submitted Role:", data);
     // send to API here when ready
-    onCancel();
+    setShowSuccess(true);
+    
   };
+
+  if (showSuccess) {
+    return (
+      <SuccessPopup
+        message="Role created successfully!"
+        buttonText="Okay"
+        showButton={false}
+        onClose={() => {
+          setShowSuccess(false);
+          onCancel?.(); // closes the form/modal if passed from parent
+        }}
+      />
+    );
+  }
 
   return (
     <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
@@ -68,7 +88,7 @@ export default function CreateRoleForm({ onCancel }) {
             validate: (value) =>
               value && value.length > 0
                 ? true
-                : "At least one permission must be selected"
+                : "At least one permission must be selected",
           }}
           render={({ field: { value = [], onChange, ...fieldProps } }) => (
             <>
