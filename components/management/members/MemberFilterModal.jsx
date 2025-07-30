@@ -140,7 +140,7 @@ export default function MemberFiltersModal({ open, onClose }) {
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
-                  className="w-1/2 justify-start text-left"
+                  className="w-full sm:w-1/2 justify-start text-left"
                 >
                   {format(dateRange.from, "dd/MM/yyyy")}
                 </Button>
@@ -158,7 +158,7 @@ export default function MemberFiltersModal({ open, onClose }) {
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
-                  className="w-1/2 justify-start text-left"
+                  className="w-full sm:w-1/2 justify-start text-left"
                 >
                   {format(dateRange.to, "dd/MM/yyyy")}
                 </Button>
