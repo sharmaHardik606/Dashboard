@@ -9,7 +9,7 @@ import CompleteProfileForm from "@/components/complete-profile/CompleteProfileFo
 import { useSelector } from "react-redux";
 
 // List of public (non-auth) routes
-const PUBLIC_ROUTES = ["/login", "/signup", "/forgot-password"];
+const PUBLIC_ROUTES = ["/login", "/signup", "/forgot-password",];
 
 export default function ClientLayout({ children }) {
   const pathname = usePathname();

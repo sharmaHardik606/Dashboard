@@ -25,10 +25,6 @@ export default function DashboardPage() {
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  // This value could be used, but overlay/modal is now handled in the layout!
-  // const isProfileComplete = useSelector(
-  //   (state) => state.profile.isProfileComplete
-  // );
 
   return (
     <div className="relative">
