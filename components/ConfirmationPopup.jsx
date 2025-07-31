@@ -9,11 +9,11 @@ export default function ConfirmationPopup({
   buttonText = "Confirm", 
 }) {
   return (
-    <div className="text-center p-6">
-      <div className="flex justify-center mb-4">
-        <div className="w-20 h-20 rounded-full bg-orange-100 flex items-center justify-center">
+    <div className="text-center p-6 ">
+      <div className="flex justify-center mb-4 ">
+        <div className="w-35 h-35 rounded-full bg-red-600 flex items-center justify-center">
           <svg
-            className="w-12 h-12 text-orange-500"
+            className="w-35 h-35 text-white"
             fill="none"
             stroke="currentColor"
             strokeWidth="2.5"
@@ -28,15 +28,15 @@ export default function ConfirmationPopup({
         </div>
       </div>
       <p className="text-sm text-gray-700 mb-6">{message}</p>
-      <div className="flex gap-4 justify-center">
-        <Button className="bg-blue-600 text-white px-6" onClick={onConfirm}>
+      <div className="flex flex-wrap  gap-4 justify-center">
+        <Button className="bg-red-600 text-white px-6 w-full " onClick={onConfirm}>
           {buttonText}
         </Button>
 
         {onCancel && (
           <Button
-            variant="outline"
-            className="px-6 border-gray-300"
+            variant="hollow"
+            className="w-full"
             onClick={onCancel}
           >
             Cancel

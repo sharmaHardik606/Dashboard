@@ -12,6 +12,8 @@ import {
   setPaymentMethod,
 } from "@/redux/slices/paymentModalSlice";
 import { completeProfile } from "@/redux/slices/profileSlice";
+import SuccessPopup from "@/components/SuccessPopup";
+
 
 export default function PaymentModal() {
   const dispatch = useDispatch();
@@ -115,21 +117,20 @@ export default function PaymentModal() {
   }
 
   // 🏆 Show success popup (after UPI or Card)
-  if (paymentCompleted || (paymentMethod === "upi" && showUpiPopupState)) {
-    return (
-      <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
-        <div className="bg-white p-4 rounded-lg shadow-lg relative max-w-md w-full">
-          <Image
-            src="/sucess-popover.png"
-            alt="Payment Successful"
-            width={400}
-            height={300}
-            className="w-full h-auto"
-          />
-        </div>
+if (paymentCompleted || (paymentMethod === "upi" && showUpiPopupState)) {
+  return (
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+      <div className="bg-white p-4 rounded-lg shadow-lg relative max-w-md w-full flex items-center justify-center">
+        <SuccessPopup
+          message="Payment successful!"
+          showButton={false}
+          autoClose={2000}
+        />
       </div>
-    );
-  }
+    </div>
+  );
+}
+
 
   // 💳 (Optional) Card: "Processing..." placeholder for the brief moment before success, if desired.
   if (paymentMethod === "card" && !paymentCompleted) {

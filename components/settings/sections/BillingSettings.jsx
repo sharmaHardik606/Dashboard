@@ -2,10 +2,12 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import StepTwoChoosePlan from "@/components/complete-profile/StepTwoChoosePlan";
-import PaymentModal from "@/components/complete-profile/PaymentModal"; 
+import PaymentModal from "@/components/complete-profile/PaymentModal";
+import ConfirmationPopup from "@/components/ConfirmationPopup";
 
 export default function BillingSettings() {
   const [showUpgradeForm, setShowUpgradeForm] = useState(false);
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
   return (
     <div className="space-y-6">
@@ -21,11 +23,7 @@ export default function BillingSettings() {
         <div className="flex items-center justify-between bg-blue-50 rounded-lg py-4 px-3">
           <div className="flex items-center gap-3">
             <span className="inline-flex items-center justify-center w-9 h-9 bg-white rounded-full border">
-              <img
-                src="/razorpay.png"
-                alt="Razorpay"
-                className="w-8 h-6"
-              />
+              <img src="/razorpay.png" alt="Razorpay" className="w-8 h-6" />
             </span>
             <div className="font-medium text-base">Razorpay</div>
           </div>
@@ -66,9 +64,14 @@ export default function BillingSettings() {
 
             {/* Action buttons */}
             <div className="flex gap-3 mt-2 sm:mt-0">
-              <Button variant="hollow" className="font-medium">
+              <Button
+                variant="hollow"
+                className="font-medium"
+                onClick={() => setShowCancelConfirm(true)}
+              >
                 Cancel Subscription
               </Button>
+
               <Button
                 variant="mainblue"
                 className="text-sm font-semibold"
@@ -87,6 +90,23 @@ export default function BillingSettings() {
 
       {/* Payment Modal — always active */}
       <PaymentModal />
+
+      {showCancelConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-white rounded-lg shadow-lg max-w-sm w-full">
+            <ConfirmationPopup
+              message="Are you sure you want to cancel your subscription?"
+              buttonText="Yes, Cancel Subscription"
+              onConfirm={() => {
+                // TODO: Replace with actual cacel logic
+                console.log("Subscription cancelled.");
+                setShowCancelConfirm(false);
+              }}
+              onCancel={() => setShowCancelConfirm(false)}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
