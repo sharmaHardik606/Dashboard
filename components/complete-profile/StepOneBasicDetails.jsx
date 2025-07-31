@@ -3,27 +3,35 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
+import { submitProfile } from "@/redux/slices/profileSlice";
 
 export default function StepOneBasicDetails({ onNext }) {
+  const dispatch = useDispatch();
+  const loading = useSelector(state => state.profile.loading);
+  const error = useSelector(state => state.profile.error);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("Step 1 Data:", data);
-    onNext(data); 
-
+  const onSubmit = async (data) => {
+    // Dispatch the thunk
+    const result = await dispatch(submitProfile(data));
+    // Only proceed if no error (fulfilled action)
+    if (!result.error) {
+      onNext(data);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 ">
       <h2 className="text-lg font-semibold">Complete Profile</h2>
-     <div className="border-b"></div>
+      <div className="border-b"></div>
       <h2 className="text-lg font-semibold">Step 1 - Basic Details</h2>
-       
 
       {/* Legal Business Name */}
       <div className="space-y-1">
@@ -124,13 +132,16 @@ export default function StepOneBasicDetails({ onNext }) {
         )}
       </div>
 
+      {/* Error/Loading */}
+      {error && <div className="text-red-500 text-sm">{error}</div>}
+
       {/* Buttons */}
       <div className="flex justify-between pt-4">
         <Button type="button" variant="ghost" disabled>
           Cancel
         </Button>
-        <Button type="submit" variant="mainblue">
-          Next
+        <Button type="submit" variant="mainblue" disabled={loading}>
+          {loading ? "Saving..." : "Next"}
         </Button>
       </div>
     </form>

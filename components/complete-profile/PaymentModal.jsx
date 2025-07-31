@@ -11,29 +11,20 @@ import {
   hideUpiPopup,
   setPaymentMethod,
 } from "@/redux/slices/paymentModalSlice";
-import { completeProfile } from "@/redux/slices/profileSlice";
+import { markProfileComplete } from "@/redux/slices/profileSlice";
+import { upgradeSubscriptionPlanThunk } from "@/redux/slices/subscriptionPlanSlice";
 import SuccessPopup from "@/components/SuccessPopup";
 
-
-export default function PaymentModal() {
+export default function PaymentModal({ selectedPlanId }) {
   const dispatch = useDispatch();
   const router = useRouter();
-  const showPaymentModal = useSelector(
-    (state) => state.paymentModal.showPaymentModal
-  );
-  const paymentCompleted = useSelector(
-    (state) => state.paymentModal.paymentCompleted
-  );
-  const paymentMethod = useSelector(
-    (state) => state.paymentModal.paymentMethod
-  ); // "card" or "upi"
-  const showUpiPopupState = useSelector(
-    (state) => state.paymentModal.showUpiPopup
-  );
+  const showPaymentModal = useSelector((state) => state.paymentModal.showPaymentModal);
+  const paymentCompleted = useSelector((state) => state.paymentModal.paymentCompleted);
+  const paymentMethod = useSelector((state) => state.paymentModal.paymentMethod);
+  const showUpiPopupState = useSelector((state) => state.paymentModal.showUpiPopup);
 
   const [timerExpired, setTimerExpired] = useState(false);
 
-  // ⏲️ Timeout: auto-close modal after 10 min
   useEffect(() => {
     if (!showPaymentModal) return;
     const timeoutId = setTimeout(() => {
@@ -43,31 +34,30 @@ export default function PaymentModal() {
     return () => clearTimeout(timeoutId);
   }, [showPaymentModal, dispatch]);
 
-  // 🎉 After payment, success popup + redirect/unlock
+  // 🎉 After payment, success popup + set plan + redirect/unlock
   useEffect(() => {
-    if (paymentCompleted) {
-      dispatch(completeProfile());
+    if (paymentCompleted && selectedPlanId) {
+      dispatch(upgradeSubscriptionPlanThunk(selectedPlanId));
+      dispatch(markProfileComplete());
       const successTimer = setTimeout(() => {
         router.push("/dashboard");
         dispatch(clearModal());
       }, 2000);
       return () => clearTimeout(successTimer);
     }
-  }, [paymentCompleted, dispatch, router]);
+  }, [paymentCompleted, selectedPlanId, dispatch, router]);
 
-  // 💳 For CARD, auto-complete after brief moment
   useEffect(() => {
     if (showPaymentModal && paymentMethod === "card" && !paymentCompleted) {
       const timer = setTimeout(() => {
         dispatch(completePayment());
-      }, 500); // adjust if you want a longer/shorter pause
+      }, 500);
       return () => clearTimeout(timer);
     }
   }, [showPaymentModal, paymentMethod, paymentCompleted, dispatch]);
 
   if (!showPaymentModal) return null;
 
-  // ❌ Timeout Expired
   if (timerExpired) {
     return (
       <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
@@ -86,12 +76,10 @@ export default function PaymentModal() {
     );
   }
 
-  // 💸 UPI: Show waiting popup until upi payment finishes
   if (paymentMethod === "upi" && !paymentCompleted && !showUpiPopupState) {
     return (
       <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
         <div className="bg-white p-4 rounded-lg shadow-lg relative max-w-md w-full">
-          {/* Your actual UPI waiting PNG here */}
           <Image
             src="/payment.png"
             alt="Waiting for UPI payment"
@@ -116,29 +104,24 @@ export default function PaymentModal() {
     );
   }
 
-  // 🏆 Show success popup (after UPI or Card)
-if (paymentCompleted || (paymentMethod === "upi" && showUpiPopupState)) {
-  return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
-      <div className="bg-white p-4 rounded-lg shadow-lg relative max-w-md w-full flex items-center justify-center">
-        <SuccessPopup
-          message="Payment successful!"
-          showButton={false}
-          autoClose={2000}
-        />
+  if (paymentCompleted || (paymentMethod === "upi" && showUpiPopupState)) {
+    return (
+      <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+        <div className="bg-white p-4 rounded-lg shadow-lg relative max-w-md w-full flex items-center justify-center">
+          <SuccessPopup
+            message="Payment successful!"
+            showButton={false}
+            autoClose={2000}
+          />
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
-
-  // 💳 (Optional) Card: "Processing..." placeholder for the brief moment before success, if desired.
   if (paymentMethod === "card" && !paymentCompleted) {
-    // Don't put any hooks or async code here!
     return (
       <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
         <div className="bg-white p-4 rounded-lg shadow-lg relative max-w-md w-full flex flex-col items-center">
-          {/* Optionally a spinner here; showing payment in progress */}
           <Image
             src="/payment.png"
             alt="Processing..."
@@ -154,6 +137,5 @@ if (paymentCompleted || (paymentMethod === "upi" && showUpiPopupState)) {
     );
   }
 
-  // Fallback: render nothing
   return null;
 }

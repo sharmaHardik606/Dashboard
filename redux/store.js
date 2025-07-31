@@ -13,22 +13,26 @@ import storage from "redux-persist/lib/storage";
 import authReducer from "./slices/authSlice";
 import modalReducer from "./slices/modalSlice";
 import memberReducer from "./slices/memberSlice";
-import planReducer from "./slices/planSlice";
 import paymentReducer from "./slices/paymentSlice";
 import notificationReducer from "./slices/notificationSlice";
 import forgotpassReducer from "./slices/forgotPasswordSlice";
-import signupSliceReducer from "./slices/signupSlice"; 
+import signupSliceReducer from "./slices/signupSlice";
 import profileReducer from "./slices/profileSlice";
 import paymentModalReducer from "./slices/paymentModalSlice";
-
-
-
+import subscriptionPlanReducer from "./slices/subscriptionPlanSlice";
 
 // slices to persist
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["auth", "members", "plans", "payments", "signup", "profile"],
+  whitelist: [
+    "auth",
+    "members",
+    "payments",
+    "signup",
+    "profile",
+    "subscriptionPlans",
+  ],
 };
 
 // Combine all reducers
@@ -39,10 +43,10 @@ const rootReducer = combineReducers({
   signup: signupSliceReducer,
   modal: modalReducer,
   members: memberReducer,
-  plans: planReducer,
   payments: paymentReducer,
   notifications: notificationReducer,
-  paymentModal: paymentModalReducer, 
+  paymentModal: paymentModalReducer,
+  subscriptionPlans: subscriptionPlanReducer,
 });
 
 // Apply persistence

@@ -1,13 +1,41 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import StepTwoChoosePlan from "@/components/complete-profile/StepTwoChoosePlan";
 import PaymentModal from "@/components/complete-profile/PaymentModal";
 import ConfirmationPopup from "@/components/ConfirmationPopup";
+import {
+  fetchCurrentSubscriptionPlan,
+  upgradeSubscriptionPlanThunk,
+  cancelSubscriptionPlanThunk,
+  fetchSubscriptionPlans,
+} from "@/redux/slices/subscriptionPlanSlice";
 
 export default function BillingSettings() {
+  const dispatch = useDispatch();
+  const plan = useSelector(state => state.subscriptionPlans.currentSubscriptionPlan);
+  const upgrading = useSelector(state => state.subscriptionPlans.upgrading);
+  const cancelling = useSelector(state => state.subscriptionPlans.cancelling);
+  const allPlans = useSelector(state => state.subscriptionPlans.subscriptionPlans);
+
   const [showUpgradeForm, setShowUpgradeForm] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+
+  useEffect(() => {
+    dispatch(fetchCurrentSubscriptionPlan());
+    dispatch(fetchSubscriptionPlans());
+  }, [dispatch]);
+
+  const handleUpgrade = async (newPlanId) => {
+    await dispatch(upgradeSubscriptionPlanThunk(newPlanId));
+    setShowUpgradeForm(false);
+  };
+
+  const handleCancel = async () => {
+    await dispatch(cancelSubscriptionPlanThunk());
+    setShowCancelConfirm(false);
+  };
 
   return (
     <div className="space-y-6">
@@ -37,7 +65,7 @@ export default function BillingSettings() {
       </section>
 
       {/* Subscription Plan Section */}
-      <section className="">
+      <section>
         <div className="mb-4">
           <span className="block text-lg font-semibold mb-1">
             Subscription Plan
@@ -46,49 +74,53 @@ export default function BillingSettings() {
 
         {!showUpgradeForm ? (
           <div className="flex flex-col sm:flex-row sm:items-start justify-between rounded-xl border-[1.4px] bg-white p-6">
-            {/* Plan name and price */}
             <div>
-              <div className="text-base font-semibold">Basic</div>
+              <div className="text-base font-semibold">
+                {plan ? plan.name : "No Plan"}
+              </div>
               <div className="text-3xl font-bold">
-                $49
+                {plan ? plan.price : "-"}
                 <span className="text-base font-medium text-gray-700 ml-1">
-                  /month
+                  {plan ? `/${plan.duration}` : ""}
                 </span>
               </div>
               <ul className="mt-2 mb-1 space-y-1 text-sm text-gray-700 list-disc pl-5">
-                <li>Access to basic equipment</li>
-                <li>Standard gym hours</li>
-                <li>Add up to 100 members</li>
+                {plan && plan.features && plan.features.map((f) => (
+                  <li key={f}>{f}</li>
+                ))}
               </ul>
             </div>
-
-            {/* Action buttons */}
             <div className="flex gap-3 mt-2 sm:mt-0">
               <Button
                 variant="hollow"
                 className="font-medium"
                 onClick={() => setShowCancelConfirm(true)}
+                disabled={!plan || cancelling}
               >
-                Cancel Subscription
+                {cancelling ? "Cancelling..." : "Cancel Subscription"}
               </Button>
-
               <Button
                 variant="mainblue"
                 className="text-sm font-semibold"
                 onClick={() => setShowUpgradeForm(true)}
+                disabled={upgrading}
               >
-                Upgrade
+                {upgrading ? "Upgrading..." : "Upgrade"}
               </Button>
             </div>
           </div>
         ) : (
           <div className="border p-4 rounded-xl bg-white">
-            <StepTwoChoosePlan mode="billing" />
+            <StepTwoChoosePlan
+              mode="billing"
+              plans={allPlans}
+              onSelectPlan={handleUpgrade}
+              onBack={() => setShowUpgradeForm(false)}
+            />
           </div>
         )}
       </section>
 
-      {/* Payment Modal — always active */}
       <PaymentModal />
 
       {showCancelConfirm && (
@@ -97,11 +129,7 @@ export default function BillingSettings() {
             <ConfirmationPopup
               message="Are you sure you want to cancel your subscription?"
               buttonText="Yes, Cancel Subscription"
-              onConfirm={() => {
-                // TODO: Replace with actual cacel logic
-                console.log("Subscription cancelled.");
-                setShowCancelConfirm(false);
-              }}
+              onConfirm={handleCancel}
               onCancel={() => setShowCancelConfirm(false)}
             />
           </div>
