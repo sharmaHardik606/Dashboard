@@ -1,5 +1,4 @@
-"use client";
-
+import { useEffect, useState } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -11,7 +10,26 @@ export default function MembershipSettings() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const showForm = searchParams.get("showForm") === "1";
+
+  const [showForm, setShowForm] = useState(false);
+  const [isMounted, setIsMounted] = useState(false); // to control modal visibility separately
+
+  useEffect(() => {
+    const visible = searchParams.get("showForm") === "1";
+    setShowForm(visible);
+    if (visible) setIsMounted(true);
+  }, [searchParams]);
+
+  function handleAdd(data) {
+    // Show popup here or inside the form, then delay closing modal
+    router.push(pathname);
+    setTimeout(() => setIsMounted(false), 300); // wait 300ms so popup shows
+  }
+
+  function handleCancel() {
+    router.push(pathname);
+    setTimeout(() => setIsMounted(false), 300); // same delay
+  }
 
   const membershipColumns = [
     { key: "planName", header: "Plan Name" },
@@ -63,11 +81,6 @@ export default function MembershipSettings() {
     },
   ];
 
-  function handleAdd(data) {
-    // handle new plan addition here (API or local update)
-    router.push(pathname); // close modal
-  }
-
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between">
@@ -85,18 +98,21 @@ export default function MembershipSettings() {
         columns={membershipColumns}
         data={membershipPlans}
         getActions={(item) => [
-          { label: "Activate", onClick: () => console.log("Activate", item.id) },
-          { label: "Deactivate", onClick: () => console.log("Deactivate", item.id) },
+          {   
+            label: "Activate",
+            onClick: () => console.log("Activate", item.id),
+          },
+          {
+            label: "Deactivate",
+            onClick: () => console.log("Deactivate", item.id),
+          },
           { label: "Edit", onClick: () => console.log("Edit", item.id) },
           { label: "Delete", onClick: () => console.log("Delete", item.id) },
         ]}
       />
-      {showForm && (
+      {isMounted && showForm && (
         <Modal>
-          <AddMembershipPlanForm
-            onCancel={() => router.push(pathname)}
-            onSubmit={handleAdd}
-          />
+          <AddMembershipPlanForm onCancel={handleCancel} onSubmit={handleAdd} />
         </Modal>
       )}
     </div>

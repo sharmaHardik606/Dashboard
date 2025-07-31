@@ -8,7 +8,7 @@ export default function SuccessPopup({
   buttonText = "Okay",
   onClose = () => {},
   showButton = true,
-  autoClose = 1000,
+  autoClose = 2000,
 }) {
   useEffect(() => {
     const timer = setTimeout(onClose, autoClose);

@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -22,22 +23,31 @@ export function AddMembershipPlanForm({ onCancel, onSubmit }) {
     },
   });
 
-  // SuccessPopup state
   const [showSuccess, setShowSuccess] = useState(false);
 
-  // Controlled submit handler
   const handleFormSubmit = (data) => {
-    if (onSubmit) onSubmit(data);
+    onSubmit?.(data);
     setShowSuccess(true);
   };
 
-  // IF successful, show the popup and auto-close
+  useEffect(() => {
+    if (showSuccess) {
+      const timer = setTimeout(() => {
+        setShowSuccess(false);
+        onCancel(); // modal close after 2s
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [showSuccess, onCancel]);
+
   if (showSuccess) {
     return (
       <SuccessPopup
         message="Plan added successfully!"
         showButton={false}
-        autoClose = "2000"
+        autoClose={2000}
+        onClose={() => {}}
       />
     );
   }
@@ -56,6 +66,7 @@ export function AddMembershipPlanForm({ onCancel, onSubmit }) {
           &times;
         </button>
       </div>
+
       <div className="space-y-4">
         {/* Plan Name */}
         <div>
@@ -65,31 +76,26 @@ export function AddMembershipPlanForm({ onCancel, onSubmit }) {
             placeholder="Plan Name"
           />
           {errors.planName && (
-            <span className="text-xs text-red-500">
-              {errors.planName.message}
-            </span>
+            <span className="text-xs text-red-500">{errors.planName.message}</span>
           )}
         </div>
+
         {/* Price */}
         <div>
           <label className="text-sm font-medium mb-1 block">Price</label>
-          <div className="flex items-center">
-            <Input
-              type="number"
-              min={0}
-              step={1}
-              {...register("price", {
-                required: "Price is required",
-                min: { value: 0, message: "Price cannot be negative" },
-              })}
-              placeholder="₹"
-              className="w-full"
-            />
-          </div>
+          <Input
+            type="number"
+            {...register("price", {
+              required: "Price is required",
+              min: { value: 0, message: "Price cannot be negative" },
+            })}
+            placeholder="₹"
+          />
           {errors.price && (
             <span className="text-xs text-red-500">{errors.price.message}</span>
           )}
         </div>
+
         {/* Duration */}
         <div>
           <label className="text-sm font-medium mb-1 block">Duration</label>
@@ -102,46 +108,27 @@ export function AddMembershipPlanForm({ onCancel, onSubmit }) {
                 value={field.value}
                 onValueChange={field.onChange}
               >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem
-                    value="monthly"
-                    id="monthly"
-                    className="accent-blue-600"
-                  />
-                  <label htmlFor="monthly" className="text-sm font-medium">
-                    Monthly
-                  </label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem
-                    value="quarterly"
-                    id="quarterly"
-                    className="accent-blue-600"
-                  />
-                  <label htmlFor="quarterly" className="text-sm font-medium">
-                    Quarterly
-                  </label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem
-                    value="yearly"
-                    id="yearly"
-                    className="accent-blue-600"
-                  />
-                  <label htmlFor="yearly" className="text-sm font-medium">
-                    Yearly
-                  </label>
-                </div>
+                {["monthly", "quarterly", "yearly"].map((option) => (
+                  <div key={option} className="flex items-center space-x-2">
+                    <RadioGroupItem value={option} id={option} />
+                    <label htmlFor={option} className="text-sm font-medium capitalize">
+                      {option}
+                    </label>
+                  </div>
+                ))}
               </RadioGroup>
             )}
           />
         </div>
+
         {/* Notes */}
         <div>
           <label className="text-sm font-medium mb-1 block">Notes</label>
-          <Textarea {...register("notes")} placeholder="Placeholder" rows={3} />
+          <Textarea {...register("notes")} placeholder="Optional" rows={3} />
         </div>
       </div>
+
+      {/* Footer Buttons */}
       <div className="flex justify-end gap-2">
         <Button type="button" variant="hollow" onClick={onCancel}>
           Cancel
