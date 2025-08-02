@@ -34,11 +34,11 @@ export default function PaymentModal({ selectedPlanId, onPaymentComplete }) {
   const [timerExpired, setTimerExpired] = useState(false);
 
   // Debug logs
-  console.log('PaymentModal render:', { 
-    showPaymentModal, 
-    paymentMethod, 
+  console.log("PaymentModal render:", {
+    showPaymentModal,
+    paymentMethod,
     paymentCompleted,
-    selectedPlanId 
+    selectedPlanId,
   });
 
   useEffect(() => {
@@ -163,6 +163,22 @@ export default function PaymentModal({ selectedPlanId, onPaymentComplete }) {
       </div>
     );
   }
+
+  return (
+  <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+    <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full text-center">
+      <p>DEBUG fallback — state was:</p>
+      <pre style={{ textAlign: "left", fontSize: 12 }}>{JSON.stringify({ showPaymentModal, paymentCompleted, paymentMethod, showUpiPopupState }, null, 2)}</pre>
+      <button
+        className="mt-4 bg-blue-600 text-white py-2 px-4 rounded"
+        onClick={() => dispatch(clearModal())}
+      >
+        Close
+      </button>
+    </div>
+  </div>
+);
+
 
   return null;
 }
