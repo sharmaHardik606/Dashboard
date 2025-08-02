@@ -13,7 +13,7 @@ import {
 } from "@/redux/slices/paymentModalSlice";
 import { fetchSubscriptionPlans } from "@/redux/slices/subscriptionPlanSlice";
 
-export default function StepTwoChoosePlan({ onBack, mode = "profile" }) {
+export default function StepTwoChoosePlan({ onBack, mode = "profile", onPlanSelect }){
   const dispatch = useDispatch();
   const plans = useSelector(
     (state) => state.subscriptionPlans.subscriptionPlans
@@ -50,9 +50,11 @@ export default function StepTwoChoosePlan({ onBack, mode = "profile" }) {
   const heading = mode === "billing" ? "Upgrade Plan" : "Step 2: Choose Plan";
 
   const submitHandler = (data) => {
-    dispatch(setPaymentMethod(data.paymentMethod));
-    dispatch(showPayment());
-  };
+  if (!data.plan) return;
+  console.log('Plan selected', data.plan, data.paymentMethod); // <-- Add this
+  onPlanSelect(data.plan, data.paymentMethod); // Should trigger parent logic
+};
+
 
   return (
     <form onSubmit={handleSubmit(submitHandler)} className="space-y-6 ">

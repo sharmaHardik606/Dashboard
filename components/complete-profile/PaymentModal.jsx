@@ -15,15 +15,31 @@ import { markProfileComplete } from "@/redux/slices/profileSlice";
 import { upgradeSubscriptionPlanThunk } from "@/redux/slices/subscriptionPlanSlice";
 import SuccessPopup from "@/components/SuccessPopup";
 
-export default function PaymentModal({ selectedPlanId }) {
+export default function PaymentModal({ selectedPlanId, onPaymentComplete }) {
   const dispatch = useDispatch();
   const router = useRouter();
-  const showPaymentModal = useSelector((state) => state.paymentModal.showPaymentModal);
-  const paymentCompleted = useSelector((state) => state.paymentModal.paymentCompleted);
-  const paymentMethod = useSelector((state) => state.paymentModal.paymentMethod);
-  const showUpiPopupState = useSelector((state) => state.paymentModal.showUpiPopup);
+  const showPaymentModal = useSelector(
+    (state) => state.paymentModal.showPaymentModal
+  );
+  const paymentCompleted = useSelector(
+    (state) => state.paymentModal.paymentCompleted
+  );
+  const paymentMethod = useSelector(
+    (state) => state.paymentModal.paymentMethod
+  );
+  const showUpiPopupState = useSelector(
+    (state) => state.paymentModal.showUpiPopup
+  );
 
   const [timerExpired, setTimerExpired] = useState(false);
+
+  // Debug logs
+  console.log('PaymentModal render:', { 
+    showPaymentModal, 
+    paymentMethod, 
+    paymentCompleted,
+    selectedPlanId 
+  });
 
   useEffect(() => {
     if (!showPaymentModal) return;
@@ -34,29 +50,33 @@ export default function PaymentModal({ selectedPlanId }) {
     return () => clearTimeout(timeoutId);
   }, [showPaymentModal, dispatch]);
 
-  // 🎉 After payment, success popup + set plan + redirect/unlock
-  useEffect(() => {
-    if (paymentCompleted && selectedPlanId) {
-      dispatch(upgradeSubscriptionPlanThunk(selectedPlanId));
-      dispatch(markProfileComplete());
-      const successTimer = setTimeout(() => {
-        router.push("/dashboard");
-        dispatch(clearModal());
-      }, 2000);
-      return () => clearTimeout(successTimer);
-    }
-  }, [paymentCompleted, selectedPlanId, dispatch, router]);
-
   useEffect(() => {
     if (showPaymentModal && paymentMethod === "card" && !paymentCompleted) {
       const timer = setTimeout(() => {
         dispatch(completePayment());
-      }, 500);
+      }, 2000); // Increased from 500ms
       return () => clearTimeout(timer);
     }
   }, [showPaymentModal, paymentMethod, paymentCompleted, dispatch]);
 
   if (!showPaymentModal) return null;
+
+  // Add fallback for missing payment method
+  if (!paymentMethod) {
+    return (
+      <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+        <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full text-center">
+          <p className="mb-4">Please select a payment method</p>
+          <button
+            className="bg-blue-600 text-white py-2 px-4 rounded"
+            onClick={() => dispatch(clearModal())}
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (timerExpired) {
     return (
@@ -112,6 +132,13 @@ export default function PaymentModal({ selectedPlanId }) {
             message="Payment successful!"
             showButton={false}
             autoClose={2000}
+            onClose={async () => {
+              await dispatch(upgradeSubscriptionPlanThunk(selectedPlanId));
+              dispatch(markProfileComplete());
+              dispatch(clearModal());
+              router.push("/dashboard");
+              onPaymentComplete?.(); // call parent callback
+            }}
           />
         </div>
       </div>
