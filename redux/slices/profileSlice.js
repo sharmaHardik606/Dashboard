@@ -2,15 +2,24 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import * as profileApi from "@/lib/api/profile";
 
 // Thunks for each major async action
-export const fetchProfile = createAsyncThunk("profile/fetchProfile", async () => {
-  return await profileApi.getProfile();
-});
-export const submitProfile = createAsyncThunk("profile/submitProfile", async (formData) => {
-  return await profileApi.submitProfile(formData);
-});
-export const markProfileComplete = createAsyncThunk("profile/markProfileComplete", async () => {
-  return await profileApi.markProfileComplete();
-});
+export const fetchProfile = createAsyncThunk(
+  "profile/fetchProfile",
+  async () => {
+    return await profileApi.getProfile();
+  }
+);
+export const submitProfile = createAsyncThunk(
+  "profile/submitProfile",
+  async (formData) => {
+    return await profileApi.submitProfile(formData);
+  }
+);
+export const markProfileComplete = createAsyncThunk(
+  "profile/markProfileComplete",
+  async () => {
+    return await profileApi.markProfileComplete();
+  }
+);
 
 const initialState = {
   isProfileComplete: false,
@@ -38,24 +47,23 @@ const profileSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
-      // similar for submitProfile and markProfileComplete
       .addCase(submitProfile.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(submitProfile.fulfilled, (state, action) => {
         state.loading = false;
-        // Optionally update profile details here
       })
       .addCase(submitProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })
-      .addCase(markProfileComplete.fulfilled, (state) => {
-        state.isProfileComplete = true;
+      .addCase(markProfileComplete.fulfilled, (state, action) => {
+        // Accept backend or mock that returns PROFILE
+        state.data = action.payload;
+        state.isProfileComplete = !!action.payload.isComplete;
       });
   },
 });
 
 export default profileSlice.reducer;
-

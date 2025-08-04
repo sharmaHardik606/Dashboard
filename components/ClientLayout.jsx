@@ -9,7 +9,7 @@ import CompleteProfileForm from "@/components/complete-profile/CompleteProfileFo
 import { useSelector } from "react-redux";
 
 // List of public (non-auth) routes
-const PUBLIC_ROUTES = ["/login", "/signup", "/forgot-password",];
+const PUBLIC_ROUTES = ["/login", "/signup", "/forgot-password"];
 
 export default function ClientLayout({ children }) {
   const pathname = usePathname();
@@ -17,7 +17,9 @@ export default function ClientLayout({ children }) {
 
   const isPublicRoute = PUBLIC_ROUTES.includes(pathname);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const isProfileComplete = useSelector((state) => state.profile.isProfileComplete);
+  const isProfileComplete = useSelector(
+    (state) => state.profile.isProfileComplete
+  );
 
   useEffect(() => {
     if (!isPublicRoute && !isAuthenticated) {
@@ -38,6 +40,8 @@ export default function ClientLayout({ children }) {
   if (!isAuthenticated) return null;
 
   const iconOnly = pathname === "/settings";
+  // In ClientLayout.jsx, right before your return:
+  console.log("isProfileComplete from Redux:", isProfileComplete);
 
   return (
     <SidebarProvider>
@@ -53,11 +57,14 @@ export default function ClientLayout({ children }) {
           <Navbar />
           <div className="flex flex-1 w-full">
             <Sidebar iconOnly={iconOnly} />
-            <main className="flex-1 sm:p-4 overflow-auto relative">{children}</main>
+            <main className="flex-1 sm:p-4 overflow-auto relative">
+              {children}
+            </main>
           </div>
         </div>
         {!isProfileComplete && (
           <div className="fixed inset-0 z-50 flex items-center justify-center">
+            {/* This is the SINGLE OVERLAY controlling the whole onboarding flow */}
             <div className="absolute inset-0 bg-black/40 backdrop-blur-md pointer-events-none" />
             <div className="relative z-10">
               <CompleteProfileForm />

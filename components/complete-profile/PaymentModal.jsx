@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
@@ -33,14 +34,6 @@ export default function PaymentModal({ selectedPlanId, onPaymentComplete }) {
 
   const [timerExpired, setTimerExpired] = useState(false);
 
-  // Debug logs
-  console.log("PaymentModal render:", {
-    showPaymentModal,
-    paymentMethod,
-    paymentCompleted,
-    selectedPlanId,
-  });
-
   useEffect(() => {
     if (!showPaymentModal) return;
     const timeoutId = setTimeout(() => {
@@ -54,17 +47,15 @@ export default function PaymentModal({ selectedPlanId, onPaymentComplete }) {
     if (showPaymentModal && paymentMethod === "card" && !paymentCompleted) {
       const timer = setTimeout(() => {
         dispatch(completePayment());
-      }, 2000); // Increased from 500ms
+      }, 2000);
       return () => clearTimeout(timer);
     }
   }, [showPaymentModal, paymentMethod, paymentCompleted, dispatch]);
 
   if (!showPaymentModal) return null;
-
-  // Add fallback for missing payment method
   if (!paymentMethod) {
     return (
-      <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+      <div className="flex items-center justify-center">
         <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full text-center">
           <p className="mb-4">Please select a payment method</p>
           <button
@@ -80,7 +71,7 @@ export default function PaymentModal({ selectedPlanId, onPaymentComplete }) {
 
   if (timerExpired) {
     return (
-      <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+      <div className="flex items-center justify-center">
         <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full text-center">
           <p className="mb-2 font-semibold text-red-600">
             Payment session expired.
@@ -98,7 +89,7 @@ export default function PaymentModal({ selectedPlanId, onPaymentComplete }) {
 
   if (paymentMethod === "upi" && !paymentCompleted && !showUpiPopupState) {
     return (
-      <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+      <div className="flex items-center justify-center">
         <div className="bg-white p-4 rounded-lg shadow-lg relative max-w-md w-full">
           <Image
             src="/payment.png"
@@ -126,7 +117,7 @@ export default function PaymentModal({ selectedPlanId, onPaymentComplete }) {
 
   if (paymentCompleted || (paymentMethod === "upi" && showUpiPopupState)) {
     return (
-      <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+      <div className="flex items-center justify-center">
         <div className="bg-white p-4 rounded-lg shadow-lg relative max-w-md w-full flex items-center justify-center">
           <SuccessPopup
             message="Payment successful!"
@@ -134,13 +125,13 @@ export default function PaymentModal({ selectedPlanId, onPaymentComplete }) {
             autoClose={2000}
             onClose={async () => {
               await dispatch(upgradeSubscriptionPlanThunk(selectedPlanId));
-              await dispatch(markProfileComplete());
+              const markResult = await dispatch(markProfileComplete());
+              console.log("MARK PROFILE RESULT", markResult);
               setTimeout(() => {
                 dispatch(clearModal());
-                
                 router.push("/dashboard");
-                onPaymentComplete?.(); // signal to parent if needed
-              }, 200); // slight delay so Redux states remain "true" for unmounts
+                onPaymentComplete?.();
+              }, 200);
             }}
           />
         </div>
@@ -150,7 +141,7 @@ export default function PaymentModal({ selectedPlanId, onPaymentComplete }) {
 
   if (paymentMethod === "card" && !paymentCompleted) {
     return (
-      <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+      <div className="flex items-center justify-center">
         <div className="bg-white p-4 rounded-lg shadow-lg relative max-w-md w-full flex flex-col items-center">
           <Image
             src="/payment.png"
@@ -167,8 +158,9 @@ export default function PaymentModal({ selectedPlanId, onPaymentComplete }) {
     );
   }
 
+  // Debug fallback
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+    <div className="flex items-center justify-center">
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full text-center">
         <p>DEBUG fallback — state was:</p>
         <pre style={{ textAlign: "left", fontSize: 12 }}>
@@ -192,6 +184,4 @@ export default function PaymentModal({ selectedPlanId, onPaymentComplete }) {
       </div>
     </div>
   );
-
-  return null;
 }
