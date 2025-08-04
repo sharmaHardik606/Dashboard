@@ -1,18 +1,15 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
-  hidePayment,
   completePayment,
   clearModal,
   showUpiPopup,
   hideUpiPopup,
-  setPaymentMethod,
 } from "@/redux/slices/paymentModalSlice";
-import { markProfileComplete } from "@/redux/slices/profileSlice";
+import { markProfileComplete, fetchProfile } from "@/redux/slices/profileSlice";
 import { upgradeSubscriptionPlanThunk } from "@/redux/slices/subscriptionPlanSlice";
 import SuccessPopup from "@/components/SuccessPopup";
 
@@ -124,28 +121,14 @@ export default function PaymentModal({ selectedPlanId, onPaymentComplete }) {
             showButton={false}
             autoClose={2000}
             onClose={async () => {
-              try {
-                await dispatch(upgradeSubscriptionPlanThunk(selectedPlanId));
-                
-                // First mark profile complete
-                const markResult = await dispatch(markProfileComplete());
-                console.log("MARK PROFILE RESULT", markResult);
-                
-                // Then force a profile fetch to update Redux state
-                const fetchResult = await dispatch(fetchProfile());
-                console.log("FETCH PROFILE RESULT", fetchResult);
-                
-                // Clear modal state
-                dispatch(clearModal());
-                
-                // Small delay to ensure state updates
-                setTimeout(() => {
-                  router.push("/dashboard");
-                  onPaymentComplete?.();
-                }, 200);
-              } catch (error) {
-                console.error("Payment completion error:", error);
-              }
+              await dispatch(upgradeSubscriptionPlanThunk(selectedPlanId));
+              await dispatch(markProfileComplete());
+              await dispatch(fetchProfile());
+              dispatch(clearModal());
+              setTimeout(() => {
+                router.push("/dashboard");
+                onPaymentComplete?.();
+              }, 200);
             }}
           />
         </div>
@@ -171,31 +154,5 @@ export default function PaymentModal({ selectedPlanId, onPaymentComplete }) {
       </div>
     );
   }
-
-  // Debug fallback
-  return (
-    <div className="flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full text-center">
-        <p>DEBUG fallback — state was:</p>
-        <pre style={{ textAlign: "left", fontSize: 12 }}>
-          {JSON.stringify(
-            {
-              showPaymentModal,
-              paymentCompleted,
-              paymentMethod,
-              showUpiPopupState,
-            },
-            null,
-            2
-          )}
-        </pre>
-        <button
-          className="mt-4 bg-blue-600 text-white py-2 px-4 rounded"
-          onClick={() => dispatch(clearModal())}
-        >
-          Close
-        </button>
-      </div>
-    </div>
-  );
+  return null;
 }

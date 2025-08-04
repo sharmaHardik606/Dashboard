@@ -22,8 +22,6 @@ export default function CompleteProfileForm() {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({});
   const [selectedPlan, setSelectedPlan] = useState(null);
-
-  // NEW: local flag for form visibility during payment flow
   const [hideForm, setHideForm] = useState(false);
 
   useEffect(() => {
@@ -36,13 +34,7 @@ export default function CompleteProfileForm() {
     return () => { document.body.style.overflow = prev; };
   }, []);
 
-  if (isProfileComplete) return null;
-
-  // Hide *all* overlays once paid and/or profile completed
-  if (paymentCompleted || isProfileComplete) {
-    console.log("CompleteProfileForm hiding - paymentCompleted:", paymentCompleted, "isProfileComplete:", isProfileComplete);
-    return null;
-  }
+  if (paymentCompleted || isProfileComplete) return null;
 
   return (
     <>
@@ -66,7 +58,7 @@ export default function CompleteProfileForm() {
                     mode="profile"
                     onPlanSelect={(planId, method) => {
                       setSelectedPlan(planId);
-                      setHideForm(true); // HIDE FORM, SHOW MODAL
+                      setHideForm(true);
                       dispatch(setPaymentMethod(method));
                       dispatch(showPayment());
                     }}
@@ -82,7 +74,7 @@ export default function CompleteProfileForm() {
         <PaymentModal
           selectedPlanId={selectedPlan}
           onPaymentComplete={() => {
-            setHideForm(false); // Reset for next open, probably not needed
+            setHideForm(false);
             dispatch(fetchProfile());
           }}
         />

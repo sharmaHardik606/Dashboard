@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import * as profileApi from "@/lib/api/profile";
 
-// Thunks for each major async action
+// Thunks for async actions
 export const fetchProfile = createAsyncThunk(
   "profile/fetchProfile",
   async () => {
@@ -59,13 +59,8 @@ const profileSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(markProfileComplete.fulfilled, (state, action) => {
-        console.log("markProfileComplete.fulfilled payload:", action.payload);
         state.data = action.payload;
         state.isProfileComplete = !!action.payload.isComplete;
-        // Force it to true as backup
-        if (action.payload.isComplete) {
-          state.isProfileComplete = true;
-        }
       });
   },
 });
