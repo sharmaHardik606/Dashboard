@@ -19,11 +19,24 @@ export default function StepOneBasicDetails({ onNext }) {
   } = useForm();
 
   const onSubmit = async (data) => {
-    // Dispatch the thunk
-    const result = await dispatch(submitProfile(data));
+    // HANDLE FILE
+    let processedData = { ...data };
+
+    // React Hook Form gives you FileList for file inputs!
+    if (data.documents && data.documents.length > 0) {
+      // For now, store filenames only for mock/demo. Use upload API for real files.
+      processedData.documents = Array.from(data.documents).map(file =>
+        file.name // could also map to { name: file.name, size: file.size, type: file.type }
+      );
+    } else {
+      processedData.documents = [];
+    }
+
+    // Dispatch the thunk with only serializable fields
+    const result = await dispatch(submitProfile(processedData));
     // Only proceed if no error (fulfilled action)
     if (!result.error) {
-      onNext(data);
+      onNext(processedData);
     }
   };
 

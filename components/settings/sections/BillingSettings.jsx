@@ -14,10 +14,10 @@ import {
 
 export default function BillingSettings() {
   const dispatch = useDispatch();
-  const plan = useSelector(state => state.subscriptionPlans.currentSubscriptionPlan);
-  const upgrading = useSelector(state => state.subscriptionPlans.upgrading);
-  const cancelling = useSelector(state => state.subscriptionPlans.cancelling);
-  const allPlans = useSelector(state => state.subscriptionPlans.subscriptionPlans);
+  const plan = useSelector((state) => state.subscriptionPlans.currentSubscriptionPlan);
+  const upgrading = useSelector((state) => state.subscriptionPlans.upgrading);
+  const cancelling = useSelector((state) => state.subscriptionPlans.cancelling);
+  const allPlans = useSelector((state) => state.subscriptionPlans.subscriptionPlans);
 
   const [showUpgradeForm, setShowUpgradeForm] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
@@ -27,6 +27,7 @@ export default function BillingSettings() {
     dispatch(fetchSubscriptionPlans());
   }, [dispatch]);
 
+  // Plan upgrade logic (calls payment step)
   const handleUpgrade = async (newPlanId) => {
     await dispatch(upgradeSubscriptionPlanThunk(newPlanId));
     setShowUpgradeForm(false);
@@ -45,7 +46,7 @@ export default function BillingSettings() {
         </h2>
       </div>
 
-      {/* Payment Method Section */}
+      {/* Payment Method */}
       <section className=" space-y-3">
         <div className="text-lg font-semibold mb-3">Payment Method</div>
         <div className="flex items-center justify-between bg-blue-50 rounded-lg py-4 px-3">
@@ -114,15 +115,17 @@ export default function BillingSettings() {
             <StepTwoChoosePlan
               mode="billing"
               plans={allPlans}
-              onSelectPlan={handleUpgrade}
+              onPlanSelect={handleUpgrade}
               onBack={() => setShowUpgradeForm(false)}
             />
           </div>
         )}
       </section>
 
+      {/* Payment modal for upgrades/cancellations */}
       <PaymentModal />
 
+      {/* Cancellation confirmation */}
       {showCancelConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="bg-white rounded-lg shadow-lg max-w-sm w-full">
