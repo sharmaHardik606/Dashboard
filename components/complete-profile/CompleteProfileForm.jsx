@@ -39,7 +39,10 @@ export default function CompleteProfileForm() {
   if (isProfileComplete) return null;
 
   // Hide *all* overlays once paid and/or profile completed
-  if (paymentCompleted || isProfileComplete) return null;
+  if (paymentCompleted || isProfileComplete) {
+    console.log("CompleteProfileForm hiding - paymentCompleted:", paymentCompleted, "isProfileComplete:", isProfileComplete);
+    return null;
+  }
 
   return (
     <>

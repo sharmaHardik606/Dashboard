@@ -20,6 +20,14 @@ export default function ClientLayout({ children }) {
   const isProfileComplete = useSelector(
     (state) => state.profile.isProfileComplete
   );
+  const paymentCompleted = useSelector(
+    (state) => state.paymentModal.paymentCompleted
+  );
+
+  // Hide overlay if profile is complete OR payment is completed
+  const shouldHideOverlay = isProfileComplete || paymentCompleted;
+
+  console.log("ClientLayout - isProfileComplete:", isProfileComplete, "paymentCompleted:", paymentCompleted);
 
   useEffect(() => {
     if (!isPublicRoute && !isAuthenticated) {
@@ -44,34 +52,33 @@ export default function ClientLayout({ children }) {
   console.log("isProfileComplete from Redux:", isProfileComplete);
 
   return (
-    <SidebarProvider>
-      <div className="flex flex-col min-h-screen w-full relative">
-        <div
-          className={`relative flex flex-col min-h-screen w-full transition-all duration-200 
-            ${
-              !isProfileComplete
-                ? "backdrop-blur-sm pointer-events-none select-none"
-                : ""
-            }`}
-        >
-          <Navbar />
-          <div className="flex flex-1 w-full">
-            <Sidebar iconOnly={iconOnly} />
-            <main className="flex-1 sm:p-4 overflow-auto relative">
-              {children}
-            </main>
+  <SidebarProvider>
+    <div className="flex flex-col min-h-screen w-full relative">
+      <div
+        className={`relative flex flex-col min-h-screen w-full transition-all duration-200 
+          ${
+            !shouldHideOverlay
+              ? "backdrop-blur-sm pointer-events-none select-none"
+              : ""
+          }`}
+      >
+        <Navbar />
+        <div className="flex flex-1 w-full">
+          <Sidebar iconOnly={iconOnly} />
+          <main className="flex-1 sm:p-4 overflow-auto relative">
+            {children}
+          </main>
+        </div>
+      </div>
+      {!shouldHideOverlay && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-md pointer-events-none" />
+          <div className="relative z-10">
+            <CompleteProfileForm />
           </div>
         </div>
-        {!isProfileComplete && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center">
-            {/* This is the SINGLE OVERLAY controlling the whole onboarding flow */}
-            <div className="absolute inset-0 bg-black/40 backdrop-blur-md pointer-events-none" />
-            <div className="relative z-10">
-              <CompleteProfileForm />
-            </div>
-          </div>
-        )}
-      </div>
-    </SidebarProvider>
+      )}
+    </div>
+  </SidebarProvider>
   );
 }

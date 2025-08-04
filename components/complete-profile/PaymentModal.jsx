@@ -124,14 +124,28 @@ export default function PaymentModal({ selectedPlanId, onPaymentComplete }) {
             showButton={false}
             autoClose={2000}
             onClose={async () => {
-              await dispatch(upgradeSubscriptionPlanThunk(selectedPlanId));
-              const markResult = await dispatch(markProfileComplete());
-              console.log("MARK PROFILE RESULT", markResult);
-              setTimeout(() => {
+              try {
+                await dispatch(upgradeSubscriptionPlanThunk(selectedPlanId));
+                
+                // First mark profile complete
+                const markResult = await dispatch(markProfileComplete());
+                console.log("MARK PROFILE RESULT", markResult);
+                
+                // Then force a profile fetch to update Redux state
+                const fetchResult = await dispatch(fetchProfile());
+                console.log("FETCH PROFILE RESULT", fetchResult);
+                
+                // Clear modal state
                 dispatch(clearModal());
-                router.push("/dashboard");
-                onPaymentComplete?.();
-              }, 200);
+                
+                // Small delay to ensure state updates
+                setTimeout(() => {
+                  router.push("/dashboard");
+                  onPaymentComplete?.();
+                }, 200);
+              } catch (error) {
+                console.error("Payment completion error:", error);
+              }
             }}
           />
         </div>

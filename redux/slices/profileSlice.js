@@ -59,9 +59,13 @@ const profileSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(markProfileComplete.fulfilled, (state, action) => {
-        // Accept backend or mock that returns PROFILE
+        console.log("markProfileComplete.fulfilled payload:", action.payload);
         state.data = action.payload;
         state.isProfileComplete = !!action.payload.isComplete;
+        // Force it to true as backup
+        if (action.payload.isComplete) {
+          state.isProfileComplete = true;
+        }
       });
   },
 });
