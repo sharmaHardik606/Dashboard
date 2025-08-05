@@ -50,10 +50,16 @@ export default function StepTwoChoosePlan({ onBack, mode = "profile", onPlanSele
   const heading = mode === "billing" ? "Upgrade Plan" : "Step 2: Choose Plan";
 
   const submitHandler = (data) => {
-  if (!data.plan) return;
-  console.log('Plan selected', data.plan, data.paymentMethod); // <-- Add this
-  onPlanSelect(data.plan, data.paymentMethod); // Should trigger parent logic
-};
+    if (!data.plan) return;
+    console.log('StepTwoChoosePlan: Plan selected', data.plan, data.paymentMethod);
+    console.log('StepTwoChoosePlan: onPlanSelect function:', onPlanSelect);
+    
+    if (onPlanSelect) {
+      onPlanSelect(data.plan, data.paymentMethod);
+    } else {
+      console.error('StepTwoChoosePlan: onPlanSelect is not defined!');
+    }
+  }; // Should trigger parent logic
 
 
   return (

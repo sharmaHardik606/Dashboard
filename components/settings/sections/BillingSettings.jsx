@@ -11,25 +11,59 @@ import {
   cancelSubscriptionPlanThunk,
   fetchSubscriptionPlans,
 } from "@/redux/slices/subscriptionPlanSlice";
+import {
+  showPayment,
+  setPaymentMethod,
+} from "@/redux/slices/paymentModalSlice";
 
 export default function BillingSettings() {
   const dispatch = useDispatch();
-  const plan = useSelector((state) => state.subscriptionPlans.currentSubscriptionPlan);
+  const plan = useSelector(
+    (state) => state.subscriptionPlans.currentSubscriptionPlan
+  );
   const upgrading = useSelector((state) => state.subscriptionPlans.upgrading);
   const cancelling = useSelector((state) => state.subscriptionPlans.cancelling);
-  const allPlans = useSelector((state) => state.subscriptionPlans.subscriptionPlans);
+  const allPlans = useSelector(
+    (state) => state.subscriptionPlans.subscriptionPlans
+  );
 
   const [showUpgradeForm, setShowUpgradeForm] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+  const [selectedPlanForUpgrade, setSelectedPlanForUpgrade] = useState(null);
 
   useEffect(() => {
     dispatch(fetchCurrentSubscriptionPlan());
     dispatch(fetchSubscriptionPlans());
   }, [dispatch]);
 
-  // Plan upgrade logic (calls payment step)
-  const handleUpgrade = async (newPlanId) => {
-    await dispatch(upgradeSubscriptionPlanThunk(newPlanId));
+  useEffect(() => {
+    console.log('BillingSettings - Current plan:', plan);
+    console.log('BillingSettings - Upgrading:', upgrading);
+    console.log('BillingSettings - All plans:', allPlans);
+  }, [plan, upgrading, allPlans]);
+
+  // Plan upgrade logic
+  const handleUpgrade = (newPlanId, paymentMethod) => {
+    console.log('BillingSettings: handleUpgrade called with:', newPlanId, paymentMethod);
+    
+    // Store the selected plan
+    setSelectedPlanForUpgrade(newPlanId);
+    console.log('BillingSettings: selectedPlanForUpgrade set to:', newPlanId);
+    
+    // Set payment method in Redux
+    dispatch(setPaymentMethod(paymentMethod));
+    
+    // Show payment modal for upgrade
+    dispatch(showPayment());
+  };
+
+  // Handle payment completion for billing upgrades
+  const handlePaymentComplete = async () => {
+    console.log('Payment completed, refreshing current plan');
+    // Don't upgrade again - PaymentModal already did it
+    // Just refresh the current plan and reset state
+    await dispatch(fetchCurrentSubscriptionPlan());
+    setSelectedPlanForUpgrade(null);
     setShowUpgradeForm(false);
   };
 
@@ -72,44 +106,52 @@ export default function BillingSettings() {
             Subscription Plan
           </span>
         </div>
-
         {!showUpgradeForm ? (
-          <div className="flex flex-col sm:flex-row sm:items-start justify-between rounded-xl border-[1.4px] bg-white p-6">
-            <div>
-              <div className="text-base font-semibold">
-                {plan ? plan.name : "No Plan"}
+          plan && !upgrading ? (
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between rounded-xl border-[1.4px] bg-white p-6">
+              <div>
+                <div className="text-base font-semibold">
+                  Current Plan: {plan ? plan.name : "No Plan"}
+                </div>
+                <div className="text-3xl font-bold">
+                  {plan ? plan.price : "-"}
+                  <span className="text-base font-medium text-gray-700 ml-1">
+                    {plan ? `/${plan.duration}` : ""}
+                  </span>
+                </div>
+                <ul className="mt-2 mb-1 space-y-1 text-sm text-gray-700 list-disc pl-5">
+                  {plan &&
+                    plan.features &&
+                    plan.features.map((f) => <li key={f}>{f}</li>)}
+                </ul>
+                <div className="mt-2 text-xs text-gray-600">
+                  Plan ID: {plan?.id}
+                </div>
               </div>
-              <div className="text-3xl font-bold">
-                {plan ? plan.price : "-"}
-                <span className="text-base font-medium text-gray-700 ml-1">
-                  {plan ? `/${plan.duration}` : ""}
-                </span>
+              <div className="flex gap-3 mt-2 sm:mt-0">
+                <Button
+                  variant="hollow"
+                  className="font-medium"
+                  onClick={() => setShowCancelConfirm(true)}
+                  disabled={!plan || cancelling}
+                >
+                  {cancelling ? "Cancelling..." : "Cancel Plan"}
+                </Button>
+                <Button
+                  variant="mainblue"
+                  className="text-sm font-semibold"
+                  onClick={() => setShowUpgradeForm(true)}
+                  disabled={upgrading}
+                >
+                  {upgrading ? "Upgrading..." : "Upgrade Plan"}
+                </Button>
               </div>
-              <ul className="mt-2 mb-1 space-y-1 text-sm text-gray-700 list-disc pl-5">
-                {plan && plan.features && plan.features.map((f) => (
-                  <li key={f}>{f}</li>
-                ))}
-              </ul>
             </div>
-            <div className="flex gap-3 mt-2 sm:mt-0">
-              <Button
-                variant="hollow"
-                className="font-medium"
-                onClick={() => setShowCancelConfirm(true)}
-                disabled={!plan || cancelling}
-              >
-                {cancelling ? "Cancelling..." : "Cancel Subscription"}
-              </Button>
-              <Button
-                variant="mainblue"
-                className="text-sm font-semibold"
-                onClick={() => setShowUpgradeForm(true)}
-                disabled={upgrading}
-              >
-                {upgrading ? "Upgrading..." : "Upgrade"}
-              </Button>
+          ) : (
+            <div className="text-center py-10 text-gray-500">
+              Loading your current plan...
             </div>
-          </div>
+          )
         ) : (
           <div className="border p-4 rounded-xl bg-white">
             <StepTwoChoosePlan
@@ -123,7 +165,10 @@ export default function BillingSettings() {
       </section>
 
       {/* Payment modal for upgrades/cancellations */}
-      <PaymentModal />
+      <PaymentModal 
+        selectedPlanId={selectedPlanForUpgrade}
+        onPaymentComplete={handlePaymentComplete}
+      />
 
       {/* Cancellation confirmation */}
       {showCancelConfirm && (

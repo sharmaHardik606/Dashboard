@@ -10,7 +10,7 @@ import {
   hideUpiPopup,
 } from "@/redux/slices/paymentModalSlice";
 import { markProfileComplete, fetchProfile } from "@/redux/slices/profileSlice";
-import { upgradeSubscriptionPlanThunk } from "@/redux/slices/subscriptionPlanSlice";
+import { upgradeSubscriptionPlanThunk, fetchCurrentSubscriptionPlan } from "@/redux/slices/subscriptionPlanSlice";
 import SuccessPopup from "@/components/SuccessPopup";
 
 export default function PaymentModal({ selectedPlanId, onPaymentComplete }) {
@@ -121,14 +121,37 @@ export default function PaymentModal({ selectedPlanId, onPaymentComplete }) {
             showButton={false}
             autoClose={2000}
             onClose={async () => {
-              await dispatch(upgradeSubscriptionPlanThunk(selectedPlanId));
-              await dispatch(markProfileComplete());
-              await dispatch(fetchProfile());
-              dispatch(clearModal());
-              setTimeout(() => {
-                router.push("/dashboard");
-                onPaymentComplete?.();
-              }, 200);
+              try {
+                // Only upgrade if we have a selectedPlanId (for billing upgrades)
+                if (selectedPlanId) {
+                  console.log('PaymentModal: Upgrading to plan:', selectedPlanId);
+                  const upgradeResult = await dispatch(upgradeSubscriptionPlanThunk(selectedPlanId));
+                  console.log('PaymentModal: Upgrade result:', upgradeResult);
+                  
+                  // Fetch updated subscription after upgrade
+                  const fetchResult = await dispatch(fetchCurrentSubscriptionPlan());
+                  console.log('PaymentModal: Fetch result:', fetchResult);
+                } else {
+                  // For profile completion flow only
+                  await dispatch(markProfileComplete());
+                  await dispatch(fetchProfile());
+                }
+                
+                // Clear modal state
+                dispatch(clearModal());
+                
+                setTimeout(() => {
+                  if (selectedPlanId) {
+                    // For billing upgrades, call the completion callback
+                    onPaymentComplete?.();
+                  } else {
+                    // For profile completion, navigate to dashboard
+                    router.push("/dashboard");
+                  }
+                }, 200);
+              } catch (error) {
+                console.error("Payment completion error:", error);
+              }
             }}
           />
         </div>
