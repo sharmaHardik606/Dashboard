@@ -21,6 +21,7 @@ export default function PaymentModal({
   selectedPlan,
   onPaymentComplete,
 }) {
+  // DEBUG: see what you get every render!
   console.log("PaymentModal: selectedPlanId:", selectedPlanId);
   console.log("PaymentModal: selectedPlan:", selectedPlan);
 
@@ -137,33 +138,20 @@ export default function PaymentModal({
                 selectedPlan
               );
               try {
-                if (selectedPlanId && !selectedPlan) {
-                  // Billing upgrade
-                  await dispatch(upgradeSubscriptionPlanThunk(selectedPlanId));
+                // prefer selectedPlan prop (which is lastPlanRef.current from parent)
+                const planToSet = selectedPlan || selectedPlanId;
+                if (planToSet) {
+                  console.log("Upgrading to plan:", planToSet);
+                  await dispatch(upgradeSubscriptionPlanThunk(planToSet));
                   await dispatch(fetchCurrentSubscriptionPlan());
-                  dispatch(clearModal());
-                  setTimeout(() => {
-                    onPaymentComplete?.();
-                  }, 200);
-                } else if (selectedPlan) {
-                  // Profile/Signup flow!
-                  await dispatch(upgradeSubscriptionPlanThunk(selectedPlan));
-                  await dispatch(fetchCurrentSubscriptionPlan());
-                  await dispatch(markProfileComplete());
-                  await dispatch(fetchProfile());
-                  dispatch(clearModal());
-                  setTimeout(() => {
-                    router.push("/dashboard");
-                  }, 200);
-                } else {
-                  // Fallback (should not hit here if flows distinct)
-                  await dispatch(markProfileComplete());
-                  await dispatch(fetchProfile());
-                  dispatch(clearModal());
-                  setTimeout(() => {
-                    router.push("/dashboard");
-                  }, 200);
                 }
+                await dispatch(markProfileComplete());
+                await dispatch(fetchProfile());
+                dispatch(clearModal());
+
+                setTimeout(() => {
+                  router.push("/dashboard");
+                }, 200);
               } catch (error) {
                 console.error("Payment completion error:", error);
               }

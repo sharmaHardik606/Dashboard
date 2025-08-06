@@ -11,8 +11,12 @@ export const fetchCurrentSubscriptionPlan = createAsyncThunk(
 );
 export const upgradeSubscriptionPlanThunk = createAsyncThunk(
   "subscriptionPlans/upgrade",
-  api.upgradeSubscriptionPlan
+  async (planId, thunkAPI) => {
+    console.log("[THUNK] upgradeSubscriptionPlanThunk called with:", planId);
+    return await api.upgradeSubscriptionPlan(planId);
+  }
 );
+
 export const cancelSubscriptionPlanThunk = createAsyncThunk(
   "subscriptionPlans/cancel",
   api.cancelSubscriptionPlan

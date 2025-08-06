@@ -12,25 +12,23 @@ import {
 
 export default function CompleteProfileForm() {
   const dispatch = useDispatch();
-  const isProfileComplete = useSelector(
-    (state) => state.profile.isProfileComplete
-  );
-  const showPaymentModal = useSelector(
-    (state) => state.paymentModal.showPaymentModal
-  );
-  const paymentCompleted = useSelector(
-    (state) => state.paymentModal.paymentCompleted
-  );
+  const isProfileComplete = useSelector((state) => state.profile.isProfileComplete);
+  const showPaymentModal = useSelector((state) => state.paymentModal.showPaymentModal);
+  const paymentCompleted = useSelector((state) => state.paymentModal.paymentCompleted);
 
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({});
   const [selectedPlan, setSelectedPlan] = useState(null);
+  // Bulletproof sticky plan chosen during signup/payment flow
+  const [lastPlanChosen, setLastPlanChosen] = useState(null);
   const [hideForm, setHideForm] = useState(false);
 
+  // Fetch profile on mount
   useEffect(() => {
     dispatch(fetchProfile());
   }, [dispatch]);
 
+  // Prevent page scroll while form/modal is open
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -39,6 +37,7 @@ export default function CompleteProfileForm() {
     };
   }, []);
 
+  // Hide form/modal if payment completed or profile is already complete
   if (paymentCompleted || isProfileComplete) return null;
 
   return (
@@ -63,6 +62,7 @@ export default function CompleteProfileForm() {
                     mode="profile"
                     onPlanSelect={(planId, method) => {
                       setSelectedPlan(planId);
+                      setLastPlanChosen(planId); // remember selected plan persistently
                       setHideForm(true);
                       dispatch(setPaymentMethod(method));
                       dispatch(showPayment());
@@ -78,12 +78,12 @@ export default function CompleteProfileForm() {
       {showPaymentModal && (
         <PaymentModal
           selectedPlanId={selectedPlan}
-          selectedPlan={selectedPlan}
+          selectedPlan={lastPlanChosen} // crucial: pass sticky plan to PaymentModal
           onPaymentComplete={() => {
             setHideForm(false);
-            dispatch(fetchProfile());
-            // reset selectedPlan if you want, e.g.
             setSelectedPlan(null);
+            setLastPlanChosen(null); // cleanup after payment complete
+            dispatch(fetchProfile());
           }}
         />
       )}
