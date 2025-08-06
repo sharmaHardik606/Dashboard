@@ -10,10 +10,20 @@ import {
   hideUpiPopup,
 } from "@/redux/slices/paymentModalSlice";
 import { markProfileComplete, fetchProfile } from "@/redux/slices/profileSlice";
-import { upgradeSubscriptionPlanThunk, fetchCurrentSubscriptionPlan } from "@/redux/slices/subscriptionPlanSlice";
+import {
+  upgradeSubscriptionPlanThunk,
+  fetchCurrentSubscriptionPlan,
+} from "@/redux/slices/subscriptionPlanSlice";
 import SuccessPopup from "@/components/SuccessPopup";
 
-export default function PaymentModal({ selectedPlanId, onPaymentComplete }) {
+export default function PaymentModal({
+  selectedPlanId,
+  selectedPlan,
+  onPaymentComplete,
+}) {
+  console.log("PaymentModal: selectedPlanId:", selectedPlanId);
+  console.log("PaymentModal: selectedPlan:", selectedPlan);
+
   const dispatch = useDispatch();
   const router = useRouter();
   const showPaymentModal = useSelector(
@@ -119,36 +129,41 @@ export default function PaymentModal({ selectedPlanId, onPaymentComplete }) {
           <SuccessPopup
             message="Payment successful!"
             showButton={false}
-            autoClose={2000}
             onClose={async () => {
+              console.log(
+                "PaymentModal onClose: selectedPlanId:",
+                selectedPlanId,
+                "selectedPlan:",
+                selectedPlan
+              );
               try {
-                // Only upgrade if we have a selectedPlanId (for billing upgrades)
-                if (selectedPlanId) {
-                  console.log('PaymentModal: Upgrading to plan:', selectedPlanId);
-                  const upgradeResult = await dispatch(upgradeSubscriptionPlanThunk(selectedPlanId));
-                  console.log('PaymentModal: Upgrade result:', upgradeResult);
-                  
-                  // Fetch updated subscription after upgrade
-                  const fetchResult = await dispatch(fetchCurrentSubscriptionPlan());
-                  console.log('PaymentModal: Fetch result:', fetchResult);
-                } else {
-                  // For profile completion flow only
+                if (selectedPlanId && !selectedPlan) {
+                  // Billing upgrade
+                  await dispatch(upgradeSubscriptionPlanThunk(selectedPlanId));
+                  await dispatch(fetchCurrentSubscriptionPlan());
+                  dispatch(clearModal());
+                  setTimeout(() => {
+                    onPaymentComplete?.();
+                  }, 200);
+                } else if (selectedPlan) {
+                  // Profile/Signup flow!
+                  await dispatch(upgradeSubscriptionPlanThunk(selectedPlan));
+                  await dispatch(fetchCurrentSubscriptionPlan());
                   await dispatch(markProfileComplete());
                   await dispatch(fetchProfile());
-                }
-                
-                // Clear modal state
-                dispatch(clearModal());
-                
-                setTimeout(() => {
-                  if (selectedPlanId) {
-                    // For billing upgrades, call the completion callback
-                    onPaymentComplete?.();
-                  } else {
-                    // For profile completion, navigate to dashboard
+                  dispatch(clearModal());
+                  setTimeout(() => {
                     router.push("/dashboard");
-                  }
-                }, 200);
+                  }, 200);
+                } else {
+                  // Fallback (should not hit here if flows distinct)
+                  await dispatch(markProfileComplete());
+                  await dispatch(fetchProfile());
+                  dispatch(clearModal());
+                  setTimeout(() => {
+                    router.push("/dashboard");
+                  }, 200);
+                }
               } catch (error) {
                 console.error("Payment completion error:", error);
               }

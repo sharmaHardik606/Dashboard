@@ -5,7 +5,10 @@ import StepOneBasicDetails from "./StepOneBasicDetails";
 import StepTwoChoosePlan from "./StepTwoChoosePlan";
 import PaymentModal from "./PaymentModal";
 import { fetchProfile } from "@/redux/slices/profileSlice";
-import { showPayment, setPaymentMethod } from "@/redux/slices/paymentModalSlice";
+import {
+  showPayment,
+  setPaymentMethod,
+} from "@/redux/slices/paymentModalSlice";
 
 export default function CompleteProfileForm() {
   const dispatch = useDispatch();
@@ -31,7 +34,9 @@ export default function CompleteProfileForm() {
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = prev; };
+    return () => {
+      document.body.style.overflow = prev;
+    };
   }, []);
 
   if (paymentCompleted || isProfileComplete) return null;
@@ -73,9 +78,12 @@ export default function CompleteProfileForm() {
       {showPaymentModal && (
         <PaymentModal
           selectedPlanId={selectedPlan}
+          selectedPlan={selectedPlan}
           onPaymentComplete={() => {
             setHideForm(false);
             dispatch(fetchProfile());
+            // reset selectedPlan if you want, e.g.
+            setSelectedPlan(null);
           }}
         />
       )}
