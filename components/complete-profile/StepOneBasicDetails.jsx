@@ -19,11 +19,18 @@ export default function StepOneBasicDetails({ onNext }) {
   } = useForm();
 
   const onSubmit = async (data) => {
+    // ✅ Fix: Convert FileList to array of files
+    const fixedData = {
+      ...data,
+      documents: data.documents instanceof FileList ? Array.from(data.documents) : data.documents,
+    };
+
     // Dispatch the thunk
-    const result = await dispatch(submitProfile(data));
+    const result = await dispatch(submitProfile(fixedData));
+    
     // Only proceed if no error (fulfilled action)
     if (!result.error) {
-      onNext(data);
+      onNext(fixedData);
     }
   };
 
