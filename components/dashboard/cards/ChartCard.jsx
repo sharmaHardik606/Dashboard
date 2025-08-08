@@ -1,13 +1,15 @@
 import { ArrowUp, ArrowDown, Info } from "lucide-react";
 import SlopeChart from "@/components/dashboard/charts/SlopeChart";
 
-export default function ChartCard({ title, value, change, isPositive = true }) {
-  const changeValue = parseFloat(
-    change.replace("%", "").replace("+", "").replace("-", "")
-  );
-  const endValue = isPositive ? 100 + changeValue : 100 - changeValue;
-
-  const chartData = [{ value: 100 }, { value: endValue }];
+export default function ChartCard({
+  title,
+  value,
+  change,
+  isPositive = true,
+  chartData = [],  // new prop for weekly data
+}) {
+  // transform chartData into {value: number} objects as expected by SlopeChart
+  const dataPoints = chartData.map((val) => ({ value: val }));
 
   return (
     <div className="rounded-xl bg-neutral-100 text-card-foreground p-3 px-4">
@@ -19,9 +21,10 @@ export default function ChartCard({ title, value, change, isPositive = true }) {
       <div className="flex items-center justify-between space-y-0 pb-2">
         <div className="text-3xl font-bold mb-1">{value}</div>
         <div className="w-20">
-          <SlopeChart data={chartData} isPositive={isPositive} />
+          <SlopeChart data={dataPoints} isPositive={isPositive} />
         </div>
       </div>
+
       <div className="flex items-center gap-1">
         <div
           className={`flex items-center text-xs font-semibold ${
