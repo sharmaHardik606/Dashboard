@@ -11,7 +11,7 @@ export default function SlopeChart({ data, isPositive }) {
             type="monotone"
             dataKey="value"
             stroke={isPositive ? "#16a34a" : "#dc2626"}
-            strokeWidth={2}
+            strokeWidth={2.5}
             dot={false}
           />
         </LineChart>
