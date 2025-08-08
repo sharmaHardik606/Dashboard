@@ -2,7 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff, ArrowLeft } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  ArrowLeft,
+  CheckCircle,
+  OctagonAlert,
+} from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../ui/button";
 import OtpForm from "./forgetpass/OtpForm";
@@ -40,6 +46,19 @@ export default function SignupPage() {
   });
 
   const password = watch("password");
+  const passwordValue = password ?? "";
+
+  const rules = {
+    minLen: passwordValue.length >= 8,
+    combo:
+      /[a-z]/.test(passwordValue) &&
+      /[A-Z]/.test(passwordValue) &&
+      /\d/.test(passwordValue) &&
+      /[^\w\s]/.test(passwordValue), // at least one symbol
+    noEdgeSpace: passwordValue === passwordValue.trim(),
+    // Can't check this client-side, so just display as info.
+    notInLast12: true,
+  };
 
   const onSubmit = async (data) => {
     if (data.password !== data.confirmPassword) {
@@ -63,7 +82,7 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen w-full flex items-start justify-center pt-24">
+    <div className="min-h-screen w-full flex items-start justify-center pt-20 pb-10">
       {/* UI remains unchanged */}
       <div className="absolute top-6 left-1/2 -translate-x-1/2 sm:left-auto sm:right-6 sm:translate-x-0 text-sm">
         <div className="flex items-center gap-2">
@@ -226,11 +245,62 @@ export default function SignupPage() {
               )}
             </div>
 
-            <ul className="text-xs text-gray-500 space-y-1 list-disc pl-4">
-              <li>Must be at least 8 characters or more.</li>
-              <li>Use uppercase, lowercase, numbers, and symbols.</li>
-              <li>Don't start or end your password with a blank space.</li>
-              <li>Must be different from your last 12 passwords.</li>
+            <ul className="text-xs space-y-1 pl-0">
+              <li className="flex items-center gap-2">
+                {rules.minLen ? (
+                  <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
+                ) : (
+                  <OctagonAlert className="w-4 h-4 text-gray-700 flex-shrink-0" />
+                )}
+                <span
+                  className={rules.minLen ? "text-green-600" : "text-gray-700"}
+                >
+                  Must be at least 8 characters or more.
+                </span>
+              </li>
+
+              <li className="flex items-center gap-2">
+                {rules.combo ? (
+                  <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
+                ) : (
+                  <OctagonAlert className="w-4 h-4 text-gray-700 flex-shrink-0" />
+                )}
+                <span
+                  className={rules.combo ? "text-green-600" : "text-gray-700"}
+                >
+                  Use uppercase, lowercase, numbers, and symbols.
+                </span>
+              </li>
+
+              <li className="flex items-center gap-2">
+                {rules.noEdgeSpace ? (
+                  <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
+                ) : (
+                  <OctagonAlert className="w-4 h-4 text-gray-700 flex-shrink-0" />
+                )}
+                <span
+                  className={
+                    rules.noEdgeSpace ? "text-green-600" : "text-gray-700"
+                  }
+                >
+                  Don't start or end your password with a blank space.
+                </span>
+              </li>
+
+              <li className="flex items-center gap-2">
+                {rules.notInLast12 ? (
+                  <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
+                ) : (
+                  <OctagonAlert className="w-4 h-4 text-gray-700 flex-shrink-0" />
+                )}
+                <span
+                  className={
+                    rules.notInLast12 ? "text-green-600" : "text-gray-700"
+                  }
+                >
+                  Must be different from your last 12 passwords.
+                </span>
+              </li>
             </ul>
 
             <button
