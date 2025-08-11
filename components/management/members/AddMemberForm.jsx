@@ -74,6 +74,19 @@ export default function AddMemberForm({ onCancel }) {
         </button>
       </div>
 
+      <div>
+        <label className="text-xs font-semibold mb-1 block">Name</label>
+        <input
+          type="text"
+          placeholder="Name"
+          className="w-full border px-3 py-2 rounded-md text-xs font-semibold"
+          {...register("name", { required: "Name is required" })}
+        />
+        {errors.name && (
+          <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>
+        )}
+      </div>
+
       {/* Profile Picture Upload Section */}
       <div>
         <label className="text-xs font-semibold mb-1 block">
@@ -113,19 +126,6 @@ export default function AddMemberForm({ onCancel }) {
             <p className="text-xs text-gray-500 mt-0.5">JPG, PNG, or GIF</p>
           </div>
         </div>
-      </div>
-
-      <div>
-        <label className="text-xs font-semibold mb-1 block">Name</label>
-        <input
-          type="text"
-          placeholder="Name"
-          className="w-full border px-3 py-2 rounded-md text-xs font-semibold"
-          {...register("name", { required: "Name is required" })}
-        />
-        {errors.name && (
-          <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>
-        )}
       </div>
 
       <div>

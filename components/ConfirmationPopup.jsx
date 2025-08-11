@@ -6,7 +6,7 @@ export default function ConfirmationPopup({
   message = "Are you sure you want to proceed?",
   onConfirm,
   onCancel,
-  buttonText = "Confirm", 
+  buttonText = "Confirm",
 }) {
   return (
     <div className="text-center p-6 ">
@@ -16,7 +16,7 @@ export default function ConfirmationPopup({
             className="w-35 h-35 text-white"
             fill="none"
             stroke="currentColor"
-            strokeWidth="2.5"
+            strokeWidth="2"
             viewBox="0 0 24 24"
           >
             <path
@@ -29,16 +29,15 @@ export default function ConfirmationPopup({
       </div>
       <p className="text-sm text-gray-700 mb-6">{message}</p>
       <div className="flex flex-wrap  gap-4 justify-center">
-        <Button className="bg-red-600 text-white px-6 w-full " onClick={onConfirm}>
+        <Button
+          className="bg-red-600 text-white px-6 w-full "
+          onClick={onConfirm}
+        >
           {buttonText}
         </Button>
 
         {onCancel && (
-          <Button
-            variant="hollow"
-            className="w-full"
-            onClick={onCancel}
-          >
+          <Button variant="hollow" className="w-full" onClick={onCancel}>
             Cancel
           </Button>
         )}
