@@ -1,6 +1,7 @@
 "use client";
 
 import { useForm, Controller } from "react-hook-form";
+import { User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -9,8 +10,12 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import { useState } from "react";
 
 export default function AddMemberForm({ onCancel }) {
+  const [profileImage, setProfileImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+
   const {
     register,
     control,
@@ -27,8 +32,32 @@ export default function AddMemberForm({ onCancel }) {
     },
   });
 
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setProfileImage(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removeImage = () => {
+    setProfileImage(null);
+    setImagePreview(null);
+    // Reset the file input
+    const fileInput = document.getElementById("profile-image");
+    if (fileInput) fileInput.value = "";
+  };
+
   const onSubmit = (data) => {
-    console.log("Submitted Data:", data);
+    const formData = {
+      ...data,
+      profileImage: profileImage,
+    };
+    console.log("Submitted Data:", formData);
     onCancel(); // Close modal after submit
   };
 
@@ -43,6 +72,47 @@ export default function AddMemberForm({ onCancel }) {
         >
           ✕
         </button>
+      </div>
+
+      {/* Profile Picture Upload Section */}
+      <div>
+        <label className="text-xs font-semibold mb-1 block">
+          Profile Picture (Optional)
+        </label>
+        <div className="flex items-start gap-3">
+          <div className="flex-shrink-0">
+            {imagePreview ? (
+              <div className="relative">
+                <img
+                  src={imagePreview}
+                  alt="Profile preview"
+                  className="w-12 h-12 rounded-full object-cover border-2 border-gray-200"
+                />
+                <button
+                  type="button"
+                  onClick={removeImage}
+                  className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full text-xs hover:bg-red-600 flex items-center justify-center"
+                >
+                  ✕
+                </button>
+              </div>
+            ) : (
+              <div className="h-12 w-12  rounded-full bg-black flex items-center justify-center overflow-hidden">
+                <User className="text-white w-6 h-6" />
+              </div>
+            )}
+          </div>
+          <div className="flex-1">
+            <input
+              id="profile-image"
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="w-full border px-2 py-1.5 rounded-md text-xs font-semibold file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
+            />
+            <p className="text-xs text-gray-500 mt-0.5">JPG, PNG, or GIF</p>
+          </div>
+        </div>
       </div>
 
       <div>
@@ -135,7 +205,7 @@ export default function AddMemberForm({ onCancel }) {
         {/* No error for trainer, as not required */}
       </div>
 
-      <div className="mt-2">
+      <div className="mt-1">
         <label className="text-xs font-medium mb-1 block">Payment Mode</label>
         <div className="flex gap-6">
           <label className="flex items-center gap-2 text-sm">
@@ -160,7 +230,7 @@ export default function AddMemberForm({ onCancel }) {
       </div>
 
       {/* Action Buttons */}
-      <div className="mt-6 flex justify-end gap-3">
+      <div className="mt-4 flex justify-end gap-3">
         <Button type="button" variant="hollow" onClick={onCancel}>
           Cancel
         </Button>

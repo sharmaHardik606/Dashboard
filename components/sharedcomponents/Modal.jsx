@@ -1,4 +1,5 @@
 "use client";
+
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useEffect } from "react";
 
@@ -39,11 +40,13 @@ export default function Modal({ children, className = "" }) {
   if (!show) return null;
 
   return (
-    <div className="w-full h-full fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-      <div
-        className={`relative bg-white rounded-xl shadow-xl w-full max-w-lg ${className}`}
-      >
-        <div className="p-4">{children}</div>
+    <div className="w-full h-full fixed inset-0 z-50 bg-black/40 overflow-y-auto">
+      <div className="flex min-h-screen items-start justify-center p-4">
+        <div
+          className={`relative bg-white rounded-xl shadow-xl w-full max-w-lg my-8 ${className}`}
+        >
+          <div className="p-4">{children}</div>
+        </div>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { User } from "lucide-react";
+import { Hash, User } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -10,11 +10,19 @@ import Image from "next/image";
 
 export default function GeneralSettings() {
   const [userImage, setUserImage] = useState(null);
+  const [profileImage, setProfileImage] = useState(null);
   const fileInputRef = useRef(null);
+  const profileInputRef = useRef(null);
 
   const handleReplaceClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
+    }
+  };
+
+  const handleProfileReplaceClick = () => {
+    if (profileInputRef.current) {
+      profileInputRef.current.click();
     }
   };
 
@@ -26,10 +34,25 @@ export default function GeneralSettings() {
     }
   };
 
+  const handleProfileImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setProfileImage(imageUrl);
+    }
+  };
+
   const handleRemoveClick = () => {
     setUserImage(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = null;
+    }
+  };
+
+  const handleProfileRemoveClick = () => {
+    setProfileImage(null);
+    if (profileInputRef.current) {
+      profileInputRef.current.value = null;
     }
   };
 
@@ -67,50 +90,100 @@ export default function GeneralSettings() {
         </p>
       </div>
 
-      {/* Logo Upload */}
-      <div className="flex flex-col items-start space-x-4">
-        <div>
-          <h3 className="text-sm font-semibold mb-2">Gym Logo</h3>
-        </div>
-        <div className="flex items-center gap-6 sm:justify-between justify-center">
-          <div className="h-20 w-20  rounded-full bg-black flex items-center justify-center overflow-hidden">
-            {userImage ? (
-              <Image
-                src={userImage}
-                alt="User avatar"
-                height={70}
-                width={70}
-                className="object-cover h-20 w-20"
-                priority
-              />
-            ) : (
-              <User className="text-white w-8 h-8" />
-            )}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-2">
+        {/* Logo Upload */}
+        <div className="flex flex-col items-start space-x-4">
+          <div>
+            <h3 className="text-sm font-semibold mb-2">Gym Logo</h3>
           </div>
+          <div className="flex items-center gap-6 sm:justify-between justify-center">
+            <div className="h-20 w-20  rounded-full bg-black flex items-center justify-center overflow-hidden">
+              {userImage ? (
+                <Image
+                  src={userImage}
+                  alt="User avatar"
+                  height={70}
+                  width={70}
+                  className="object-cover h-20 w-20"
+                  priority
+                />
+              ) : (
+                <Hash className="text-white w-10 h-10" />
+              )}
+            </div>
 
-          <input
-            type="file"
-            accept="image/*"
-            className="hidden"
-            ref={fileInputRef}
-            onChange={handleImageChange}
-          />
+            <Input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              ref={fileInputRef}
+              onChange={handleImageChange}
+            />
 
-          <div className="flex flex-col sm:flex-row gap-2">
-            <Button
-              variant="default"
-              className="font-semibold"
-              onClick={handleReplaceClick}
-            >
-              Replace picture
-            </Button>
-            <Button
-              variant="outline"
-              className="font-semibold"
-              onClick={handleRemoveClick}
-            >
-              Remove
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <Button
+                variant="default"
+                className="font-semibold"
+                onClick={handleReplaceClick}
+              >
+                Replace picture
+              </Button>
+              <Button
+                variant="outline"
+                className="font-semibold"
+                onClick={handleRemoveClick}
+              >
+                Remove
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Profile Picture Upload */}
+        <div className="flex flex-col items-start space-x-4">
+          <div>
+            <h3 className="text-sm font-semibold mb-2">Profile Picture</h3>
+          </div>
+          <div className="flex items-center gap-6 sm:justify-between justify-center">
+            <div className="h-20 w-20  rounded-full bg-black flex items-center justify-center overflow-hidden">
+              {profileImage ? (
+                <Image
+                  src={profileImage}
+                  alt="Profile avatar"
+                  height={70}
+                  width={70}
+                  className="object-cover h-20 w-20"
+                  priority
+                />
+              ) : (
+                <User className="text-white w-10 h-10" />
+              )}
+            </div>
+
+            <Input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              ref={profileInputRef}
+              onChange={handleProfileImageChange}
+            />
+
+            <div className="flex flex-col sm:flex-row gap-2">
+              <Button
+                variant="default"
+                className="font-semibold"
+                onClick={handleProfileReplaceClick}
+              >
+                Replace picture
+              </Button>
+              <Button
+                variant="outline"
+                className="font-semibold"
+                onClick={handleProfileRemoveClick}
+              >
+                Remove
+              </Button>
+            </div>
           </div>
         </div>
       </div>
