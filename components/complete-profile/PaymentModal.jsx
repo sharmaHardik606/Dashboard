@@ -12,6 +12,7 @@ import {
 import { markProfileComplete, fetchProfile } from "@/redux/slices/profileSlice";
 import { upgradeSubscriptionPlanThunk } from "@/redux/slices/subscriptionPlanSlice";
 import SuccessPopup from "@/components/popups/SuccessPopup";
+import UpiPaymentPopup from "../popups/UpiPaymentPopup";
 
 export default function PaymentModal({ selectedPlanId, onPaymentComplete }) {
   const dispatch = useDispatch();
@@ -88,13 +89,7 @@ export default function PaymentModal({ selectedPlanId, onPaymentComplete }) {
     return (
       <div className="flex items-center justify-center">
         <div className="bg-white p-4 rounded-lg shadow-lg relative max-w-md w-full">
-          <Image
-            src="/payment.png"
-            alt="Waiting for UPI payment"
-            width={400}
-            height={300}
-            className="w-full h-auto"
-          />
+          <UpiPaymentPopup />
           <button
             className="mt-4 bg-blue-600 text-white py-2 px-4 rounded w-full"
             onClick={() => {
