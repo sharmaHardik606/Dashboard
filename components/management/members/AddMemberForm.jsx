@@ -87,19 +87,19 @@ export default function AddMemberForm({ onCancel }) {
         )}
       </div>
 
-      {/* Profile Picture Upload Section */}
       <div>
         <label className="text-xs font-semibold mb-1 block">
           Profile Picture (Optional)
         </label>
         <div className="flex items-start gap-3">
+          {/* Preview */}
           <div className="flex-shrink-0">
             {imagePreview ? (
               <div className="relative">
                 <img
                   src={imagePreview}
                   alt="Profile preview"
-                  className="w-12 h-12 rounded-full object-cover border-2 border-gray-200"
+                  className="w-13 h-13 rounded-full object-cover border-2 border-gray-200"
                 />
                 <button
                   type="button"
@@ -110,20 +110,66 @@ export default function AddMemberForm({ onCancel }) {
                 </button>
               </div>
             ) : (
-              <div className="h-12 w-12  rounded-full bg-black flex items-center justify-center overflow-hidden">
+              <div className="h-13 w-13 rounded-full bg-black flex items-center justify-center overflow-hidden">
                 <User className="text-white w-6 h-6" />
               </div>
             )}
           </div>
-          <div className="flex-1">
-            <input
-              id="profile-image"
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="w-full border px-2 py-1.5 rounded-md text-xs font-semibold file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
-            />
-            <p className="text-xs text-gray-500 mt-0.5">JPG, PNG, or GIF</p>
+
+          {/* Controls */}
+          <div className="flex-1 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+            {/* Large screen version → filename & buttons in one row */}
+            {/* Small screen version → filename on top, buttons below */}
+            <div className="flex flex-col gap-2 w-full">
+              {/* Filename */}
+              <div
+                className="w-40 truncate whitespace-nowrap overflow-hidden text-xs font-semibold border px-2 py-1 rounded bg-gray-50"
+                title={profileImage?.name || ""}
+              >
+                {profileImage?.name || "No file chosen"}
+              </div>
+
+              {/* Buttons */}
+              <div className="flex gap-2">
+                <input
+                  id="profile-image"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleImageUpload}
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    document.getElementById("profile-image").click()
+                  }
+                  className="flex-1 border px-3 py-1.5 rounded-md text-xs font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200"
+                >
+                  Choose File
+                </button>
+
+                <input
+                  id="camera-capture"
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  className="hidden"
+                  onChange={handleImageUpload}
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    document.getElementById("camera-capture").click()
+                  }
+                  className="flex-1 border px-3 py-1.5 rounded-md text-xs font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200"
+                >
+                  Take Photo
+                </button>
+              </div>
+
+              {/* Help text */}
+              <p className="text-xs text-gray-500">JPG, PNG, or GIF</p>
+            </div>
           </div>
         </div>
       </div>
