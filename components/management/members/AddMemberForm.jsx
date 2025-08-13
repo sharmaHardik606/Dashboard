@@ -116,60 +116,55 @@ export default function AddMemberForm({ onCancel }) {
             )}
           </div>
 
-          {/* Controls */}
-          <div className="flex-1 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-            {/* Large screen version → filename & buttons in one row */}
-            {/* Small screen version → filename on top, buttons below */}
-            <div className="flex flex-col gap-2 w-full">
-              {/* Filename */}
+          {/* Controls in one flex row */}
+          <div className="flex-1">
+            <div className="flex flex-wrap items-center gap-2">
+              {/* Filename - shown only on sm and up */}
               <div
-                className="w-40 truncate whitespace-nowrap overflow-hidden text-xs font-semibold border px-2 py-1 rounded bg-gray-50"
+                className="hidden sm:block flex-grow max-w-[215px] truncate whitespace-nowrap overflow-hidden text-xs font-semibold border px-2 py-1 rounded bg-gray-50"
                 title={profileImage?.name || ""}
               >
                 {profileImage?.name || "No file chosen"}
               </div>
 
-              {/* Buttons */}
-              <div className="flex gap-2">
-                <input
-                  id="profile-image"
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleImageUpload}
-                />
-                <button
-                  type="button"
-                  onClick={() =>
-                    document.getElementById("profile-image").click()
-                  }
-                  className="flex-1 border px-3 py-1.5 rounded-md text-xs font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200"
-                >
-                  Choose File
-                </button>
+              {/* Hidden Upload Input */}
+              <input
+                id="profile-image"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleImageUpload}
+              />
+              <button
+                type="button"
+                onClick={() => document.getElementById("profile-image").click()}
+                className="border px-3 py-1.5 rounded-md text-xs font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200"
+              >
+                Choose File
+              </button>
 
-                <input
-                  id="camera-capture"
-                  type="file"
-                  accept="image/*"
-                  capture="environment"
-                  className="hidden"
-                  onChange={handleImageUpload}
-                />
-                <button
-                  type="button"
-                  onClick={() =>
-                    document.getElementById("camera-capture").click()
-                  }
-                  className="flex-1 border px-3 py-1.5 rounded-md text-xs font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200"
-                >
-                  Take Photo
-                </button>
-              </div>
-
-              {/* Help text */}
-              <p className="text-xs text-gray-500">JPG, PNG, or GIF</p>
+              {/* Hidden Camera Input */}
+              <input
+                id="camera-capture"
+                type="file"
+                accept="image/*"
+                capture="environment"
+                className="hidden"
+                onChange={handleImageUpload}
+              />
+              <button
+                type="button"
+                onClick={() =>
+                  document.getElementById("camera-capture").click()
+                }
+                className="border px-3 py-1.5 rounded-md text-xs font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200"
+              >
+                Take Photo
+              </button>
             </div>
+
+            {/* Help text */}
+            <p className="text-xs text-gray-500 mt-1">JPG, PNG, or GIF</p>
           </div>
         </div>
       </div>
