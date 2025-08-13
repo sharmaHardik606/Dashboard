@@ -5,7 +5,7 @@ import { Ellipsis, ArrowLeft } from "lucide-react";
 import MessageInput from "./MessageInput";
 import { Button } from "../ui/button";
 import PopupMenu from "../sharedcomponents/PopupActionButton";
-import ConfirmationPopup from "../ConfirmationPopup";
+import ConfirmationPopup from "../popups/ConfirmationPopup";
 
 export default function ChatWindow({ conversation, onBack }) {
   const [messages, setMessages] = useState(conversation.messages);
@@ -93,7 +93,7 @@ export default function ChatWindow({ conversation, onBack }) {
                   : "Are you sure you want to block this user?"
               }
               buttonText={confirmType === "delete" ? "Delete" : "Block"}
-              onConfirm={() => setConfirmOpen(false)} 
+              onConfirm={() => setConfirmOpen(false)}
               onCancel={() => setConfirmOpen(false)}
             />
           </div>

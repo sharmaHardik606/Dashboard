@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import StepTwoChoosePlan from "@/components/complete-profile/StepTwoChoosePlan";
 import PaymentModal from "@/components/complete-profile/PaymentModal";
-import ConfirmationPopup from "@/components/ConfirmationPopup";
+import ConfirmationPopup from "@/components/popups/ConfirmationPopup";
 import {
   fetchCurrentSubscriptionPlan,
   upgradeSubscriptionPlanThunk,
@@ -14,10 +14,14 @@ import {
 
 export default function BillingSettings() {
   const dispatch = useDispatch();
-  const plan = useSelector(state => state.subscriptionPlans.currentSubscriptionPlan);
-  const upgrading = useSelector(state => state.subscriptionPlans.upgrading);
-  const cancelling = useSelector(state => state.subscriptionPlans.cancelling);
-  const allPlans = useSelector(state => state.subscriptionPlans.subscriptionPlans);
+  const plan = useSelector(
+    (state) => state.subscriptionPlans.currentSubscriptionPlan
+  );
+  const upgrading = useSelector((state) => state.subscriptionPlans.upgrading);
+  const cancelling = useSelector((state) => state.subscriptionPlans.cancelling);
+  const allPlans = useSelector(
+    (state) => state.subscriptionPlans.subscriptionPlans
+  );
 
   const [showUpgradeForm, setShowUpgradeForm] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
@@ -85,9 +89,9 @@ export default function BillingSettings() {
                 </span>
               </div>
               <ul className="mt-2 mb-1 space-y-1 text-sm text-gray-700 list-disc pl-5">
-                {plan && plan.features && plan.features.map((f) => (
-                  <li key={f}>{f}</li>
-                ))}
+                {plan &&
+                  plan.features &&
+                  plan.features.map((f) => <li key={f}>{f}</li>)}
               </ul>
             </div>
             <div className="flex gap-3 mt-2 sm:mt-0">

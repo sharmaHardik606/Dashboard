@@ -11,7 +11,7 @@ import {
 } from "@/redux/slices/paymentModalSlice";
 import { markProfileComplete, fetchProfile } from "@/redux/slices/profileSlice";
 import { upgradeSubscriptionPlanThunk } from "@/redux/slices/subscriptionPlanSlice";
-import SuccessPopup from "@/components/SuccessPopup";
+import SuccessPopup from "@/components/popups/SuccessPopup";
 
 export default function PaymentModal({ selectedPlanId, onPaymentComplete }) {
   const dispatch = useDispatch();

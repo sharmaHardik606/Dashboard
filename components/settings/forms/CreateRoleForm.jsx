@@ -4,7 +4,7 @@ import { useForm, Controller } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import SuccessPopup from "@/components/SuccessPopup";
+import SuccessPopup from "@/components/popups/SuccessPopup";
 import { useState } from "react";
 
 const PERMISSIONS = ["Members", "Classes", "Workout", "Diet", "Staff"];
@@ -33,7 +33,6 @@ export default function CreateRoleForm({ onCancel }) {
     console.log("Submitted Role:", data);
     // send to API here when ready
     setShowSuccess(true);
-    
   };
 
   if (showSuccess) {

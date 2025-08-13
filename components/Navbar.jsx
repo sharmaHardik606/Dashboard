@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 import { logout } from "@/redux/slices/authSlice";
 import { useRouter } from "next/navigation";
 import NotificationPanel from "./NotificationPanel";
-import ConfirmationPopup from "./ConfirmationPopup";
+import ConfirmationPopup from "./popups/ConfirmationPopup";
 
 export function Navbar() {
   const { toggleSidebar } = useSidebar();

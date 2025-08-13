@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import SuccessPopup from "@/components/SuccessPopup";
+import SuccessPopup from "@/components/popups/SuccessPopup";
 
 export function AddMembershipPlanForm({ onCancel, onSubmit }) {
   const {
@@ -76,7 +76,9 @@ export function AddMembershipPlanForm({ onCancel, onSubmit }) {
             placeholder="Plan Name"
           />
           {errors.planName && (
-            <span className="text-xs text-red-500">{errors.planName.message}</span>
+            <span className="text-xs text-red-500">
+              {errors.planName.message}
+            </span>
           )}
         </div>
 
@@ -111,7 +113,10 @@ export function AddMembershipPlanForm({ onCancel, onSubmit }) {
                 {["monthly", "quarterly", "yearly"].map((option) => (
                   <div key={option} className="flex items-center space-x-2">
                     <RadioGroupItem value={option} id={option} />
-                    <label htmlFor={option} className="text-sm font-medium capitalize">
+                    <label
+                      htmlFor={option}
+                      className="text-sm font-medium capitalize"
+                    >
                       {option}
                     </label>
                   </div>
