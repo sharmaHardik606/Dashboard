@@ -89,7 +89,13 @@ export default function PaymentModal({ selectedPlanId, onPaymentComplete }) {
     return (
       <div className="flex items-center justify-center">
         <div className="bg-white p-4 rounded-lg shadow-lg relative max-w-md w-full">
-          <UpiPaymentPopup />
+          <Image
+            src="/payment.png"
+            alt="Processing..."
+            width={400}
+            height={300}
+            className="w-full h-auto"
+          />
           <button
             className="mt-4 bg-blue-600 text-white py-2 px-4 rounded w-full"
             onClick={() => {
