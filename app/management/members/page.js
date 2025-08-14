@@ -13,6 +13,7 @@ import AddMemberForm from "@/components/management/members/AddMemberForm";
 import ImportMembersCSVPanel from "@/components/management/members/ImportMembersCSVPanel";
 import MemberFiltersModal from "@/components/management/members/MemberFilterModal";
 import ViewEditMember from "@/components/management/members/view-edit/ViewEditMember";
+import Modal from "@/components/sharedcomponents/Modal";
 
 export default function MembersPage() {
   const router = useRouter();
@@ -76,7 +77,14 @@ export default function MembersPage() {
         </div>
       </div>
 
-      {showForm && <AddMemberForm onCancel={closeView} />}
+      {showForm && (
+        <Modal
+          isOpen={showForm}
+          onClose={() => router.push("/management/members")}
+        >
+          <AddMemberForm onCancel={() => router.push("/management/members")} />
+        </Modal>
+      )}
 
       <FilterBar
         searchValue={searchQuery}

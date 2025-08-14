@@ -42,20 +42,16 @@ export function Navbar() {
     <>
       {/* Confirmation Popup Overlay */}
       {showConfirm && (
-        <div className="fixed inset-0 z-[100] bg-black/30 flex items-center justify-center">
-          <div className="bg-white rounded-lg shadow-lg max-w-xs w-full">
-            <ConfirmationPopup
-              message="Are you sure you want to log out?"
-              buttonText="Log out"
-              onConfirm={() => {
-                setShowConfirm(false);
-                setDropdownOpen(false);
-                handleLogout();
-              }}
-              onCancel={() => setShowConfirm(false)}
-            />
-          </div>
-        </div>
+        <ConfirmationPopup
+          message="Are you sure you want to log out?"
+          buttonText="Log out"
+          onConfirm={() => {
+            setShowConfirm(false);
+            setDropdownOpen(false);
+            handleLogout();
+          }}
+          onCancel={() => setShowConfirm(false)}
+        />
       )}
 
       <header className="w-full sticky top-0 z-50 bg-gray-50 dark:bg-black border-b border-gray-200 dark:border-gray-800">
