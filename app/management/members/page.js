@@ -10,21 +10,15 @@ import { Plus, HardDriveDownload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import FilterBar from "@/components/sharedcomponents/FilterBar";
 import AddMemberForm from "@/components/management/members/AddMemberForm";
-import Modal from "@/components/sharedcomponents/Modal";
 import ImportMembersCSVPanel from "@/components/management/members/ImportMembersCSVPanel";
 import MemberFiltersModal from "@/components/management/members/MemberFilterModal";
-
-// ✅ Import your ViewEditMember component here
 import ViewEditMember from "@/components/management/members/view-edit/ViewEditMember";
 
 export default function MembersPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Existing
   const showForm = searchParams.get("showForm") === "1";
-
-  // ✅ New params for action modals
   const action = searchParams.get("action");
   const memberId = searchParams.get("id");
 
@@ -33,19 +27,26 @@ export default function MembersPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showImportSection, setShowImportSection] = useState(false);
 
-  const closeModal = () => {
-    router.push("/management/members"); // Clears query params
+  const closeView = () => {
+    router.push("/management/members");
   };
 
-  // Existing Import Section logic
+  // --- FULL PAGE REPLACEMENT for View/Edit ---
+  if (action === "view" && memberId) {
+    return (
+      <ViewEditMember
+        member={Data.find((m) => m.id === memberId)}
+        onClose={closeView}
+      />
+    );
+  }
+
   if (showImportSection) {
     return (
       <div className="p-3 space-y-6">
         <ImportMembersCSVPanel
           onCancel={() => setShowImportSection(false)}
-          onImport={(importedMembers) => {
-            setShowImportSection(false);
-          }}
+          onImport={(importedMembers) => setShowImportSection(false)}
         />
       </div>
     );
@@ -75,24 +76,7 @@ export default function MembersPage() {
         </div>
       </div>
 
-      {/* Existing Add Form Modal */}
-      {showForm && (
-        <Modal isOpen={showForm} onClose={closeModal}>
-          <AddMemberForm onCancel={closeModal} />
-        </Modal>
-      )}
-
-      {/* ✅ New Action Modal Logic (only if action param exists) */}
-      {action && (
-        <Modal isOpen={!!action} onClose={closeModal}>
-          {action === "view" && (
-            <ViewEditMember
-              member={Data.find((m) => m.id === memberId)}
-              onClose={closeModal}
-            />
-          )}
-        </Modal>
-      )}
+      {showForm && <AddMemberForm onCancel={closeView} />}
 
       <FilterBar
         searchValue={searchQuery}
@@ -121,15 +105,15 @@ export default function MembersPage() {
             },
             {
               label: "Assign Workout",
-              onClick: () => console.log("Workout", item.id), // placeholder
+              onClick: () => console.log("Workout", item.id),
             },
             {
               label: "Assign Diet",
-              onClick: () => console.log("Assign Diet", item.id), // placeholder
+              onClick: () => console.log("Assign Diet", item.id),
             },
             {
               label: "Delete Member",
-              onClick: () => console.log("Delete", item.id), // placeholder
+              onClick: () => console.log("Delete", item.id),
             },
           ]}
         />
