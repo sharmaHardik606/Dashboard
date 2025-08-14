@@ -32,7 +32,8 @@ export default function ConfirmationPopup({
           <p className="text-sm text-gray-700 mb-6">{message}</p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Button
-              className="bg-red-600 text-white px-6 w-full "
+              variant="destructive"
+              className=" px-6 w-full"
               onClick={onConfirm}
             >
               {buttonText}

@@ -14,6 +14,7 @@ import ImportMembersCSVPanel from "@/components/management/members/ImportMembers
 import MemberFiltersModal from "@/components/management/members/MemberFilterModal";
 import ViewEditMember from "@/components/management/members/view-edit/ViewEditMember";
 import Modal from "@/components/sharedcomponents/Modal";
+import ConfirmationPopup from "@/components/popups/ConfirmationPopup";
 
 export default function MembersPage() {
   const router = useRouter();
@@ -24,9 +25,13 @@ export default function MembersPage() {
   const memberId = searchParams.get("id");
 
   const [filtersModalOpen, setFiltersModalOpen] = useState(false);
-  const filteredData = Data.filter((item) => item.type === "member");
   const [searchQuery, setSearchQuery] = useState("");
   const [showImportSection, setShowImportSection] = useState(false);
+
+  /** 🔹 New state for delete confirmation */
+  const [memberToDelete, setMemberToDelete] = useState(null);
+
+  const filteredData = Data.filter((item) => item.type === "member");
 
   const closeView = () => {
     router.push("/management/members");
@@ -53,8 +58,25 @@ export default function MembersPage() {
     );
   }
 
+  /**  Handle delete confirm */
+  const handleConfirmDelete = () => {
+    console.log("Deleting member:", memberToDelete?.id);
+    // TODO: your delete logic here
+    setMemberToDelete(null);
+  };
+
   return (
     <div className="p-3 space-y-6">
+      {/*  Confirmation Popup when deleting */}
+      {memberToDelete && (
+        <ConfirmationPopup
+          message={`Are you sure you want to delete ${memberToDelete.name}? This action cannot be undone.`}
+          buttonText="Delete"
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setMemberToDelete(null)}
+        />
+      )}
+
       <div className="flex flex-col justify-between gap-4 sm:flex-row">
         <h1 className="text-3xl font-semibold">Members</h1>
         <div className="flex gap-2">
@@ -121,7 +143,7 @@ export default function MembersPage() {
             },
             {
               label: "Delete Member",
-              onClick: () => console.log("Delete", item.id),
+              onClick: () => setMemberToDelete(item), 
             },
           ]}
         />
