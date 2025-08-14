@@ -48,9 +48,9 @@ export default function ViewEditMember({ member, onClose }) {
       )}
 
       {/* Page Title */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col justify-between sm:not-even:items-center gap-4 sm:flex-row">
         <h1 className="text-3xl font-semibold">Members</h1>
-        <div className="flex justify-center gap-3 ">
+        <div className="flex  gap-3 ">
           <Button
             variant="destructive"
             size="xl"
