@@ -50,22 +50,60 @@ export default function ViewEditMember({ member, onClose }) {
       {/* Page Title */}
       <div className="flex flex-col justify-between sm:not-even:items-center gap-4 sm:flex-row">
         <h1 className="text-3xl font-semibold">Members</h1>
-        <div className="flex  gap-3 ">
-          <Button
-            variant="destructive"
-            size="xl"
+        <div className="flex items-center gap-2 ">
+          <button
+            aria-label="Delete item"
             onClick={() => setShowDeleteConfirm(true)}
+            class="relative p-2 border-none bg-transparent cursor-pointer text-base transition-transform duration-200 ease-in-out group"
           >
-            Delete Member
-          </Button>
+            <svg
+              class="w-10 h-10 transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] drop-shadow-sm overflow-visible group-hover:scale-[1.08] group-hover:rotate-[3deg] group-active:scale-[0.96] group-active:rotate-[-1deg]"
+              viewBox="0 -10 64 74"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g id="trash-can">
+                <rect
+                  x="16"
+                  y="24"
+                  width="32"
+                  height="30"
+                  rx="3"
+                  ry="3"
+                  fill="#e74c3c"
+                ></rect>
+
+                <g
+                  id="lid-group"
+                  class="origin-[12px_18px] transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:rotate-[-28deg] group-hover:translate-y-[2px] group-active:rotate-[-12deg] group-active:scale-[0.98]"
+                >
+                  <rect
+                    x="12"
+                    y="12"
+                    width="40"
+                    height="6"
+                    rx="2"
+                    ry="2"
+                    fill="#c0392b"
+                  ></rect>
+                  <rect
+                    x="26"
+                    y="8"
+                    width="12"
+                    height="4"
+                    rx="2"
+                    ry="2"
+                    fill="#c0392b"
+                  ></rect>
+                </g>
+              </g>
+            </svg>
+          </button>
 
           {/* 🆕 Edit button triggers AddMemberForm modal */}
           <Button
             variant="mainblue"
-            size="xl"
-            onClick={() =>
-              router.push(`/management/members?showForm=1`)
-            }
+            size="lg"
+            onClick={() => router.push(`/management/members?showForm=1`)}
           >
             Edit Member
           </Button>
